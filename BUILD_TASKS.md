@@ -1438,15 +1438,21 @@ It runs export → sections:build → render → `test:seo` → `test:data`, sto
 then **prints instructions for a human** to read `git diff` and push. Publishing to the live site is
 a person pushing to `main`, which fires `.github/workflows/static.yml`.
 
-**And the deploy workflow runs no gate at all.** Checked, not assumed: `static.yml` has three steps —
-checkout, configure-pages, upload `path: '.'` — and **no build, no test, no `npm` anywhere**. So:
+**The deploy workflow used to run no gate at all.** That was true when this plan was written and is
+no longer: **P8-T3 landed 24 Oct 2026 (`ac9a91a`)** and `static.yml` now runs `test:seo` and
+`test:data` before the upload step, with an allow-list artifact behind an assertion. A failing gate
+fails the job and nothing deploys. First green gated deploy: `e162f4e`, 28 Oct 2026.
 
-> **The SEO and leak gates are not on the path to the live site.** They are a local command someone
-> chooses to run first. The thing that actually protects the site today is **the human between
-> `publish` and `push`**.
+So the sentence this plan was built on has changed, and the change is in this task's favour:
 
-A Publish button removes that human. That is the whole risk of this task, and it cannot be designed
-around by being careful — it has to be designed around structurally.
+> **The SEO and leak gates are now ON the path to the live site.** A Publish button no longer
+> removes the only thing protecting the site, because the protection moved off the human and into
+> CI before the button was built. That ordering was deliberate.
+
+What a Publish button still removes is the human who **reads `git diff` and decides the change is
+the one they meant**. The gates catch a page that is broken, leaking or unindexable. They do not
+catch a page that is *wrong* — correct markup, correct schema, wrong content. That residue is what
+sections 4 and 8 below are arranged around.
 
 ---
 
@@ -1539,6 +1545,114 @@ unpublished-changes list, the workflow change that puts the gates before the dep
 - **Rollback** — that is P12-T2, on the same substrate.
 - **Anything that writes to the site outside this path.** There must be exactly one way the live
   site changes, or the gate has a hole beside it.
+
+---
+
+#### 8. Concurrency — the answer the owner asked for, before any code
+
+Read from the code, not reasoned from the design. Three mechanisms matter and **none of them
+currently guards anything**: `server/index.js:703` (the page save), `scripts/export.js:175-181`
+(the read), and `static.yml`'s `concurrency: group "pages"` (the deploy).
+
+**There is no draft state anywhere.** No `draft`, `published` or `status` field exists on a page
+tree, in the API or in the export. Every `PUT /api/pages/:slug` writes straight to the collection
+that `npm run export` reads. **Saving IS staging**: the moment an editor clicks Save, that content
+is what the next publish ships, whoever triggers it. Everything below follows from this.
+
+---
+
+**Q1. Two people press Publish within a minute.**
+
+*The deploy is safe.* `static.yml` sets `concurrency: group "pages", cancel-in-progress: false`:
+the first run finishes, later runs queue, and intermediate queued runs are dropped so only the
+latest survives. Each run checks out the branch tip, which contains both commits. The site is never
+half-deployed and no change is lost. **Nothing to fix here.**
+
+*The export is not safe.* `scripts/export.js` reads five collections in five separate awaits —
+`cases`, `products`, `faq`, `homepage`, then `pages` — with **no transaction and no snapshot**. A
+write landing between the first and last await produces a `data/` that is **a mix of two database
+states**: finding 41's shape, one level up. Nobody would see it in review, because each file is
+individually valid.
+
+*The commit is not safe under option C.* If the API commits, two publishes race on one working
+tree and one branch. Second push is rejected non-fast-forward, or worse, two processes stage the
+same tree at once. **Option B is worse still** — push credentials in a web service, racing.
+
+**Fix: one publish at a time, process-wide.** A single-document advisory lock in Mongo
+(`publishLock`, `findOneAndUpdate` with a TTL and an owner token — an atomic compare-and-swap, not
+a read-then-write) taken before export and released after push. A second Publish inside that window
+does not queue and does not fail silently: it returns **409 with who holds it and since when**, and
+the button says so. Plus a `readConcern: 'snapshot'` transaction around the five reads, so the
+export is one consistent picture of the database or none.
+
+---
+
+**Q2. A publish lands while someone is mid-edit in the editor.**
+
+Two different failures, and the second is the serious one.
+
+*(a) A half-finished edit ships.* There is no draft state, so if the editor has saved — autosave,
+or a deliberate save before stepping away — that content is live at the next publish, by anyone.
+"Mid-edit" is only safe while the work is **unsaved**, which is the opposite of what an editor
+should promise. **This is the real hole, and no lock fixes it**; it is a data-model gap.
+
+*(b) The editor's next save silently reverts the publish.* `server/index.js:703` is:
+
+```js
+await db.collection(PAGE_COLLECTIONS.pages)
+  .replaceOne({ slug: slug }, doc, { upsert: true });
+```
+
+An **unconditional whole-document replace**. `updatedAt` is written and **never read as a
+precondition**. So: A opens 典型病例 at 10:00. B edits and publishes at 10:05. A saves at 10:10 from
+the tree loaded at 10:00 — B's work is gone, with no error, no warning and no trace, and the next
+publish ships the reversal. This is **finding 25's shape on the page-tree path** ("no write path may
+delete a field its caller was not shown"), and it is live today in the Puck editor; the Publish
+button only widens the window and raises the cost.
+
+**Fix for (b): optimistic concurrency.** Hand the tree out with its `updatedAt` as an ETag; require
+`If-Match` on the PUT; `replaceOne({ slug, updatedAt: <expected> }, …)` **without upsert**, and
+treat `matchedCount === 0` as **409 Conflict**. One extra filter key. The editor then shows
+"someone else changed this page" and offers reload — rather than destroying the change.
+
+**Fix for (a): give a page tree a draft.** `draft` and `published` trees per slug; the editor
+writes `draft`, Publish copies `draft → published`, and **export reads `published` only**. That,
+not a lock, is what makes "mid-edit" mean anything. It also makes Publish meaningful: today it
+ships whatever happens to be in the database at that instant.
+
+---
+
+**Q3. What prevents a half-published state?**
+
+Today, honestly: **the deploy step, and nothing else.**
+
+| Stage | Atomic? | Why |
+|---|---|---|
+| DB → `data/` (export) | **No** | five unsynchronised reads, no snapshot |
+| `data/` → rendered HTML | Yes | one process, all-or-nothing; a throw leaves `data/` untouched |
+| gates | Yes | `test:seo` / `test:data` fail the job; nothing uploads |
+| commit + push | **No** | no lock; two publishes race one tree and one branch |
+| artifact → live | **Yes** | Pages swaps one artifact; visitors see old or new, never a mix |
+
+So a visitor never sees a half-deployed *site*. What they can see is a **fully deployed artifact
+built from a torn read** — internally consistent-looking, and wrong. Nothing in the repository
+would catch it, because every file in it is valid.
+
+**In order, smallest first — and 1 and 2 are worth doing even if Publish is never built:**
+
+1. `If-Match` / `updatedAt` on `PUT /api/pages/:slug` → 409. Closes a live data-loss bug.
+2. The five export reads in one snapshot transaction. Closes the torn read.
+3. The `publishLock` with a TTL, returning 409 with the holder.
+4. `draft` / `published` trees, which is the only thing that makes Publish an event rather than a
+   photograph of whatever was in the database at that moment.
+
+**Gate for this section:** each of 1–3 proved by effect with a negative control — two concurrent
+writers where the stale one must be refused; an export racing a write that must produce one
+consistent picture or none; two Publishes where the second must get 409 naming the holder. A test
+that passes without the guard in place is not a test (findings 12, 23).
+
+**Owner's call:** 4 changes what Save means for the client and is a schema change to every page
+tree. It may belong in P11-T2 with the new admin rather than here. 1–3 do not need that decision.
 
 ---
 

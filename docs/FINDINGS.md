@@ -88,6 +88,11 @@ length, image load counts, JSON-LD blocks, `<h1>` count and failed requests.
 | 41 | **An edit made directly to a GENERATED file is reverted by the next `npm run export`.** `assets.navActive` was added to 14 page-tree FILES at P10-T1 and never to MongoDB. It sat correct for five weeks and the first export since stripped all 14 — the chrome partial's nav fix, silently undone | **High — latent.** Armed the moment the edit was made, and it would have detonated at the first publish from the admin, which is an export. **Nothing would have caught it:** no suite asserts `navActive` or the nav highlight, and no suite exercises `export` at all | **Rule, recorded 24 Oct 2026.** The database is the source of truth for anything in a page tree. Fixed by writing `navActive` into the 14 page documents, so export now preserves it |
 | 42 | **The Google Fonts URL is malformed, so Inter and Playfair Display have NEVER loaded.** It declares two axes (`opsz,wght`) then gives `14..32,300;400;500;600;700` — one value pair followed by four bare numbers. Google Fonts answers **400**. Byte-identical on the pre-migration hand-coded pages, so this predates the rebuild and is live today on all 18 pages | Medium — the site has always rendered in fallback fonts, and the typography the design assumes has never been delivered. Not a regression and not caused by the merge | **Phase 13**, with finding 36 (self-hosting) and finding 21b (the CJK stack). One-line fix available now: paired values, e.g. `Inter:opsz,wght@14..32,300..700` returns 200 |
 | 43 | **The CI SEO gate cannot run, and its reference holds what it forbids.** P8-T3 put `test:seo` on the deploy path. That suite refuses to start without `baseline/head/`, which is **gitignored**, so the gate has failed on every CI run since and NOTHING has deployed. The obvious fix is barred: those head snapshots were captured from live pages carrying the finding-26 rating markup, so committing them would republish it | **High.** The live site has been frozen on the pre-P8-T3 artifact since 24 Oct 2026 — `server/`, `docs/` and `legacy/` are still publicly served, which is the exposure P8-T3 existed to close. The gate failed SAFE, but it has never once passed | **FIXED 28 Oct 2026** (option A). `scripts/seo-reference.js` emits `baseline/seo-reference.json` (8.7 KB, committed); `scripts/test-seo.js:110-124` reads it and asserts it carries no rating data. Proven in a tracked-files-only checkout with three negative controls |
+| 44 | **The chat widget's strings had four copies, and three had drifted — on the health disclaimer.** `renderer/chrome/chat.html` says in its own comment that there is "ONE copy of every string, in data/site.json". There were four: the partial, plus a hand-made copy in each of `product.html`, `購物車.html` and `account.html`, which are out of Phase 9 scope and do not go through the renderer. The refusal wording was changed centrally at `17b4e49` and the three copies were not, so all three served `本對話無法解答` where the data says `此處不提供解答` — leaving them on the **first-person phrasing the owner had explicitly rejected** (BUILD_TASKS P13-T5, "impersonal by owner decision") | **Medium.** It is the one string carrying the health referral, on a site with finding 26 open. Not caught for a fortnight because **nothing compared them** — no gate read those three files, and the comment asserting single-sourcing was the only thing anyone would have checked | **FIXED 31 Oct 2026 at P15-T1.** `scripts/sync-chat-markup.js` GENERATES the block in all three from the same partial the renderer uses (`npm run chat:sync`, idempotent), so there is now one source in fact and not only in a comment. Gated by `scripts/test-chat.js`, which asserts each page carries the filled partial byte for byte and names the repair command on failure; proved by reintroducing the drift (exit 1) and repairing it (exit 0) |
+| 45 | **The language switcher sent visitors to the Wix site.** `alternateFor()` returned the `hreflang` href verbatim - an absolute `www.wonder-herb.com` URL, because that is what hreflang means - so clicking a language button navigated off whatever host the visitor was on. That domain is the client’s **Wix site** until cutover | **High.** Live on every pre-rendered page from the GitHub Pages copy and from localhost. Invisible for six weeks because no English page existed, so the switcher always took the “not available” branch - `test:behaviour` asserted the dead branch thoroughly and the live one not at all | **FIXED 2 Nov 2026 at P14-T1.** `sameHost()` in `assets/site.js` keeps the canonical path and puts it on the visitor’s own origin, deriving the base prefix from this page’s canonical. Gated: `test:behaviour` `languageSwitch@1280` asserts the navigation lands on the test’s host |
+| 46 | **The homepage tree was not in MongoDB.** `data/pages/index.json` existed with no database document, so the homepage could not be edited in the admin or Puck, and `export` printed an orphan warning every run | Medium - contradicts finding 41’s rule (the database is the source of truth for a page tree) for the single most important page. Found only because the English migration writes to Mongo and the homepage silently got none of it | **FIXED 2 Nov 2026 at P14-T1.** Inserted, content byte-identical - `npm run export` reported 0 files changed afterwards |
+| 47 | **`unit` was marked structural, so an editor save would have destroyed its English.** `editor/lang.js` `STRUCTURAL` listed it among hrefs, icons and image URLs. It is display copy (“/ 500粒膠囊 (標準裝)”), not a unit symbol | Medium - latent until the field became per-language, then the first save in Puck would have collapsed `{zh, en}` back to a string on all six product pages. **The second time this exact mistake was made**: `number` came off the same list at P9 for the same reason | **FIXED 2 Nov 2026 at P14-T1.** Removed from `STRUCTURAL`; both removals now recorded beside the list. Caught by `test:editor:lang`’s finding-25 round trip |
+| 48 | **Hard-coded Chinese aria-labels inside section components.** `ProductGrid` (`产品列表`, `关闭`) and `Gallery` (`产品缩略图`) - literal strings in the source, not fields | Low-medium - would have stayed Chinese in every language the site ever adds, and only a screen-reader user would have met them. No gate reads the text inside an element; a rule about per-language FIELDS cannot catch a string that was never made one | **FIXED 2 Nov 2026 at P14-T1.** Per-language defaults in the component, overridable by a tree field |
 
 ---
 
@@ -2624,3 +2629,182 @@ button. **Not recommended**, and if taken it must be written into P12-T5 as a bl
 `/server/index.js`, `/docs/FINDINGS.md` and `/legacy/` all return **404** on the live site while
 the 18 pages, `assets/`, `data/`, `admin/` and the models return 200. Negative control: the gate
 must still fail the job when a tree is given rating data.
+
+---
+
+## Finding 44 — four copies of one disclaimer, three of them stale
+
+**Found:** 31 Oct 2026, while wiring the chat widget to an answer service (P15-T1).
+**Status:** fixed the same day, and gated.
+
+### What was wrong
+
+`renderer/chrome/chat.html` carries this comment, written at P13-T5:
+
+> the states that are not on screen at load ride on the panel as `data-*` so there is **ONE copy of
+> every string**, in `data/site.json`
+
+That is true of the fifteen pre-rendered pages, which are built from the partial. It was not true of
+the site. `product.html`, `購物車.html` and `account.html` are out of Phase 9 scope by decision
+(owner, 16 Sep 2026) and stay hand-coded, so they never see the partial — and at P13-T5 the whole
+chat block was **copied into each of them by hand**. Four copies, three of them unmanaged.
+
+The refusal wording was then changed centrally, at `17b4e49`. The three copies were not touched:
+
+| | refusal string |
+|---|---|
+| `data/site.json` | …此處不提供解答… |
+| the three hand-coded pages | …本對話無法解答… |
+
+### Why it matters more than a stale string usually would
+
+That is **the string that carries the health referral**, on a site where finding 26 is open as a
+legal matter about health content. And the direction of the drift is the bad one: `本對話無法解答`
+is the first-person-adjacent phrasing — "this conversation cannot answer" — that BUILD_TASKS P13-T5
+records the owner as having **explicitly rejected**, because on a health site it reads as a person
+declining and invites being treated as an adviser. The impersonal wording was a decision; three of
+eighteen pages were still serving the version it replaced.
+
+### Why nothing caught it
+
+Nothing compared them. `test:behaviour` drives the widget on the pre-rendered pages and asserts the
+refusal against `data/site.json` (`scripts/test-behaviour.js:729`) — correctly, and it passed, because
+those pages are generated from the data. No suite read the three hand-coded files. The only thing
+anyone would have consulted was the comment claiming single-sourcing, which was wrong.
+
+This is finding 35's rule arriving from the other direction. Finding 35 was about a **finding** that
+described a gate which did not exist. This was a **code comment** describing an invariant that did
+not hold. Both were trusted at the moment they mattered.
+
+### The fix, and why it is a generator and not a test
+
+Policing four copies with a test only tells you they have diverged; somebody then edits three files
+by hand and the next change starts the clock again. So the three pages are now **generated**:
+
+- `scripts/sync-chat-markup.js` (`npm run chat:sync`) fills `renderer/chrome/chat.html` through the
+  renderer's own `fillChat` and writes the result into each of the three, between the launcher button
+  and the behaviour `<script>`. Idempotent — an unchanged run leaves git clean.
+- `scripts/test-chat.js` asserts each page carries the filled partial **byte for byte**, and prints
+  the repair command when it does not. It also checks the strings against `data/site.json`
+  independently of the partial, since the partial could be right and the data stale, and asserts the
+  refusal is the impersonal wording by name.
+
+**Negative control, run:** the superseded wording was put back into `product.html` by hand — the suite
+exited 1 naming both the page and the string; `npm run chat:sync` repaired it and the suite exited 0.
+
+### What is still a copy
+
+Nothing in the chat block. But the three hand-coded pages duplicate the site chrome — header, footer,
+floating buttons — by the same mechanism, and nothing compares those either. The chat block is now
+generated; the rest of those three pages is not. Recorded here rather than fixed, because they are out
+of Phase 9 scope and the right time is whenever that decision is revisited.
+
+---
+
+## Finding 45 — the language switcher sent visitors off the site
+
+**Found:** 2 Nov 2026, at P14-T1, the moment English pages existed.
+**Status:** fixed the same day, gated by `test:behaviour`.
+
+### What was wrong
+
+`alternateFor()` in `assets/site.js` returned the `hreflang` href exactly as written:
+
+```js
+return links[i].getAttribute('href');   // https://www.wonder-herb.com/en/...
+```
+
+An hreflang href **has** to be an absolute canonical URL — that is what hreflang means. So following
+one verbatim navigated to `www.wonder-herb.com` however the visitor had arrived. From the GitHub
+Pages URL, from `localhost`, from any future staging host, clicking a language button left the site.
+
+**And `www.wonder-herb.com` is the client's Wix site until cutover.** A visitor on the pre-rendered
+GitHub Pages copy who clicked "EN" would have been handed to the old Wix site, mid-session.
+
+### Why nothing caught it for six weeks
+
+Because until P14-T1 there were no English pages, so `alternateFor()` found no alternate and the
+switcher took the other branch every time — the honest "this page is Chinese only" notice. The bug
+was in the branch that could not execute. `test:behaviour` asserted that notice thoroughly, at two
+widths, on fifteen pages, with a negative control; it asserted the dead branch exactly as
+thoroughly as the live one, which is to say it asserted the wrong thing correctly.
+
+This is the same shape as finding 23 — a control that looks tested and is not — but reached from the
+other end: there, the behaviour was dead and the test passed; here, the test passed *because* the
+behaviour was dead.
+
+### The fix
+
+`sameHost()` keeps the canonical **path** and puts it on the origin the visitor is actually using.
+The base prefix is derived, not assumed: compare this page's own canonical path against
+`location.pathname`, and whatever sits in front is the base this deployment is served under
+(`/wonder-herb` on the project Pages URL, nothing at a domain root). A home page whose canonical is
+the bare directory is handled explicitly, and a target ending in `/` is given `index.html` when the
+current page is itself served as one — so it works on a plain static server, not only on a host that
+resolves directory URLs. Anything unparseable falls back to the href untouched.
+
+**Gated:** `test:behaviour`'s `languageSwitch@1280` now asserts the navigation happened, that the
+page that loaded is really in English, and that its stylesheet resolves as `../assets/…` — on the
+test's own host, which is not the canonical one. If the switcher ever goes back to following the
+absolute href, the test leaves the server and fails.
+
+---
+
+## Finding 46 — the homepage tree was not in the database
+
+`data/pages/index.json` existed; no document in the `pages` collection did. So the homepage could
+not be edited through the admin or Puck at all, and `npm run export` printed
+`1 file(s) not in the database, left in place: index.json` on every single run — a warning that had
+been scrolling past for weeks.
+
+Contrary to finding 41's rule, which is that the database is the source of truth for anything in a
+page tree, the homepage's source of truth was a file nothing managed. It was found at P14-T1 only
+because the English migration writes to MongoDB and the homepage silently received none of it.
+
+**Fixed 2 Nov 2026:** inserted, content byte-identical — `npm run export` reported 0 files changed
+afterwards, which is the proof that nothing moved.
+
+---
+
+## Finding 47 — a translatable field marked structural, and the editor would have eaten it
+
+`editor/lang.js` `STRUCTURAL` listed `unit` alongside `href`, `icon`, `image` and `src` — the keys
+that must NOT be translated because translating them breaks the page. But `unit` is display copy:
+`"/ 500粒膠囊 (標準裝)"`, `"/ 120粒軟膠醒"`. It reads like a unit symbol (`ml`, `mg`) and is not one.
+
+While `data/` held a bare string this was invisible: projecting and merging a plain string is a
+no-op. The moment P14-T1 made it `{zh, en}`, the first editor save would have collapsed it back to a
+string and discarded the English — on all six product pages, one field each.
+
+Caught by `test:editor:lang`'s finding-25 round trip ("an unchanged editor save changes nothing but
+adding section ids"), which is precisely the check that exists for this.
+
+**This is the second time.** `number` was on the same list and came off at P9 for the same reason,
+caught by the same check — hero stats read "90%+", "20+ Yrs", "GMP", which are copy, not quantities.
+Both removals are now recorded in `editor/lang.js` next to the list, because the list's danger is
+that a key's NAME suggests a type its CONTENT does not have.
+
+**Fixed 2 Nov 2026:** `unit` removed from `STRUCTURAL`.
+
+---
+
+## Finding 48 — hard-coded Chinese inside section components
+
+`sections/ProductGrid.jsx` carried `aria-label="产品列表"` and `aria-label="关闭"`, and
+`sections/Gallery.jsx` carried `aria-label="产品缩略图"` — literal Chinese in the component source,
+not fields.
+
+They would have stayed Chinese on every English page, in every language the site ever adds, and
+**only a screen-reader user would ever have encountered them**. No gate reads the text inside an
+element, so nothing would have reported it; it was found by counting CJK characters in the rendered
+English output and chasing the last two dozen.
+
+Worth noting what kind of miss this is: the project's rule is that every text field is a
+per-language object, and these were not fields at all. A rule about fields cannot catch a string
+that was never made one.
+
+**Fixed 2 Nov 2026:** per-language defaults in the component (`{ zh, en }`), overridable by a tree
+field, so a tree that wants to set them still can and a tree that does not still gets the right
+language. Simplified Chinese preserved exactly as it was for `zh` — these three strings are
+simplified while the rest of the site is traditional, which is a pre-existing inconsistency in the
+source pages and was not "corrected" here.

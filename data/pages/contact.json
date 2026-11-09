@@ -2,31 +2,37 @@
   "slug": "contact",
   "path": "聯絡我們.html",
   "title": {
-    "zh": "聯絡我們 | Wonder Herb - 雲芝糖肽精華"
+    "zh": "聯絡我們 | Wonder Herb - 雲芝糖肽精華",
+    "en": "Contact Us | Wonder Herb - Yunzhi PSP Essence"
   },
   "seo": {
     "description": {
-      "zh": "康草堂 Wonder Herb 聯絡資訊：亞洲總部、中國辦事處、加拿大、澳洲及美國分銷商聯絡方式。專業雲芝糖肽產品諮詢。"
+      "zh": "康草堂 Wonder Herb 聯絡資訊：亞洲總部、中國辦事處、加拿大、澳洲及美國分銷商聯絡方式。專業雲芝糖肽產品諮詢。",
+      "en": "Wonder Herb contact details: Asia head office, China office, and distributors in Canada, Australia and the USA. Professional advice on Yunzhi PSP products."
     },
     "dateModified": "2026-06-02T10:30:00+08:00",
     "ogTitle": {
-      "zh": "聯絡我們 | Wonder Herb - 雲芝糖肽精華"
+      "zh": "聯絡我們 | Wonder Herb - 雲芝糖肽精華",
+      "en": "Contact Us | Wonder Herb - Yunzhi PSP Essence"
     },
     "ogDescription": {
-      "zh": "康草堂 Wonder Herb 聯絡資訊：亞洲總部、中國辦事處、加拿大、澳洲及美國分銷商聯絡方式。"
+      "zh": "康草堂 Wonder Herb 聯絡資訊：亞洲總部、中國辦事處、加拿大、澳洲及美國分銷商聯絡方式。",
+      "en": "Wonder Herb contact details: Asia head office, China office, and distributors in Canada, Australia and the USA."
     },
     "ogType": "website",
     "image": "https://static.wixstatic.com/media/b3683f_b7c386343b774bd3a28a2720f4237d3a~mv2.png",
     "breadcrumb": [
       {
         "name": {
-          "zh": "首頁"
+          "zh": "首頁",
+          "en": "Home"
         },
         "path": ""
       },
       {
         "name": {
-          "zh": "聯絡我們"
+          "zh": "聯絡我們",
+          "en": "Contact"
         },
         "path": "聯絡我們.html"
       }
@@ -99,11 +105,13 @@
       "type": "page-header",
       "fields": {
         "heading": {
-          "zh": "聯絡我們"
+          "zh": "聯絡我們",
+          "en": "Contact"
         },
         "variant": "centered",
         "sub": {
-          "zh": "康草堂 Wonder Herb 亞洲總部及全球分銷據點，歡迎諮詢"
+          "zh": "康草堂 Wonder Herb 亞洲總部及全球分銷據點，歡迎諮詢",
+          "en": "Wonder Herb Asia Headquarters & Global Distributors – Welcome to Inquire"
         },
         "headingId": "contact-heading"
       }
@@ -119,24 +127,29 @@
         "cards": [
           {
             "title": {
-              "zh": "亞洲總部"
+              "zh": "亞洲總部",
+              "en": "Asia Headquarters"
             },
             "flag": "https://flagcdn.com/hk.svg",
             "flagAlt": {
-              "zh": "Hong Kong Flag"
+              "zh": "Hong Kong Flag",
+              "en": "Hong Kong Flag"
             },
             "company": {
-              "zh": "康草堂有限公司"
+              "zh": "康草堂有限公司",
+              "en": "Wonder Herb Health Products Ltd"
             },
             "details": [
               {
                 "icon": "fas fa-map-marker-alt",
                 "text": [
                   {
-                    "zh": "香港九龍彌敦道301-309号 嘉賓商業大厦8樓803室"
+                    "zh": "香港九龍彌敦道301-309号 嘉賓商業大厦8樓803室",
+                    "en": "Room 803, 8/F, Carbin Commercial Building, 301-309 Nathan Road, Kowloon, Hong Kong"
                   },
                   {
-                    "zh": "(佐敦地鐵A出口)"
+                    "zh": "(佐敦地鐵A出口)",
+                    "en": "(Jordan MTR, Exit A)"
                   }
                 ],
                 "href": "https://maps.app.goo.gl/V3tFgJC9dk49HKPD7",
@@ -145,20 +158,23 @@
               {
                 "icon": "fas fa-phone-alt",
                 "text": {
-                  "zh": "+852 2757 3112"
+                  "zh": "+852 2757 3112",
+                  "en": "+852 2757 3112"
                 }
               },
               {
                 "icon": "fab fa-whatsapp",
                 "text": {
-                  "zh": "+852 9331 8571 (WhatsApp)"
+                  "zh": "+852 9331 8571 (WhatsApp)",
+                  "en": "+852 9331 8571 (WhatsApp)"
                 },
                 "href": "https://wa.me/85293318571/"
               },
               {
                 "icon": "fas fa-envelope",
                 "text": {
-                  "zh": "info@wonder-herb.com"
+                  "zh": "info@wonder-herb.com",
+                  "en": "info@wonder-herb.com"
                 },
                 "href": "mailto:info@wonder-herb.com"
               }
@@ -166,56 +182,66 @@
           },
           {
             "title": {
-              "zh": "中國辦事處"
+              "zh": "中國辦事處",
+              "en": "China Office"
             },
             "flag": "https://flagcdn.com/cn.svg",
             "flagAlt": {
-              "zh": "China Flag"
+              "zh": "China Flag",
+              "en": "China Flag"
             },
             "details": [
               {
                 "icon": "fas fa-map-marker-alt",
                 "text": {
-                  "zh": "廣東省廣州市荔灣區流花路73號流花君庭東座3樓"
+                  "zh": "廣東省廣州市荔灣區流花路73號流花君庭東座3樓",
+                  "en": "3/F, East Tower, Liuhua Junting, No.73 Liuhua Road, Liwan District, Guangzhou"
                 }
               },
               {
                 "icon": "fas fa-phone-alt",
                 "text": {
-                  "zh": "+86 138 0295 5088"
+                  "zh": "+86 138 0295 5088",
+                  "en": "+86 138 0295 5088"
                 }
               }
             ]
           },
           {
             "title": {
-              "zh": "加拿大分銷商"
+              "zh": "加拿大分銷商",
+              "en": "Canada Distributor"
             },
             "flag": "https://flagcdn.com/ca.svg",
             "flagAlt": {
-              "zh": "Canada Flag"
+              "zh": "Canada Flag",
+              "en": "Canada Flag"
             },
             "company": {
-              "zh": "Smartmed Services Group Inc"
+              "zh": "Smartmed Services Group Inc",
+              "en": "Smartmed Services Group Inc"
             },
             "details": [
               {
                 "icon": "fas fa-user",
                 "text": {
-                  "zh": "聯絡：陳小姐"
+                  "zh": "聯絡：陳小姐",
+                  "en": "Contact: Ms Chan"
                 }
               },
               {
                 "icon": "fab fa-whatsapp",
                 "text": {
-                  "zh": "+1 778 636 4068 (WhatsApp)"
+                  "zh": "+1 778 636 4068 (WhatsApp)",
+                  "en": "+1 778 636 4068 (WhatsApp)"
                 },
                 "href": "https://wa.me/17786364068"
               },
               {
                 "icon": "fas fa-envelope",
                 "text": {
-                  "zh": "jc@smartgroupinc.org"
+                  "zh": "jc@smartgroupinc.org",
+                  "en": "jc@smartgroupinc.org"
                 },
                 "href": "mailto:jc@smartgroupinc.org"
               }
@@ -223,33 +249,39 @@
           },
           {
             "title": {
-              "zh": "澳洲分銷商"
+              "zh": "澳洲分銷商",
+              "en": "Australia Distributor"
             },
             "flag": "https://flagcdn.com/au.svg",
             "flagAlt": {
-              "zh": "Australia Flag"
+              "zh": "Australia Flag",
+              "en": "Australia Flag"
             },
             "company": {
-              "zh": "Provital Pty Ltd"
+              "zh": "Provital Pty Ltd",
+              "en": "Provital Pty Ltd"
             },
             "details": [
               {
                 "icon": "fas fa-user",
                 "text": {
-                  "zh": "聯絡：袁先生"
+                  "zh": "聯絡：袁先生",
+                  "en": "Contact: Mr Yuen"
                 }
               },
               {
                 "icon": "fab fa-whatsapp",
                 "text": {
-                  "zh": "+61 416 775 229 (WhatsApp)"
+                  "zh": "+61 416 775 229 (WhatsApp)",
+                  "en": "+61 416 775 229 (WhatsApp)"
                 },
                 "href": "https://wa.me/61416775229"
               },
               {
                 "icon": "fas fa-envelope",
                 "text": {
-                  "zh": "enquiry@provital.com.au"
+                  "zh": "enquiry@provital.com.au",
+                  "en": "enquiry@provital.com.au"
                 },
                 "href": "mailto:enquiry@provital.com.au"
               }
@@ -257,33 +289,39 @@
           },
           {
             "title": {
-              "zh": "美國分銷商"
+              "zh": "美國分銷商",
+              "en": "USA Distributor"
             },
             "flag": "https://flagcdn.com/us.svg",
             "flagAlt": {
-              "zh": "USA Flag"
+              "zh": "USA Flag",
+              "en": "USA Flag"
             },
             "company": {
-              "zh": "Echo Glen Healthful Solutions"
+              "zh": "Echo Glen Healthful Solutions",
+              "en": "Echo Glen Healthful Solutions"
             },
             "details": [
               {
                 "icon": "fas fa-phone-alt",
                 "text": {
-                  "zh": "+1 503 647-5003"
+                  "zh": "+1 503 647-5003",
+                  "en": "+1 503 647-5003"
                 }
               },
               {
                 "icon": "fab fa-whatsapp",
                 "text": {
-                  "zh": "+1 971 219-5798 (WhatsApp)"
+                  "zh": "+1 971 219-5798 (WhatsApp)",
+                  "en": "+1 971 219-5798 (WhatsApp)"
                 },
                 "href": "https://wa.me/19712195798"
               },
               {
                 "icon": "fas fa-envelope",
                 "text": {
-                  "zh": "wonderherbUSA@gmail.com"
+                  "zh": "wonderherbUSA@gmail.com",
+                  "en": "wonderherbUSA@gmail.com"
                 },
                 "href": "mailto:wonderherbUSA@gmail.com"
               }
@@ -302,10 +340,12 @@
       "fields": {
         "src": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3689.895749292572!2d114.17026231539206!3d22.30823648530525!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x340400e6a87287ef%3A0xe19c61742ffc09ba!2s303%20Nathan%20Rd%2C%20Jordan%2C%20Hong%20Kong!5e0!3m2!1sen!2shk!4v1645698820308!5m2!1sen!2shk",
         "title": {
-          "zh": "香港九龙弥敦道303号地图"
+          "zh": "香港九龙弥敦道303号地图",
+          "en": "Map of 303 Nathan Road, Kowloon, Hong Kong"
         },
         "caption": {
-          "zh": "亞洲總部：香港九龍彌敦道301-309号 嘉賓商業大厦8樓803室 (佐敦地鐵A出口)"
+          "zh": "亞洲總部：香港九龍彌敦道301-309号 嘉賓商業大厦8樓803室 (佐敦地鐵A出口)",
+          "en": "<i class='fas fa-map-pin'></i> Asia HQ: Rm 803, 8/F, Champion Building, 301-309 Nathan Road, Kowloon, Hong Kong"
         },
         "captionIcon": "fas fa-map-pin",
         "allowFullscreen": true
@@ -319,13 +359,16 @@
       },
       "fields": {
         "heading": {
-          "zh": "需要專業諮詢？"
+          "zh": "需要專業諮詢？",
+          "en": "Need Professional Advice?"
         },
         "body": {
-          "zh": "我們的健康顧問團隊隨時為您解答關於雲芝糖肽精華及癌症輔助方案的疑問。"
+          "zh": "我們的健康顧問團隊隨時為您解答關於雲芝糖肽精華及癌症輔助方案的疑問。",
+          "en": "Our health consultant team is ready to answer your questions about Yunzhi PSP Essence and cancer supportive care."
         },
         "label": {
-          "zh": "立即 WhatsApp 諮詢"
+          "zh": "立即 WhatsApp 諮詢",
+          "en": "<i class='fab fa-whatsapp'></i> WhatsApp Us Now"
         },
         "href": "https://wa.me/85293318571/",
         "icon": "fab fa-whatsapp",

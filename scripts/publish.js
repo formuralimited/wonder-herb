@@ -4,6 +4,7 @@
  *     1. export          MongoDB  ->  data/*.json and data/pages/*.json
  *     2. sections:build  sections/ ->  renderer/.build/sections.cjs
  *     3. render          page trees + data  ->  static HTML
+ *     3b. sitemap        page trees  ->  sitemap.xml (hreflang alternates)
  *     4. test:seo        THE GATE. A page that loses SEO stops the pipeline.
  *
  * ============================================================================
@@ -48,6 +49,12 @@ const STAGES = [
     args: ['renderer/build-sections.js'] },
   { name: 'render',         why: 'page trees + data -> static HTML',
     args: ['renderer/render.js'] },
+  /* AFTER render, BEFORE the gates. The sitemap is generated from the trees
+     and the languages in scope, so publishing a new page or a new language
+     without regenerating it would ship a page no crawler is told about -
+     which is how English shipped invisible at P14 until it was noticed. */
+  { name: 'sitemap',        why: 'page trees -> sitemap.xml, with hreflang alternates',
+    args: ['scripts/build-sitemap.js'] },
   { name: 'test:seo',       why: 'THE GATE - blocks a page that loses SEO',
     args: ['scripts/test-seo.js'] },
   /* Runs AFTER export, on what export actually wrote. Until P9-T1 publish did

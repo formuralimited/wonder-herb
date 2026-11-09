@@ -1,33 +1,35 @@
-/* The chat widget (P13-T5) — FRONT END ONLY.
+/* The chat widget — the front end, now wired to an answer service.
  *
  * WHAT THIS DOES AND DOES NOT DO. It owns the launcher, the panel, the message
- * list, the composer and every visible state. It owns NO answer logic: there is
- * no keyword matching, no FAQ lookup, no heuristics. That was deliberate — a
- * scripted matcher would be thrown away the moment Phase 15 adds a real answer
- * API, so it was never written.
+ * list, the composer and every visible state. It owns NO answer logic and no
+ * policy: no keyword matching, no FAQ lookup, no heuristics, and no decision
+ * about what may be said. All of that is server/chat.js, deliberately, because
+ * anything in this file is editable by whoever is reading the page.
  *
  * ===================================================================
- * THE ANSWER BOUNDARY — the one thing Phase 15 changes.
+ * THE ANSWER BOUNDARY — P13-T5 left one function hollow; this is it.
  * ===================================================================
- * `requestAnswer(text, lang)` below is the ONLY place that knows where an
- * answer comes from. It returns a typed result and nothing else in this file
- * inspects anything but `kind`. Phase 15 replaces its body with an API call;
- * the UI, the states, the strings and the markup do not move.
+ * `requestAnswer(text, lang)` is the ONLY place that knows where an answer
+ * comes from. It returns a typed result and nothing else in this file inspects
+ * anything but `kind`, one of: answer | refusal | unavailable | offline |
+ * error. Filling it in changed nothing else — not the markup, not the states,
+ * not the strings. That was the whole point of building the boundary first.
  *
- * Today it answers `{ kind: 'unavailable' }`, because there is no backend, and
- * the UI tells the truth about that: the input is DISABLED with a visible
- * reason, and there is no typing indicator, because nothing is typing. A dead
- * input that swallows what someone types would be worse than no widget.
+ * NO SERVICE IS STILL A SUPPORTED STATE. With data/site.json's chat.apiBase
+ * empty, every send answers `unavailable`, the composer is never enabled, and
+ * the widget behaves exactly as it shipped. That is what the live site does
+ * until the API has a host (Phase 11), and it is a data edit to change.
  *
- * THE REFUSAL STATE IS BUILT NOW, though nothing can trigger it yet. This is a
- * health-products site: a question about treating a condition must be refused
- * and referred to a practitioner, and retrofitting that after the answers start
- * flowing is how it gets missed. The rendering path, the styling and the
- * announcement are all here and tested; Phase 15 only has to return
- * `{ kind: 'refusal' }`.
+ * THE REFUSAL STATE, which was built before anything could trigger it, now
+ * can. This is a health-products site: a question about treating a condition
+ * is refused and referred to a practitioner. server/chat.js decides that —
+ * before the model is called, and again on the model's reply — and this file
+ * only renders the outcome.
  *
- * NOTHING IS STORED. No transcript, no localStorage, no analytics. PDPO
- * retention is a Phase 15 decision and nothing may be kept before it is taken.
+ * NOTHING IS STORED. No transcript, no localStorage, no analytics, here or on
+ * the server (owner, 31 Oct 2026). Visitors type their health details into
+ * chat boxes; HK PDPO retention is a decision nobody has taken, so nothing is
+ * kept until someone takes it.
  */
 (function () {
   'use strict';
@@ -52,20 +54,74 @@
 
   var lang = (document.documentElement.getAttribute('lang') || 'zh').toLowerCase();
 
+  /* Where the answer service is, from data/site.json's chat.apiBase. Empty is
+     a supported state and the one the live site ships in until the API has a
+     host: the widget then behaves exactly as P13-T5 shipped it. */
+  var api = (panel.getAttribute('data-api') || '').replace(/\/+$/, '');
+
+  /* The only kinds render() knows. Used to enable the composer and to reject
+     anything unexpected coming back from the API. */
+  var KINDS = ['answer', 'refusal', 'unavailable', 'offline', 'error'];
+
+  /* PROGRESSIVE ENHANCEMENT, and in this order on purpose. The markup ships
+     the composer disabled with a placeholder that says why, so a visitor
+     without JavaScript - or with this file blocked, or with no service
+     configured - is never shown an input that silently eats what they type
+     (the dead-control failure of finding 23). It is enabled here, and only
+     here, once there is something on the other end of it. */
+  if (api && input) {
+    input.disabled = false;
+    var send = composer && composer.querySelector('.wh-chat-send');
+    if (send) send.disabled = false;
+  }
+
   /* ------------------------------------------------- the answer boundary */
 
   /* Returns { kind, text }. kind is one of:
        'answer'      a real reply to show
        'refusal'     a clinical question; show the referral, never an answer
-       'unavailable' there is no answer service (today's only outcome)
+       'unavailable' there is no answer service configured
        'offline'     the browser says there is no network
        'error'       the request failed
-     PHASE 15: replace this body with the API call. Change nothing else. */
-  function requestAnswer(text, pageLang) {        // eslint-disable-line no-unused-vars
+     The five kinds and the strings are unchanged from P13-T5; only this body
+     was replaced, which is what the boundary was for.
+
+     `api` is data/site.json's chat.apiBase, rendered into the panel. Empty
+     means no service: every send answers 'unavailable' exactly as before, and
+     the composer was never enabled, so nothing can call this anyway.
+
+     THE DECISION IS THE SERVER'S, NOT THIS FILE'S. server/chat.js refuses
+     clinical questions and strips efficacy language out of the model's reply.
+     That has to be true on the server: anything here is editable by whoever is
+     looking at the page. This function reads `kind` and renders it - it never
+     decides what may be said. */
+  function requestAnswer(text, pageLang) {
     if (navigator && navigator.onLine === false) {
       return Promise.resolve({ kind: 'offline' });
     }
-    return Promise.resolve({ kind: 'unavailable' });
+    if (!api) return Promise.resolve({ kind: 'unavailable' });
+
+    return fetch(api + '/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: text, lang: pageLang })
+    }).then(function (response) {
+      /* 429 is the rate limit and 400 an over-long question. Both already
+         arrive as { kind: 'error' }, so there is no status handling here: a
+         sixth kind would render as silence, because render() knows five. */
+      if (!response.ok && response.status !== 429 && response.status !== 400) {
+        return { kind: 'error' };
+      }
+      return response.json();
+    }).then(function (body) {
+      /* Trust `kind` only if it is one we render. A changed or proxied API must
+         not be able to put arbitrary markup on the page - and addMessage uses
+         textContent, so even an answer cannot. */
+      if (!body || KINDS.indexOf(body.kind) === -1) return { kind: 'error' };
+      return body;
+    }).catch(function () {
+      return { kind: 'error' };     /* network, CORS, DNS, a parked API */
+    });
   }
 
   /* --------------------------------------------------------- rendering */
@@ -88,9 +144,10 @@
     log.scrollTop = log.scrollHeight;
   }
 
-  /* Present for Phase 15 and never shown before there is something to wait
-     for. Kept here rather than invented later so the markup, the styling and
-     the removal path are already proven. */
+  /* Shown while a request is in flight and removed the moment it resolves,
+     including on failure - an indicator left spinning after an error reads as
+     a hang. It was written at P13-T5 before anything could wait, so that the
+     markup, the styling and the removal path were proven before they mattered. */
   function showTyping() {
     var el = document.createElement('div');
     el.className = 'wh-chat-typing';
@@ -148,7 +205,7 @@
   if (composer) {
     composer.addEventListener('submit', function (e) {
       e.preventDefault();
-      if (!input || input.disabled) return;      /* cannot happen today */
+      if (!input || input.disabled) return;      /* no service configured */
       var text = (input.value || '').trim();
       if (!text) return;
       addMessage('user', text);
@@ -165,8 +222,9 @@
   }
 
   /* Exposed for test:behaviour, which asserts the refusal and error states by
-     effect. They cannot be reached through the UI until Phase 15 enables the
-     input, and a state nobody can reach is a state nobody has checked. */
+     effect. The live site's composer is disabled while chat.apiBase is empty,
+     so without this seam those states would be unreachable - and a state
+     nobody can reach is a state nobody has checked. */
   window.WonderHerbChat = {
     open: open,
     close: close,

@@ -37,11 +37,24 @@ execFileSync(process.execPath, [path.join(ROOT, 'renderer', 'build-sections.js')
 
 const render = require(path.join(ROOT, 'renderer', 'render.js'));
 const { renderPage, loadData, loadStyles, loadChrome, loadTree, LANGS_IN_SCOPE, PRIMARY } = render;
+const { LANGS } = require(path.join(ROOT, 'renderer', 'i18n.js'));
 
 check('renderer/render.js exports renderPage', typeof renderPage === 'function');
-check('Month 1 renders the primary language only',
-      LANGS_IN_SCOPE.length === 1 && LANGS_IN_SCOPE[0] === PRIMARY,
-      LANGS_IN_SCOPE.join(', ') + '   (Phase 14 widens this)');
+/* Phase 14 widened this from zh alone to zh + en. What is asserted is not a
+   count but the two properties that must hold however many languages there
+   are: the primary language comes FIRST, because it keeps the canonical paths
+   the site already uses (renderer/head.js pagePath), and every entry is a
+   language the project actually supports. A count would have to be edited
+   again for every language added, which is how an assertion becomes a
+   formality. */
+check('the primary language is rendered, and first',
+      LANGS_IN_SCOPE.length >= 1 && LANGS_IN_SCOPE[0] === PRIMARY,
+      LANGS_IN_SCOPE.join(', '));
+check('every language in scope is one the project supports',
+      LANGS_IN_SCOPE.every(l => LANGS.indexOf(l) !== -1),
+      'of: ' + LANGS.join(', '));
+check('no language appears twice',
+      new Set(LANGS_IN_SCOPE).size === LANGS_IN_SCOPE.length, 'distinct');
 
 const TREE = path.join(ROOT, 'renderer', 'sample', 'products.json');
 check('the sample page tree exists', fs.existsSync(TREE), 'renderer/sample/products.json');
@@ -333,6 +346,15 @@ console.log('\n=== retired pages are served from the render; the rest are never 
   const legacyFile = path.join(ROOT, 'legacy', NAME);
   const treeFile = path.join(ROOT, 'renderer', '.build', 'zz-render-root-test.tree.json');
   const legacyExisted = fs.existsSync(path.join(ROOT, 'legacy'));
+  /* The render writes this page once per language in scope, so the cleanup has
+     to be derived from LANGS_IN_SCOPE rather than listed. It was listed, and
+     when P14-T1 added English the list did not grow: every run left
+     en/zz-render-root-test.html behind - a page titled 測試 carrying a
+     canonical on the real domain - and the "left nothing behind" check below
+     passed anyway, because it too named only the paths it already knew about.
+     Same shape as finding 45: the assertion was thorough about the world as it
+     was when it was written. */
+  const langFiles = LANGS_IN_SCOPE.filter(l => l !== PRIMARY).map(l => path.join(ROOT, l, NAME));
   const cli = () => execFileSync(process.execPath, [path.join(ROOT, 'renderer', 'render.js'), treeFile],
                                  { cwd: ROOT, stdio: 'pipe' }).toString('utf8');
   try {
@@ -365,10 +387,14 @@ console.log('\n=== retired pages are served from the render; the rest are never 
     check('a name with a directory in it is refused (the preview route\'s traversal guard)',
           originalPagePath('../.env') === null && originalPagePath('legacy/' + NAME) === null, 'null');
   } finally {
-    [rootFile, legacyFile, treeFile, path.join(ROOT, 'renderer', '.out', NAME)].forEach(f => { try { fs.unlinkSync(f); } catch (e) {} });
+    [rootFile, legacyFile, treeFile, path.join(ROOT, 'renderer', '.out', NAME)]
+      .concat(langFiles)
+      .forEach(f => { try { fs.unlinkSync(f); } catch (e) {} });
     if (!legacyExisted) { try { fs.rmdirSync(path.join(ROOT, 'legacy')); } catch (e) {} }
   }
-  check('the throwaway page left nothing behind', !fs.existsSync(rootFile) && !fs.existsSync(legacyFile), 'clean');
+  check('the throwaway page left nothing behind',
+        ![rootFile, legacyFile].concat(langFiles).some(f => fs.existsSync(f)),
+        'clean, including ' + (langFiles.length || 'no') + ' language copy/copies');
 }
 
 /* ------------------------------------------------------------- failure ----- */

@@ -225,9 +225,61 @@
   function alternateFor(code) {
     var links = document.querySelectorAll('link[rel="alternate"][hreflang]');
     for (var i = 0; i < links.length; i++) {
-      if (links[i].getAttribute('hreflang') === HREFLANG[code]) return links[i].getAttribute('href');
+      if (links[i].getAttribute('hreflang') === HREFLANG[code]) {
+        return sameHost(links[i].getAttribute('href'));
+      }
     }
     return null;
+  }
+
+  /* An hreflang href is an ABSOLUTE canonical URL - it has to be, that is what
+     hreflang means - so following one verbatim sends the visitor to
+     www.wonder-herb.com however they reached this page. That domain is the
+     client's Wix site until cutover, and the pre-rendered site is served from
+     a GitHub Pages URL and from localhost, so clicking a language button off
+     the canonical host meant LEAVING THE SITE. It went unnoticed while English
+     did not exist and every button showed a "not available" notice instead.
+
+     So: keep the canonical PATH, put it on the host the visitor is actually
+     using. The prefix is derived rather than assumed - compare this page's own
+     canonical path with the address bar, and whatever the address bar has in
+     front is the base this deployment is served under (/wonder-herb on the
+     project Pages URL, nothing at a domain root). Anything unparseable falls
+     back to the href untouched, which is the old behaviour. */
+  function sameHost(href) {
+    if (!href) return href;
+    try {
+      var target = new URL(href, root.location.href);
+      if (target.origin === root.location.origin) return target.href;
+
+      var canonical = document.querySelector('link[rel="canonical"]');
+      var prefix = '';
+      if (canonical) {
+        var mine = new URL(canonical.getAttribute('href'), root.location.href).pathname;
+        var here = root.location.pathname;
+        /* the home page's canonical is the bare directory, so compare on a
+           trailing slash rather than a file name */
+        if (mine !== '/' && here.length >= mine.length &&
+            here.slice(here.length - mine.length) === mine) {
+          prefix = here.slice(0, here.length - mine.length);
+        } else if (mine === '/') {
+          /* the home page: its canonical is the bare directory, but it may be
+             SERVED as /index.html, /wonder-herb/ or /wonder-herb/index.html */
+          prefix = here.replace(/index\.html$/, '').replace(/\/$/, '');
+        }
+      }
+
+      /* If this page is served as an explicit index.html, the host is probably
+         not resolving directory URLs either - a plain static server, a local
+         preview - so the home page's alternate "/en/" would 404. Ask for the
+         file by name. Harmless where directories DO resolve. */
+      var path = target.pathname;
+      if (path.slice(-1) === '/' && /index\.html$/.test(here)) path += 'index.html';
+
+      return root.location.origin + prefix + path + target.search + target.hash;
+    } catch (e) {
+      return href;
+    }
   }
 
   /* A dismissible bar at the bottom of the screen, in one language: the text,

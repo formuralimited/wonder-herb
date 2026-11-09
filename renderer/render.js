@@ -53,7 +53,7 @@ const ROOT = path.join(__dirname, '..');
 const BUNDLE = path.join(__dirname, '.build', 'sections.cjs');
 
 /* Month 1: zh only, to the canonical paths. Phase 14 widens this to LANGS. */
-const LANGS_IN_SCOPE = [PRIMARY];
+const LANGS_IN_SCOPE = [PRIMARY, 'en'];
 
 function sectionRegistry() {
   if (!fs.existsSync(BUNDLE)) {
@@ -187,7 +187,7 @@ function renderPage(tree, lang, data, opts) {
     styles: o.styles || [],
     derived: [faqPageNode(tree, l, resolved)].filter(Boolean)
   });
-  return baseTemplate({
+  return relocate(baseTemplate({
     head: head,
     body: body,
     lang: l,
@@ -200,7 +200,45 @@ function renderPage(tree, lang, data, opts) {
     // "type" or "type/variant" - a behaviour may belong to one variant only
     sectionTypes: (tree.sections || []).map(node =>
       node.type + (node.fields && node.fields.variant ? '/' + node.fields.variant : ''))
+  }), l);
+}
+
+/* The three pages that have no translation and never will: they are out of
+   Phase 9 scope by decision (owner, 16 Sep 2026) and stay hand-coded Chinese.
+   A link to one of them from /en/ must leave the directory, or it 404s. */
+const UNTRANSLATED_PAGES = ['product.html', '購物車.html', 'account.html'];
+
+/* A non-primary language is served one directory down (/en/產品介紹.html), so
+   every RELATIVE reference in the finished document needs to climb back out.
+ *
+ * WHY A REWRITE OF THE FINISHED HTML rather than a prefix threaded through
+ * head.js, template.js, chrome.js and every section. The relative references
+ * come from four places that do not know about each other: the tree's
+ * `assets.stylesheets`, the template's own CHROME_SHEET/CHAT_SHEET and derived
+ * behaviour scripts, the chrome lifted verbatim out of a live page, and the
+ * sections. Threading a prefix means touching all four and relying on nobody
+ * forgetting; rewriting the output catches all four and anything added later.
+ *
+ * It is narrow on purpose. Every page was audited first: 30 `assets/*` and 17
+ * `.html` attribute references, and ZERO relative `url(...)` in the inline
+ * CSS - so there is nothing to rewrite inside stylesheets, and matching on the
+ * attribute cannot touch a string that merely looks like a path.
+ *
+ * Links to pages that ARE translated stay relative and resolve inside /en/,
+ * which is what should happen: an English page links the English next page.
+ *
+ * Applied AFTER baseTemplate so that D1's "chrome.css is the last stylesheet"
+ * guard still compares the names it knows (finding 15).
+ */
+function relocate(html, lang) {
+  if (lang === PRIMARY) return html;
+  const up = '../';
+  let out = html.replace(/(\s(?:src|href)=")assets\//g, '$1' + up + 'assets/');
+  UNTRANSLATED_PAGES.forEach(page => {
+    const esc = page.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    out = out.replace(new RegExp('(\\s(?:src|href)=")' + esc, 'g'), '$1' + up + page);
   });
+  return out;
 }
 
 /* FAQPage JSON-LD, DERIVED from the questions the page actually shows.

@@ -18,6 +18,7 @@ const auth = require('./auth');
 const reports = require('./reports');
 const sales = require('./sales');
 const stock = require('./stock');
+const chat = require('./chat');
 
 const PORT = process.env.PORT || 4000;
 const app = express();
@@ -164,6 +165,17 @@ app.get('/api/health', asyncRoute(async (req, res) => {
   counts.homepage = await db.collection('homepage').countDocuments();
   res.json({ ok: true, db: DB_NAME, url: URL.replace(/\/\/.*@/, '//'), counts });
 }));
+
+/* ------------------------------------------------------------------ chat
+   The public chat widget's answer service (server/chat.js), filling the
+   boundary P13-T5 left in assets/behaviour/chat.js.
+
+   THE ONLY UNAUTHENTICATED POST ROUTE ON THIS SERVER, and the only one a
+   stranger can reach. It is metered (per-IP windows plus a daily ceiling in
+   server/chat.js) because an OpenAI key sits behind it; it touches no
+   collection and stores nothing. Mounted here rather than inside the auth
+   block so that it is obvious it is outside it. */
+app.post('/api/chat', asyncRoute(async (req, res) => chat.handle(req, res)));
 
 /* ---------------------------------------------------------------- modules
    Kept on the same /api/cms?type=… shape the admin already speaks, so the

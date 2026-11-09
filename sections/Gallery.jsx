@@ -25,7 +25,14 @@ export const config = {
   variants: ['default']
 };
 
-export default function Gallery({ images, mainAlt }) {
+/* Was a hard-coded Chinese aria-label, so it stayed Chinese in every
+   language - the same defect as ProductGrid's, and equally invisible unless
+   you use a screen reader. Per-language default here rather than a tree field
+   for the same reason: nobody remembers to translate a label they never see. */
+const THUMBS_LABEL = { zh: '产品缩略图', en: 'Product thumbnails' };
+const pickLabel = (map, lang) => map[lang] || map.zh;
+
+export default function Gallery({ images, mainAlt, lang, thumbsLabel}) {
   const list = (Array.isArray(images) ? images : []).filter(i => i && i.src);
   if (!list.length) return null;
   const main = list[0];
@@ -35,7 +42,7 @@ export default function Gallery({ images, mainAlt }) {
       <div className="main-image" id="mainImageContainer">
         <img id="mainProductImage" src={main.src} alt={mainAlt || main.alt || ''} />
       </div>
-      <div className="thumbnail-list" role="list" aria-label="产品缩略图">
+      <div className="thumbnail-list" role="list" aria-label={thumbsLabel || pickLabel(THUMBS_LABEL, lang)}>
         {list.map((img, i) => (
           <div className={i === 0 ? 'thumbnail active' : 'thumbnail'}
                data-img={img.src} role="listitem" key={i}>

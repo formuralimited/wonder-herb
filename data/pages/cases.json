@@ -2,31 +2,37 @@
   "slug": "cases",
   "path": "典型病例.html",
   "title": {
-    "zh": "典型病例 | 康草堂 Wonder Herb - 雲芝糖肽精華真實見證"
+    "zh": "典型病例 | 康草堂 Wonder Herb - 雲芝糖肽精華真實見證",
+    "en": "Case Studies | Wonder Herb - Real Yunzhi PSP Essence Testimonials"
   },
   "seo": {
     "description": {
-      "zh": "康草堂雲芝糖肽真實病例分享，見證雲芝糖肽精華PSP如何幫助患者提升免疫力，改善生活品質。"
+      "zh": "康草堂雲芝糖肽真實病例分享，見證雲芝糖肽精華PSP如何幫助患者提升免疫力，改善生活品質。",
+      "en": "Real case studies from Wonder Herb, showing how Yunzhi PSP Essence has helped patients improve their immunity and quality of life."
     },
     "dateModified": "2026-06-02T10:30:00+08:00",
     "ogTitle": {
-      "zh": "典型病例 | Wonder Herb - 雲芝糖肽精華"
+      "zh": "典型病例 | Wonder Herb - 雲芝糖肽精華",
+      "en": "Case Studies | Wonder Herb - Yunzhi PSP Essence"
     },
     "ogDescription": {
-      "zh": "康草堂雲芝糖肽真實病例分享，見證雲芝糖肽精華PSP如何幫助患者提升免疫力，改善生活品質。"
+      "zh": "康草堂雲芝糖肽真實病例分享，見證雲芝糖肽精華PSP如何幫助患者提升免疫力，改善生活品質。",
+      "en": "Real case studies from Wonder Herb, showing how Yunzhi PSP Essence has helped patients improve their immunity and quality of life."
     },
     "ogType": "website",
     "image": "https://lh3.googleusercontent.com/d/1mQafHatzw_gwbV_J9Y5AmwIAUS9r8SEi",
     "breadcrumb": [
       {
         "name": {
-          "zh": "首頁"
+          "zh": "首頁",
+          "en": "Home"
         },
         "path": ""
       },
       {
         "name": {
-          "zh": "典型病例"
+          "zh": "典型病例",
+          "en": "Case"
         },
         "path": "典型病例.html"
       }
@@ -156,11 +162,13 @@
       "type": "page-header",
       "fields": {
         "heading": {
-          "zh": "典型病例"
+          "zh": "典型病例",
+          "en": "Case"
         },
         "variant": "centered",
         "sub": {
-          "zh": "真實康復見證 · 雲芝糖肽精華幫助無數患者重拾健康"
+          "zh": "真實康復見證 · 雲芝糖肽精華幫助無數患者重拾健康",
+          "en": "Real Recovery Stories · Yunzhi PSP Essence Helps Countless Patients Regain Health"
         }
       }
     },
@@ -174,116 +182,139 @@
       "fields": {
         "source": "cases.json",
         "searchPlaceholder": {
-          "zh": "搜尋病例 (病名/內容)..."
+          "zh": "搜尋病例 (病名/內容)...",
+          "en": "Search cases (disease / keyword)..."
         },
         "searchLabel": {
-          "zh": "病例搜索"
+          "zh": "病例搜索",
+          "en": "Search case studies"
         },
         "resetLabel": {
-          "zh": "清除所有篩選"
+          "zh": "清除所有篩選",
+          "en": "Clear all filters"
         },
         "resetIcon": "fas fa-eraser",
         "resultPrefix": {
-          "zh": "共 "
+          "zh": "共 ",
+          "en": ""
         },
         "resultSuffix": {
-          "zh": " 個病例"
+          "zh": " 個病例",
+          "en": " cases found"
         },
         "filterLabel": {
-          "zh": "快速篩選病症："
+          "zh": "快速篩選病症：",
+          "en": "Quick filter:"
         },
         "filterIcon": "fas fa-tags",
         "allLabel": {
-          "zh": "全部病例"
+          "zh": "全部病例",
+          "en": "All Cases"
         },
         "allIcon": "fas fa-list-ul",
         "moreLabel": {
-          "zh": "閱讀更多"
+          "zh": "閱讀更多",
+          "en": "Read more"
         },
         "lessLabel": {
-          "zh": "收合"
+          "zh": "收合",
+          "en": "Read less"
         },
         "moreIcon": "fas fa-chevron-down",
         "emptyText": {
-          "zh": "沒有找到相關病例"
+          "zh": "沒有找到相關病例",
+          "en": "No matching case studies found"
         },
         "defaultIcon": "fa-solid fa-virus",
         "diseaseIcons": [
           {
             "match": {
-              "zh": "肛門惡性腫瘤"
+              "zh": "肛門惡性腫瘤",
+              "en": "Anal Malignant Tumor"
             },
             "icon": "fa-solid fa-circle-dot"
           },
           {
             "match": {
-              "zh": "腹膜惡性腫瘤"
+              "zh": "腹膜惡性腫瘤",
+              "en": "Peritoneal Malignancy"
             },
             "icon": "fa-solid fa-bacteria"
           },
           {
             "match": {
-              "zh": "前列腺惡性腫瘤"
+              "zh": "前列腺惡性腫瘤",
+              "en": "Prostate Cancer"
             },
             "icon": "fa-solid fa-mars"
           },
           {
             "match": {
-              "zh": "肺惡性腫瘤"
+              "zh": "肺惡性腫瘤",
+              "en": "Lung Malignancy"
             },
             "icon": "fa-solid fa-lungs"
           },
           {
             "match": {
-              "zh": "咽喉惡性腫瘤"
+              "zh": "咽喉惡性腫瘤",
+              "en": "Throat Cancer"
             },
             "icon": "fa-solid fa-teeth"
           },
           {
             "match": {
-              "zh": "大腸惡性腫瘤"
+              "zh": "大腸惡性腫瘤",
+              "en": "Colorectal Cancer"
             },
             "icon": "fa-solid fa-bacterium"
           },
           {
             "match": {
-              "zh": "胰臟惡性腫瘤"
+              "zh": "胰臟惡性腫瘤",
+              "en": "Pancreatic Cancer"
             },
             "icon": "fa-solid fa-syringe"
           },
           {
             "match": {
-              "zh": "淋巴惡性腫瘤"
+              "zh": "淋巴惡性腫瘤",
+              "en": "Lymphoma"
             },
             "icon": "fa-solid fa-virus"
           },
           {
             "match": {
-              "zh": "腎惡性腫瘤"
+              "zh": "腎惡性腫瘤",
+              "en": "Renal Malignancy"
             },
             "icon": "fa-solid fa-pills"
           },
           {
             "match": {
-              "zh": "睪丸惡性腫瘤"
+              "zh": "睪丸惡性腫瘤",
+              "en": "Testicular Cancer"
             },
             "icon": "fa-solid fa-dna"
           },
           {
             "match": {
-              "zh": "口水腺惡性腫瘤"
+              "zh": "口水腺惡性腫瘤",
+              "en": "Salivary Gland Cancer"
             },
             "icon": "fa-solid fa-tint"
           },
           {
             "match": {
-              "zh": "結腸惡性腫瘤"
+              "zh": "結腸惡性腫瘤",
+              "en": "Colon Cancer"
             },
             "icon": "fa-solid fa-prescription-bottle"
           }
         ],
         "videosLabel": {
-          "zh": "病人分享影片"
+          "zh": "病人分享影片",
+          "en": "Patient video stories"
         },
         "videos": [
           {
@@ -300,10 +331,12 @@
           }
         ],
         "videosHeading": {
-          "zh": "Real Stories & Client Testimonials"
+          "zh": "Real Stories & Client Testimonials",
+          "en": "Real Stories & Client Testimonials"
         },
         "videosSub": {
-          "zh": "Hear directly from our clients about their health journeys and results."
+          "zh": "Hear directly from our clients about their health journeys and results.",
+          "en": "Hear directly from our clients about their health journeys and results."
         }
       }
     }

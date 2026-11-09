@@ -1,0 +1,679 @@
+{
+  "generated": "2026-11-07",
+  "note": "P10-T4 gather. The PROPOSAL: what would be uploaded, and where each byte came from. data/media-manifest.json is the record of what actually IS on the bucket. Regenerate with: npm run media:gather",
+  "cacheControl": "public, max-age=31536000, immutable",
+  "assets": [
+    {
+      "key": "articles-image-67fa1afe.png",
+      "bytes": 185567,
+      "type": "image/png",
+      "sha256": "67fa1afe1bd39b238329299f064cc37627e40cf12b2ee84cb548cdf8b09aebae",
+      "refs": [
+        {
+          "url": "https://lh3.googleusercontent.com/d/1mQafHatzw_gwbV_J9Y5AmwIAUS9r8SEi",
+          "where": "pages/articles.json.seo.image"
+        }
+      ],
+      "fetchedFrom": "https://lh3.googleusercontent.com/d/1mQafHatzw_gwbV_J9Y5AmwIAUS9r8SEi",
+      "note": "Drive-hosted image, no extension in the URL; type comes from the bytes"
+    },
+    {
+      "key": "bottle-hep-5f63254d.glb",
+      "bytes": 18522656,
+      "type": "model/gltf-binary",
+      "sha256": "5f63254d8afa1aec9af1ae02976df742cd0e6672511495a0e06dcb904a8b1b5d",
+      "refs": [
+        {
+          "url": "bottle_HEP.glb",
+          "where": "local:bottle_HEP.glb"
+        }
+      ],
+      "fetchedFrom": null,
+      "note": "read from the working tree"
+    },
+    {
+      "key": "bottle-peptides-77155d64.glb",
+      "bytes": 19215368,
+      "type": "model/gltf-binary",
+      "sha256": "77155d64affa50cc95422443cf43ea5bceb739445fe17421bc652f29ce886c13",
+      "refs": [
+        {
+          "url": "bottle_PEPTIDES.glb",
+          "where": "local:bottle_PEPTIDES.glb"
+        }
+      ],
+      "fetchedFrom": null,
+      "note": "read from the working tree"
+    },
+    {
+      "key": "bottle-pt3-f17baa11.glb",
+      "bytes": 18638344,
+      "type": "model/gltf-binary",
+      "sha256": "f17baa11c1d72bb9d88d33038ff86dd023852476c1b7ae3e4a0a5728b3d58143",
+      "refs": [
+        {
+          "url": "bottle_PT3.glb",
+          "where": "local:bottle_PT3.glb"
+        }
+      ],
+      "fetchedFrom": null,
+      "note": "read from the working tree"
+    },
+    {
+      "key": "bottle-yunzhi-8a589a02.glb",
+      "bytes": 18648968,
+      "type": "model/gltf-binary",
+      "sha256": "8a589a02233975fe04d5134dcb53d8d8eae2ec1f1e624aadadba975d51e83515",
+      "refs": [
+        {
+          "url": "bottle_YUNZHI.glb",
+          "where": "local:bottle_YUNZHI.glb"
+        }
+      ],
+      "fetchedFrom": null,
+      "note": "read from the working tree"
+    },
+    {
+      "key": "brochure-1-0-href-cffee251.pdf",
+      "bytes": 2212356,
+      "type": "application/pdf",
+      "sha256": "cffee2513ce841c01d7b4c933d3fe3b59053d94c2b13b01196fe9980723487f2",
+      "refs": [
+        {
+          "url": "https://drive.google.com/file/d/1Y9W3q17TLJgAT_vyKBKAnEXfsFZ4O91D/view?usp=sharing",
+          "where": "pages/brochure.json.sections[1].fields.items[0].href"
+        }
+      ],
+      "fetchedFrom": "https://drive.google.com/uc?export=download&id=1Y9W3q17TLJgAT_vyKBKAnEXfsFZ4O91D",
+      "note": "Drive viewer page rewritten to the direct-download endpoint"
+    },
+    {
+      "key": "brochure-1-0-image-b2f8c8d0.png",
+      "bytes": 532725,
+      "type": "image/png",
+      "sha256": "b2f8c8d00bb108fa436866e942e20e51a0b5300b86af8ba3066a1c49999a73c5",
+      "refs": [
+        {
+          "url": "https://drive.google.com/thumbnail?id=1Y9W3q17TLJgAT_vyKBKAnEXfsFZ4O91D&sz=w1000",
+          "where": "pages/brochure.json.sections[1].fields.items[0].image"
+        }
+      ],
+      "fetchedFrom": "https://drive.google.com/thumbnail?id=1Y9W3q17TLJgAT_vyKBKAnEXfsFZ4O91D&sz=w1000",
+      "note": "Drive thumbnail transform; follows a 302 and yields the resized bytes"
+    },
+    {
+      "key": "brochure-1-1-href-74710e33.pdf",
+      "bytes": 2114045,
+      "type": "application/pdf",
+      "sha256": "74710e3326b9db4f918d422b440f04e8391be6f8ca359554959c2ae48e682fdb",
+      "refs": [
+        {
+          "url": "https://drive.google.com/file/d/1mgLPFYbJ9F7BW7DAoQ_2EIm6W_JxSN0b/view?usp=sharing",
+          "where": "pages/brochure.json.sections[1].fields.items[1].href"
+        }
+      ],
+      "fetchedFrom": "https://drive.google.com/uc?export=download&id=1mgLPFYbJ9F7BW7DAoQ_2EIm6W_JxSN0b",
+      "note": "Drive viewer page rewritten to the direct-download endpoint"
+    },
+    {
+      "key": "brochure-1-1-image-97b3e7ff.png",
+      "bytes": 625657,
+      "type": "image/png",
+      "sha256": "97b3e7ff429f919b31969bc394a35e293d068098226fbcd895414161adf3d046",
+      "refs": [
+        {
+          "url": "https://drive.google.com/thumbnail?id=1mgLPFYbJ9F7BW7DAoQ_2EIm6W_JxSN0b&sz=w1000",
+          "where": "pages/brochure.json.sections[1].fields.items[1].image"
+        }
+      ],
+      "fetchedFrom": "https://drive.google.com/thumbnail?id=1mgLPFYbJ9F7BW7DAoQ_2EIm6W_JxSN0b&sz=w1000",
+      "note": "Drive thumbnail transform; follows a 302 and yields the resized bytes"
+    },
+    {
+      "key": "brochure-image-2ac3b3ee.avif",
+      "bytes": 73829,
+      "type": "image/avif",
+      "sha256": "2ac3b3ee00375856151d10ce0302605100ae3f1d8540d9243eaf0f71ee3706b2",
+      "refs": [
+        {
+          "url": "https://static.wixstatic.com/media/b3683f_b8275f690b4e42c797853a481b0296f7~mv2.jpg/v1/fill/w_800,h_620,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Wonder%20herb%20leaflet%20%20(%20new%20update)-1.jpg",
+          "where": "pages/brochure.json.seo.image"
+        }
+      ],
+      "fetchedFrom": "https://static.wixstatic.com/media/b3683f_b8275f690b4e42c797853a481b0296f7~mv2.jpg/v1/fill/w_800,h_620,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Wonder%20herb%20leaflet%20%20(%20new%20update)-1.jpg",
+      "note": "Wix transform; bytes copied as served, at the dimensions in the path"
+    },
+    {
+      "key": "case-testimony-1-0dbb1ef4.jpg",
+      "bytes": 39125,
+      "type": "image/jpeg",
+      "sha256": "0dbb1ef41cbe32d3fe2696308993015fb2fe088bb5c484004f6da244e09f9a87",
+      "refs": [
+        {
+          "url": "assets/video/case-testimony-1-0dbb1ef4.jpg",
+          "where": "local:assets/video/case-testimony-1-0dbb1ef4.jpg"
+        }
+      ],
+      "fetchedFrom": null,
+      "note": "read from the working tree"
+    },
+    {
+      "key": "case-testimony-1-d68fc7d5.mp4",
+      "bytes": 3600406,
+      "type": "video/mp4",
+      "sha256": "d68fc7d53aca091f0deb829e825146fea3839ff778c45d43ecaac72d10642451",
+      "refs": [
+        {
+          "url": "assets/video/case-testimony-1-d68fc7d5.mp4",
+          "where": "local:assets/video/case-testimony-1-d68fc7d5.mp4"
+        }
+      ],
+      "fetchedFrom": null,
+      "note": "read from the working tree"
+    },
+    {
+      "key": "case-testimony-2-0f48abe8.mp4",
+      "bytes": 9047144,
+      "type": "video/mp4",
+      "sha256": "0f48abe8cff370f0207b4264bbbbe025d42062426877a57fff16d5776bce67a3",
+      "refs": [
+        {
+          "url": "assets/video/case-testimony-2-0f48abe8.mp4",
+          "where": "local:assets/video/case-testimony-2-0f48abe8.mp4"
+        }
+      ],
+      "fetchedFrom": null,
+      "note": "read from the working tree"
+    },
+    {
+      "key": "case-testimony-2-8ea57ec5.jpg",
+      "bytes": 41220,
+      "type": "image/jpeg",
+      "sha256": "8ea57ec5955c81a6f4a47a18e8677385cf0b96b94bdd07f964f58edca055d262",
+      "refs": [
+        {
+          "url": "assets/video/case-testimony-2-8ea57ec5.jpg",
+          "where": "local:assets/video/case-testimony-2-8ea57ec5.jpg"
+        }
+      ],
+      "fetchedFrom": null,
+      "note": "read from the working tree"
+    },
+    {
+      "key": "case-testimony-3-53efa570.mp4",
+      "bytes": 1625601,
+      "type": "video/mp4",
+      "sha256": "53efa570936ea733de69ff07fc905076441dccc05b596a76c68028f4b8d0ccc8",
+      "refs": [
+        {
+          "url": "assets/video/case-testimony-3-53efa570.mp4",
+          "where": "local:assets/video/case-testimony-3-53efa570.mp4"
+        }
+      ],
+      "fetchedFrom": null,
+      "note": "read from the working tree"
+    },
+    {
+      "key": "case-testimony-3-d466f1a2.jpg",
+      "bytes": 31870,
+      "type": "image/jpeg",
+      "sha256": "d466f1a2ed812dd44ed1be50ec3728a081b6a78e3ac422612723c8ffcfc45d03",
+      "refs": [
+        {
+          "url": "assets/video/case-testimony-3-d466f1a2.jpg",
+          "where": "local:assets/video/case-testimony-3-d466f1a2.jpg"
+        }
+      ],
+      "fetchedFrom": null,
+      "note": "read from the working tree"
+    },
+    {
+      "key": "contact-1-0-flag-4c7cbced.svg",
+      "bytes": 689,
+      "type": "image/svg+xml",
+      "sha256": "4c7cbced68ee586af8b3d73a8d8a8c404deaa271da7204eb2afe5c1b070972eb",
+      "refs": [
+        {
+          "url": "https://flagcdn.com/hk.svg",
+          "where": "pages/contact.json.sections[1].fields.cards[0].flag"
+        }
+      ],
+      "fetchedFrom": "https://flagcdn.com/hk.svg",
+      "note": "fetched as written"
+    },
+    {
+      "key": "contact-1-1-flag-ce797608.svg",
+      "bytes": 536,
+      "type": "image/svg+xml",
+      "sha256": "ce797608958527808601798df00691aced6120bd600c0624161230020229dc99",
+      "refs": [
+        {
+          "url": "https://flagcdn.com/cn.svg",
+          "where": "pages/contact.json.sections[1].fields.cards[1].flag"
+        }
+      ],
+      "fetchedFrom": "https://flagcdn.com/cn.svg",
+      "note": "fetched as written"
+    },
+    {
+      "key": "contact-1-2-flag-3cd6c2b9.svg",
+      "bytes": 658,
+      "type": "image/svg+xml",
+      "sha256": "3cd6c2b9fe12bc0617ef4374b570ad87920bae757a95b104384fc301352c6942",
+      "refs": [
+        {
+          "url": "https://flagcdn.com/ca.svg",
+          "where": "pages/contact.json.sections[1].fields.cards[2].flag"
+        }
+      ],
+      "fetchedFrom": "https://flagcdn.com/ca.svg",
+      "note": "fetched as written"
+    },
+    {
+      "key": "contact-1-3-flag-b826e039.svg",
+      "bytes": 1307,
+      "type": "image/svg+xml",
+      "sha256": "b826e039804d5cf313bd7e22a40ea2239e8e22ddba7c19a8787dfaad1dda71aa",
+      "refs": [
+        {
+          "url": "https://flagcdn.com/au.svg",
+          "where": "pages/contact.json.sections[1].fields.cards[3].flag"
+        }
+      ],
+      "fetchedFrom": "https://flagcdn.com/au.svg",
+      "note": "fetched as written"
+    },
+    {
+      "key": "contact-1-4-flag-e1792c01.svg",
+      "bytes": 765,
+      "type": "image/svg+xml",
+      "sha256": "e1792c011daad918fdbd99a21f7f46fd71018ffd052af5a7d7faf9954d593e31",
+      "refs": [
+        {
+          "url": "https://flagcdn.com/us.svg",
+          "where": "pages/contact.json.sections[1].fields.cards[4].flag"
+        }
+      ],
+      "fetchedFrom": "https://flagcdn.com/us.svg",
+      "note": "fetched as written"
+    },
+    {
+      "key": "contact-image-a2f03db5.png",
+      "bytes": 254578,
+      "type": "image/png",
+      "sha256": "a2f03db5a10b8761b265e4ec058a088cd3f54faf2324eab4b12229298158e11d",
+      "refs": [
+        {
+          "url": "https://static.wixstatic.com/media/b3683f_b7c386343b774bd3a28a2720f4237d3a~mv2.png",
+          "where": "pages/contact.json.seo.image"
+        }
+      ],
+      "fetchedFrom": "https://static.wixstatic.com/media/b3683f_b7c386343b774bd3a28a2720f4237d3a~mv2.png",
+      "note": "fetched as written"
+    },
+    {
+      "key": "index-0-4-poster-bb9575f2.jpg",
+      "bytes": 30660,
+      "type": "image/jpeg",
+      "sha256": "bb9575f274c50f98eb89efec2bc23a91a7829c99ebbe71fb8a87fe32e0e60b65",
+      "refs": [
+        {
+          "url": "https://lh3.googleusercontent.com/d/1zKGlugAcxcelvZXRiYFjOR5ZVdrUQOPG",
+          "where": "pages/index.json.sections[0].fields.slides[4].poster"
+        }
+      ],
+      "fetchedFrom": "https://lh3.googleusercontent.com/d/1zKGlugAcxcelvZXRiYFjOR5ZVdrUQOPG",
+      "note": "Drive-hosted image, no extension in the URL; type comes from the bytes"
+    },
+    {
+      "key": "index-1-image-1b4bf564.jpg",
+      "bytes": 28711,
+      "type": "image/jpeg",
+      "sha256": "1b4bf5644d85ea3f35c25f9e3c0f19b55d04a33456181a69f214e2d5c8b8070e",
+      "refs": [
+        {
+          "url": "https://lh3.googleusercontent.com/d/1j4nnDKPYyQ7naWRboMd3fPS8pvrlEtDq",
+          "where": "pages/index.json.seo.jsonld[1].image"
+        }
+      ],
+      "fetchedFrom": "https://lh3.googleusercontent.com/d/1j4nnDKPYyQ7naWRboMd3fPS8pvrlEtDq",
+      "note": "Drive-hosted image, no extension in the URL; type comes from the bytes"
+    },
+    {
+      "key": "index-2-image-fb1e5451.jpg",
+      "bytes": 43185,
+      "type": "image/jpeg",
+      "sha256": "fb1e5451859f38f859e6257b313fab93c597aaa30e38e61cbb6f71f4160bc0a2",
+      "refs": [
+        {
+          "url": "https://lh3.googleusercontent.com/d/1NNv7Wxa-i8YbBEgfV7qVz5AgKpsog8Kb",
+          "where": "pages/index.json.seo.jsonld[2].image"
+        }
+      ],
+      "fetchedFrom": "https://lh3.googleusercontent.com/d/1NNv7Wxa-i8YbBEgfV7qVz5AgKpsog8Kb",
+      "note": "Drive-hosted image, no extension in the URL; type comes from the bytes"
+    },
+    {
+      "key": "index-3-image-0d41b21d.jpg",
+      "bytes": 31431,
+      "type": "image/jpeg",
+      "sha256": "0d41b21da7797be61c09c741daf90f95a64ac7d26e958ca6dcf5a4bfa45739fd",
+      "refs": [
+        {
+          "url": "https://lh3.googleusercontent.com/d/1IXyoFL7qF2rpB5C-o6C3c1RVRBqoUMMk",
+          "where": "pages/index.json.seo.jsonld[3].image"
+        }
+      ],
+      "fetchedFrom": "https://lh3.googleusercontent.com/d/1IXyoFL7qF2rpB5C-o6C3c1RVRBqoUMMk",
+      "note": "Drive-hosted image, no extension in the URL; type comes from the bytes"
+    },
+    {
+      "key": "index-4-image-33a6f1df.jpg",
+      "bytes": 42045,
+      "type": "image/jpeg",
+      "sha256": "33a6f1dfb260f572d0ba110172a25de585d9d2a2cabc13a7a4dbe25f97c04ecb",
+      "refs": [
+        {
+          "url": "https://lh3.googleusercontent.com/d/1JshjDnhbCCCsQNUZOD3XnPz6Haw9Q_eE",
+          "where": "pages/index.json.seo.jsonld[4].image"
+        }
+      ],
+      "fetchedFrom": "https://lh3.googleusercontent.com/d/1JshjDnhbCCCsQNUZOD3XnPz6Haw9Q_eE",
+      "note": "Drive-hosted image, no extension in the URL; type comes from the bytes"
+    },
+    {
+      "key": "index-5-image-98139cfe.jpg",
+      "bytes": 64187,
+      "type": "image/jpeg",
+      "sha256": "98139cfe70bcd31a3bc05d5885012617cd49820a91e31af253d54b75d5b0768e",
+      "refs": [
+        {
+          "url": "https://lh3.googleusercontent.com/d/1DqnWVDZa45TvoRKRguh-IT4i_sfYbQhn",
+          "where": "pages/index.json.seo.jsonld[5].image"
+        }
+      ],
+      "fetchedFrom": "https://lh3.googleusercontent.com/d/1DqnWVDZa45TvoRKRguh-IT4i_sfYbQhn",
+      "note": "Drive-hosted image, no extension in the URL; type comes from the bytes"
+    },
+    {
+      "key": "index-6-videourl-d433c33d.mp4",
+      "bytes": 30631167,
+      "type": "video/mp4",
+      "sha256": "d433c33dbba60d5db22d8a83a291166f81ff81d468abe517a901a2800a004713",
+      "refs": [
+        {
+          "url": "https://video.wixstatic.com/video/11062b_d578b9d4ffba48c68d086ec29fe9e6f0/1080p/mp4/file.mp4",
+          "where": "pages/index.json.sections[6].fields.videoUrl"
+        }
+      ],
+      "fetchedFrom": "https://video.wixstatic.com/video/11062b_d578b9d4ffba48c68d086ec29fe9e6f0/1080p/mp4/file.mp4",
+      "note": "fetched as written"
+    },
+    {
+      "key": "index-image-845dcf97.png",
+      "bytes": 3100531,
+      "type": "image/png",
+      "sha256": "845dcf97eec3b54f0e29ef6e6ebb32d8c4384ed5d299f3def313c86b90094304",
+      "refs": [
+        {
+          "url": "https://static.wixstatic.com/media/470fe2_a0d61950ab3941c0b30acc8c6561ce3b~mv2.png",
+          "where": "pages/index.json.seo.image"
+        }
+      ],
+      "fetchedFrom": "https://static.wixstatic.com/media/470fe2_a0d61950ab3941c0b30acc8c6561ce3b~mv2.png",
+      "note": "fetched as written"
+    },
+    {
+      "key": "product-memo-image-2278bdcc.jpg",
+      "bytes": 72637,
+      "type": "image/jpeg",
+      "sha256": "2278bdcc110b5fc5290450dafaccb302afb82d5ebcbb643394f01faf56573fff",
+      "refs": [
+        {
+          "url": "https://static.wixstatic.com/media/b3683f_71a3aaf0f54147018f40440ab43e91cf~mv2.jpg",
+          "where": "pages/product-memo.json.seo.image"
+        }
+      ],
+      "fetchedFrom": "https://static.wixstatic.com/media/b3683f_71a3aaf0f54147018f40440ab43e91cf~mv2.jpg",
+      "note": "fetched as written"
+    },
+    {
+      "key": "product-psp-trial-0-1-src-fbc81f74.jpg",
+      "bytes": 67247,
+      "type": "image/jpeg",
+      "sha256": "fbc81f7453a7456959204c04170c5adb2d6407912195b6d1a802d27ebe2494a4",
+      "refs": [
+        {
+          "url": "https://static.wixstatic.com/media/b3683f_b209ae1f489d4cf0a562b1b0651d30c7~mv2.jpg",
+          "where": "pages/product-psp-trial.json.sections[0].fields.images[1].src"
+        }
+      ],
+      "fetchedFrom": "https://static.wixstatic.com/media/b3683f_b209ae1f489d4cf0a562b1b0651d30c7~mv2.jpg",
+      "note": "fetched as written"
+    },
+    {
+      "key": "product-psp-trial-image-712877ad.jpg",
+      "bytes": 207026,
+      "type": "image/jpeg",
+      "sha256": "712877adc2f1405a5175421e205815d3af6e49be374e04fcd19eb1d07dd9d1a2",
+      "refs": [
+        {
+          "url": "https://static.wixstatic.com/media/b3683f_33a97500a0794f629de24db948fa66d7~mv2.jpg",
+          "where": "pages/product-psp-trial.json.seo.image"
+        }
+      ],
+      "fetchedFrom": "https://static.wixstatic.com/media/b3683f_33a97500a0794f629de24db948fa66d7~mv2.jpg",
+      "note": "fetched as written"
+    },
+    {
+      "key": "research-3-0-href-15607330.pdf",
+      "bytes": 1044702,
+      "type": "application/pdf",
+      "sha256": "156073307720976b4eab19f14b3c9663601965eae411cc5b5fdc8635f3cf3fc2",
+      "refs": [
+        {
+          "url": "https://www.wonder-herb.com/_files/ugd/b3683f_5ce3d5e304d54d13bfd3390f8f6f676f.pdf",
+          "where": "pages/research.json.sections[3].fields.items[0].href"
+        }
+      ],
+      "fetchedFrom": "https://www.wonder-herb.com/_files/ugd/b3683f_5ce3d5e304d54d13bfd3390f8f6f676f.pdf",
+      "note": "fetched as written"
+    },
+    {
+      "key": "research-3-1-href-4283ac64.pdf",
+      "bytes": 5569960,
+      "type": "application/pdf",
+      "sha256": "4283ac64a6b73056cc89b8b681afa78bc23e9542ff751e66f7670e16db869430",
+      "refs": [
+        {
+          "url": "https://www.wonder-herb.com/_files/ugd/b3683f_3993ef273f2e40f099fc273347403ea5.pdf",
+          "where": "pages/research.json.sections[3].fields.items[1].href"
+        }
+      ],
+      "fetchedFrom": "https://www.wonder-herb.com/_files/ugd/b3683f_3993ef273f2e40f099fc273347403ea5.pdf",
+      "note": "fetched as written"
+    },
+    {
+      "key": "site-flags-de-1c257c9d.png",
+      "bytes": 97,
+      "type": "image/png",
+      "sha256": "1c257c9dc61df16acf28a6d13c8ff822bfa8a1189757e1ab64d12a325650fbd3",
+      "refs": [
+        {
+          "url": "https://flagcdn.com/w20/de.png",
+          "where": "site.json.chrome.flags.de"
+        }
+      ],
+      "fetchedFrom": "https://flagcdn.com/w20/de.png",
+      "note": "fetched as written"
+    },
+    {
+      "key": "site-flags-en-4ea005d7.png",
+      "bytes": 252,
+      "type": "image/png",
+      "sha256": "4ea005d790497629aad3e4bb23e9c4922db91160e53c5e1b49d2aab0ad8c0f94",
+      "refs": [
+        {
+          "url": "https://flagcdn.com/w20/gb.png",
+          "where": "site.json.chrome.flags.en"
+        }
+      ],
+      "fetchedFrom": "https://flagcdn.com/w20/gb.png",
+      "note": "fetched as written"
+    },
+    {
+      "key": "site-flags-es-5441d625.png",
+      "bytes": 205,
+      "type": "image/png",
+      "sha256": "5441d625e7c748032300db630115b6a5e909bc8587d815eeaed681dcba1326d2",
+      "refs": [
+        {
+          "url": "https://flagcdn.com/w20/es.png",
+          "where": "site.json.chrome.flags.es"
+        }
+      ],
+      "fetchedFrom": "https://flagcdn.com/w20/es.png",
+      "note": "fetched as written"
+    },
+    {
+      "key": "site-flags-fr-fa350026.png",
+      "bytes": 109,
+      "type": "image/png",
+      "sha256": "fa3500262df91e21dfe1f9cce0da6fd201331229970e4b5ddfcbbcc57b60653e",
+      "refs": [
+        {
+          "url": "https://flagcdn.com/w20/fr.png",
+          "where": "site.json.chrome.flags.fr"
+        }
+      ],
+      "fetchedFrom": "https://flagcdn.com/w20/fr.png",
+      "note": "fetched as written"
+    },
+    {
+      "key": "site-flags-ja-92a50fe0.png",
+      "bytes": 143,
+      "type": "image/png",
+      "sha256": "92a50fe00038e4f347eb6e325f34fb011444c695d935cc232156eecf12583d67",
+      "refs": [
+        {
+          "url": "https://flagcdn.com/w20/jp.png",
+          "where": "site.json.chrome.flags.ja"
+        }
+      ],
+      "fetchedFrom": "https://flagcdn.com/w20/jp.png",
+      "note": "fetched as written"
+    },
+    {
+      "key": "site-flags-ru-d47fd9cb.png",
+      "bytes": 121,
+      "type": "image/png",
+      "sha256": "d47fd9cb73fc6bc1347bc9a5e3985334bf848a042c9b1a7b982f3c8f86b0d9b7",
+      "refs": [
+        {
+          "url": "https://flagcdn.com/w20/ru.png",
+          "where": "site.json.chrome.flags.ru"
+        }
+      ],
+      "fetchedFrom": "https://flagcdn.com/w20/ru.png",
+      "note": "fetched as written"
+    },
+    {
+      "key": "site-flags-zh-854ccc93.png",
+      "bytes": 221,
+      "type": "image/png",
+      "sha256": "854ccc93b297216dcc81e085d2ec0e97ce4d4e0129a6ebf3f58bc5f2a26c1d8e",
+      "refs": [
+        {
+          "url": "https://flagcdn.com/w20/hk.png",
+          "where": "site.json.chrome.flags.zh"
+        }
+      ],
+      "fetchedFrom": "https://flagcdn.com/w20/hk.png",
+      "note": "fetched as written"
+    },
+    {
+      "key": "testing-1-0-href-1d1dae79.pdf",
+      "bytes": 314479,
+      "type": "application/pdf",
+      "sha256": "1d1dae795aa325d79095a85431fea64293fd5a9133233f4e6b84d0899e546b02",
+      "refs": [
+        {
+          "url": "https://drive.google.com/file/d/1EZ38FqzvR0Xhl3b2d15i1M6tD2LgsEfU/view?usp=sharing",
+          "where": "pages/testing.json.sections[1].fields.items[0].href"
+        }
+      ],
+      "fetchedFrom": "https://drive.google.com/uc?export=download&id=1EZ38FqzvR0Xhl3b2d15i1M6tD2LgsEfU",
+      "note": "Drive viewer page rewritten to the direct-download endpoint"
+    },
+    {
+      "key": "testing-1-0-image-1b7b3259.avif",
+      "bytes": 17037,
+      "type": "image/avif",
+      "sha256": "1b7b32597585222b439f1a711d74361ba8dc5ce8c4d4f25c986669ed618e64ce",
+      "refs": [
+        {
+          "url": "https://static.wixstatic.com/media/b3683f_cd911bc0a80d4d749247bbab9df01465~mv2.jpg/v1/fill/w_366,h_513,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Assay%20test%20(HK%20lab)%20-1.jpg",
+          "where": "pages/testing.json.sections[1].fields.items[0].image"
+        }
+      ],
+      "fetchedFrom": "https://static.wixstatic.com/media/b3683f_cd911bc0a80d4d749247bbab9df01465~mv2.jpg/v1/fill/w_366,h_513,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Assay%20test%20(HK%20lab)%20-1.jpg",
+      "note": "Wix transform; bytes copied as served, at the dimensions in the path"
+    },
+    {
+      "key": "testing-1-1-image-f1daa643.avif",
+      "bytes": 9184,
+      "type": "image/avif",
+      "sha256": "f1daa64346d51ffcd7561be8da141473ae1ff72e90a50a9bae531c256a132aad",
+      "refs": [
+        {
+          "url": "https://static.wixstatic.com/media/b3683f_b943d02b6c7d427fa420f0b4ef77a2a7~mv2.jpg/v1/fill/w_347,h_513,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Assay%20test%20(HK%20lab)%20-2_edited.jpg",
+          "where": "pages/testing.json.sections[1].fields.items[1].image"
+        }
+      ],
+      "fetchedFrom": "https://static.wixstatic.com/media/b3683f_b943d02b6c7d427fa420f0b4ef77a2a7~mv2.jpg/v1/fill/w_347,h_513,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Assay%20test%20(HK%20lab)%20-2_edited.jpg",
+      "note": "Wix transform; bytes copied as served, at the dimensions in the path"
+    },
+    {
+      "key": "testing-1-2-href-7a01e77f.jpg",
+      "bytes": 233102,
+      "type": "image/jpeg",
+      "sha256": "7a01e77f851b59734d6ec9c5d9e453467a33f4df8d5c62ad90873dd5d2b8ec98",
+      "refs": [
+        {
+          "url": "https://drive.google.com/file/d/1JovlPvJ4sVoIJYd2yTAc6dbaY31uvJQ-/view?usp=sharing",
+          "where": "pages/testing.json.sections[1].fields.items[2].href"
+        }
+      ],
+      "fetchedFrom": "https://drive.google.com/uc?export=download&id=1JovlPvJ4sVoIJYd2yTAc6dbaY31uvJQ-",
+      "note": "Drive viewer page rewritten to the direct-download endpoint"
+    },
+    {
+      "key": "testing-1-2-image-2f39142b.jpg",
+      "bytes": 107706,
+      "type": "image/jpeg",
+      "sha256": "2f39142b40728d247524ec343f52e075620bd775782a6c364aa174ec0bea3c8c",
+      "refs": [
+        {
+          "url": "https://drive.google.com/thumbnail?id=1s-yd_CcgGyEivKt5-lEuuFTa1tu0dNj2&sz=w800",
+          "where": "pages/testing.json.sections[1].fields.items[2].image"
+        }
+      ],
+      "fetchedFrom": "https://drive.google.com/thumbnail?id=1s-yd_CcgGyEivKt5-lEuuFTa1tu0dNj2&sz=w800",
+      "note": "Drive thumbnail transform; follows a 302 and yields the resized bytes"
+    },
+    {
+      "key": "testing-image-787275be.jpg",
+      "bytes": 501078,
+      "type": "image/jpeg",
+      "sha256": "787275beb445f4933e7714935e25a8990346abce7c72e6789ebd9b3e85c9be9f",
+      "refs": [
+        {
+          "url": "https://static.wixstatic.com/media/b3683f_cd911bc0a80d4d749247bbab9df01465~mv2.jpg",
+          "where": "pages/testing.json.seo.image"
+        }
+      ],
+      "fetchedFrom": "https://static.wixstatic.com/media/b3683f_cd911bc0a80d4d749247bbab9df01465~mv2.jpg",
+      "note": "fetched as written"
+    }
+  ]
+}

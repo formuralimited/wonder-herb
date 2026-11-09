@@ -42,3 +42,10 @@ renderer/.out/
 # stay on the machine that holds them. Re-encode with the ffmpeg line recorded
 # in BUILD_TASKS P10-T9 if they are ever needed again.
 /Video/
+
+# P10-T4 staging. `npm run media:gather` downloads every asset here so the
+# bytes can be hashed, named and reviewed before they are PUT to the bucket.
+# Gitignored because committing it would put the 86 MB we are REMOVING from
+# Git straight back into Git, under a different name. data/media-plan.json
+# and data/media-manifest.json are the committed record; the bytes are not.
+media/.staging/

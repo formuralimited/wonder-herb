@@ -2,11 +2,13 @@
   "slug": "products",
   "path": "產品介紹.html",
   "title": {
-    "zh": "產品介紹 | Wonder Herb - 雲芝糖肽精華"
+    "zh": "產品介紹 | Wonder Herb - 雲芝糖肽精華",
+    "en": "Products | Wonder Herb - Yunzhi PSP Essence"
   },
   "seo": {
     "description": {
-      "zh": "康草堂 Wonder Herb 產品系列 – 雲芝糖肽精華 PSP，T3 配方，乙肝清，憶活素。加拿大GMP藥廠生產，有效成份高達90%以上。"
+      "zh": "康草堂 Wonder Herb 產品系列 – 雲芝糖肽精華 PSP，T3 配方，乙肝清，憶活素。加拿大GMP藥廠生產，有效成份高達90%以上。",
+      "en": "The Wonder Herb product range - Yunzhi PSP Essence, T3 Formula, Hep BQ capsules and MemoProve. Made in a Canadian GMP facility, with active ingredient content above 90%."
     },
     "dateModified": "2026-06-02T10:30:00+08:00",
     "ogType": "website",
@@ -14,13 +16,15 @@
     "breadcrumb": [
       {
         "name": {
-          "zh": "首頁"
+          "zh": "首頁",
+          "en": "Home"
         },
         "path": ""
       },
       {
         "name": {
-          "zh": "產品介紹"
+          "zh": "產品介紹",
+          "en": "Products"
         },
         "path": "產品介紹.html"
       }
@@ -173,10 +177,12 @@
       "type": "page-header",
       "fields": {
         "heading": {
-          "zh": "產品系列"
+          "zh": "產品系列",
+          "en": "Product Series"
         },
         "sub": {
-          "zh": "加拿大GMP藥廠 · 有效成份 >90% · 大學研究證實"
+          "zh": "加拿大GMP藥廠 · 有效成份 >90% · 大學研究證實",
+          "en": "Canadian GMP Facility · Active Ingredients >90% · University Proven"
         },
         "headingId": "products-heading",
         "variant": "centered"
@@ -188,16 +194,20 @@
       "fields": {
         "source": "products.json",
         "quickViewLabel": {
-          "zh": "快速瀏覽"
+          "zh": "快速瀏覽",
+          "en": "<i class='fas fa-eye'></i> Quick View"
         },
         "detailLabel": {
-          "zh": "詳細介紹"
+          "zh": "詳細介紹",
+          "en": "More Details <i class='fas fa-chevron-down'></i>"
         },
         "quantityLabel": {
-          "zh": "數量："
+          "zh": "數量：",
+          "en": "Quantity:"
         },
         "addLabel": {
-          "zh": "加入購物車"
+          "zh": "加入購物車",
+          "en": "Add to Cart"
         }
       }
     }

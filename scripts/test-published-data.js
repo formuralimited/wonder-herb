@@ -134,9 +134,14 @@ console.log('\n=== nothing private anywhere in the repository (docs/FINDINGS.md 
 const RESERVED = /@([a-z0-9-]+\.)*(example\.(com|org|net)|[a-z0-9-]+\.(test|example|invalid|localhost))$/i;
 
 const EMAIL_ALLOW = [
-  { files: /^(?!admin\/)[^/]+\.html$|^data\//,
+  /* `en/` is named explicitly, not matched as "any subdirectory". Phase 14
+     renders a second language into en/<page>.html, which prints the same
+     public footer address as the Chinese page beside it - but a pattern like
+     [^/]+/[^/]+\.html would have quietly allowed that address into ANY future
+     subdirectory, which is not what was reviewed. */
+  { files: /^(?!admin\/)(?:en\/)?[^/]+\.html$|^data\//,
     emails: ['info@wonder-herb.com'],
-    why: 'the business\'s own public contact address, printed on the live pages' },
+    why: 'the business\'s own public contact address, printed on the live pages (zh and en)' },
   { files: /^legacy\/[^/]+\.html$/,
     emails: ['info@wonder-herb.com'],
     why: 'the same public contact address, in a retired original kept for reference (P9-T1)' },
@@ -151,7 +156,7 @@ const EMAIL_ALLOW = [
      page itself. Migrating a page moves its published copy into data/, so the
      allowance follows the content rather than being widened - anything else in
      data/pages/ still fails. */
-  { files: /^(聯絡我們\.html|legacy\/聯絡我們\.html|data\/pages\/contact\.json)$/,
+  { files: /^(聯絡我們\.html|en\/聯絡我們\.html|legacy\/聯絡我們\.html|data\/pages\/contact\.json)$/,
     emails: ['wonderherbusa@gmail.com', 'jc@smartgroupinc.org', 'enquiry@provital.com.au'],
     why: 'overseas distributor contacts published on the contact page by the business' },
   { files: /^admin\/index\.html$/,

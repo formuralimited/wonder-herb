@@ -18,7 +18,7 @@
     "test:sweep": "node scripts/test-ui-sweep.js",
     "test:i18n": "node scripts/test-i18n.js",
     "test:sections": "node scripts/test-sections.js",
-    "test:all": "node scripts/test-i18n.js && node scripts/test-sections.js && node scripts/test-render.js && node scripts/test-seo.js && node scripts/test-published-data.js && node scripts/test-lang-assets.js && node scripts/test-media.js && node scripts/test-behaviour.js && node scripts/test-editor-config.js && node scripts/test-editor-lang.js && node scripts/test-api.js && node scripts/test-auth.js && node scripts/test-sales.js && node scripts/test-ui-mongo.js && node scripts/test-ui-auth.js && node scripts/test-ui-sweep.js",
+    "test:all": "node scripts/test-i18n.js && node scripts/test-sections.js && node scripts/test-render.js && node scripts/test-seo.js && node scripts/test-published-data.js && node scripts/test-lang-assets.js && node scripts/test-media.js && node scripts/test-chat.js && node scripts/build-sitemap.js --check && node scripts/test-behaviour.js && node scripts/test-editor-config.js && node scripts/test-editor-lang.js && node scripts/test-api.js && node scripts/test-auth.js && node scripts/test-sales.js && node scripts/test-ui-mongo.js && node scripts/test-ui-auth.js && node scripts/test-ui-sweep.js",
     "editor:dev": "vite --config editor/vite.config.mjs",
     "editor:build": "vite build --config editor/vite.config.mjs",
     "sections:build": "node renderer/build-sections.js",
@@ -33,7 +33,13 @@
     "publish": "node scripts/publish.js",
     "test:lang-assets": "node scripts/test-lang-assets.js",
     "test:media": "node scripts/test-media.js",
-    "check:media": "node scripts/check-media.js"
+    "check:media": "node scripts/check-media.js",
+    "test:chat": "node scripts/test-chat.js",
+    "chat:sync": "node scripts/sync-chat-markup.js",
+    "sitemap": "node scripts/build-sitemap.js",
+    "test:sitemap": "node scripts/build-sitemap.js --check",
+    "media:gather": "node --env-file-if-exists=.env scripts/upload-media.js --gather",
+    "media:upload": "node --env-file-if-exists=.env scripts/upload-media.js --upload"
   },
   "dependencies": {
     "cors": "^2.8.5",

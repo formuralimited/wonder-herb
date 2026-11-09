@@ -87,7 +87,21 @@ function chatStrings(site, lang) {
   const chat = site.chat || {};
   const byLang = chat.strings || {};
   const picked = byLang[lang] || byLang[PRIMARY_LANG] || {};
-  return Object.assign({}, picked, { handoffHref: chat.handoffHref || '' });
+
+  /* Whether an answer service is configured is known HERE, at render time, so
+     the page is pre-rendered already telling the truth. The alternative - ship
+     "chat isn't available yet" and let the script swap it on load - shows every
+     visitor a wrong sentence for as long as it takes the script to run.
+     `apiBase` empty means no service: the state P13-T5 shipped, and the state
+     the live site stays in until the API is hosted (Phase 11). */
+  const live = Boolean(chat.apiBase);
+
+  return Object.assign({}, picked, {
+    handoffHref: chat.handoffHref || '',
+    apiBase: chat.apiBase || '',
+    opening: live ? (picked.ready || picked.unavailable) : picked.unavailable,
+    inputPlaceholder: live ? (picked.placeholderReady || picked.placeholder) : picked.placeholder
+  });
 }
 
 function fillChat(html, site, lang) {
@@ -117,6 +131,47 @@ function markActive(header, page) {
   return header.replace(nav[0], marked);
 }
 
+/* Translate the lifted chrome.
+ *
+ * The chrome is NOT modelled as sections: it is lifted verbatim out of a live
+ * Chinese page (`assets.chromeFrom`, the stopgap recorded in render.js). Its
+ * wording is therefore not a tree field, and when Phase 14 switched English on
+ * every page still carried a Chinese nav, footer and announcement bar - about
+ * 170 characters per page, on all 15 of them, and invisible to every gate
+ * because no suite reads the text inside an element.
+ *
+ * So the map lives in data/site.json (`chromeText.<lang>`) and is applied here.
+ * It substitutes only in TEXT NODES and in alt/title/aria-label/placeholder
+ * attributes, anchored on both sides - never a bare string replace, which
+ * would happily rewrite a class name or a URL that happened to contain the
+ * same characters.
+ *
+ * Longest first, so "康草堂 Wonder Herb 以人為本，天然高效。" is matched before the
+ * "康草堂 Wonder Herb" inside it. Without that ordering the longer string is
+ * left half-translated.
+ *
+ * When the chrome becomes sections or a shared partial, this goes away and the
+ * wording becomes per-language fields like everything else.
+ */
+function translateChrome(html, site, lang) {
+  if (!html || lang === PRIMARY_LANG) return html;
+  const map = (site.chromeText && site.chromeText[lang]) || null;
+  if (!map) return html;
+
+  const keys = Object.keys(map).sort((a, b) => b.length - a.length);
+  let out = html;
+  for (const zh of keys) {
+    const en = map[zh];
+    if (typeof en !== 'string') continue;
+    const z = zh.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    out = out.replace(new RegExp('(>\\s*)' + z + '(\\s*<)', 'g'), '$1' + en + '$2');
+    out = out.replace(
+      new RegExp('((?:alt|title|aria-label|placeholder|content)=")' + z + '(")', 'g'),
+      '$1' + en + '$2');
+  }
+  return out;
+}
+
 /* { header, footer, floating, filters, chat } for one page.
    `filters` (the SVG filter defs five of index.html's CSS rules apply, finding
    33) is emitted only for the page that asks for it.
@@ -130,10 +185,13 @@ function siteChrome(page, opts) {
   const media = site.chrome || {};
   const lang = o.lang || PRIMARY_LANG;
   const chatOn = Boolean(site.chat && site.chat.enabled);
+  /* Each lifted part goes through translateChrome; the chat partial does not,
+     because its wording is already per-language in data/site.json. */
+  const t = html => translateChrome(html, site, lang);
   return {
-    header: fill(markActive(readPart('header.html'), page), media),
-    footer: fill(readPart('footer.html'), media),
-    floating: fill(readPart('floating.html'), media),
+    header: t(fill(markActive(readPart('header.html'), page), media)),
+    footer: t(fill(readPart('footer.html'), media)),
+    floating: t(fill(readPart('floating.html'), media)),
     filters: o.filters ? fill(readPart('filters.html'), media) : '',
     chat: chatOn ? fillChat(readPart('chat.html'), site, lang) : ''
   };

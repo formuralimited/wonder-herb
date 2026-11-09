@@ -2,31 +2,37 @@
   "slug": "testing",
   "path": "有效成份檢測.html",
   "title": {
-    "zh": "有效成份檢測 | 康草堂 Wonder Herb - 雲芝糖肽精華"
+    "zh": "有效成份檢測 | 康草堂 Wonder Herb - 雲芝糖肽精華",
+    "en": "Ingredient Testing | Wonder Herb - Yunzhi PSP Essence"
   },
   "seo": {
     "description": {
-      "zh": "康草堂 Wonder Herb - 每批產品雙重檢測，有效成份 >90%，雲芝糖肽含量遠超國家標準，純度最高，吸收最好。"
+      "zh": "康草堂 Wonder Herb - 每批產品雙重檢測，有效成份 >90%，雲芝糖肽含量遠超國家標準，純度最高，吸收最好。",
+      "en": "Wonder Herb - every batch dual-tested, active ingredients >90%. Yunzhi PSP content far exceeds the national standard: highest purity, best absorption."
     },
     "dateModified": "2026-06-02T10:30:00+08:00",
     "ogTitle": {
-      "zh": "有效成份檢測 | Wonder Herb - 雲芝糖肽精華"
+      "zh": "有效成份檢測 | Wonder Herb - 雲芝糖肽精華",
+      "en": "Ingredient Testing | Wonder Herb - Yunzhi PSP Essence"
     },
     "ogDescription": {
-      "zh": "康草堂 Wonder Herb - 每批產品雙重檢測，有效成份 >90%，雲芝糖肽含量遠超國家標準，純度最高，吸收最好。"
+      "zh": "康草堂 Wonder Herb - 每批產品雙重檢測，有效成份 >90%，雲芝糖肽含量遠超國家標準，純度最高，吸收最好。",
+      "en": "Wonder Herb - every batch dual-tested, active ingredients >90%. Yunzhi PSP content far exceeds the national standard: highest purity, best absorption."
     },
     "ogType": "website",
     "image": "https://static.wixstatic.com/media/b3683f_cd911bc0a80d4d749247bbab9df01465~mv2.jpg",
     "breadcrumb": [
       {
         "name": {
-          "zh": "首頁"
+          "zh": "首頁",
+          "en": "Home"
         },
         "path": ""
       },
       {
         "name": {
-          "zh": "有效成份檢測"
+          "zh": "有效成份檢測",
+          "en": "Testing Reports"
         },
         "path": "有效成份檢測.html"
       }
@@ -103,11 +109,13 @@
       "type": "page-header",
       "fields": {
         "heading": {
-          "zh": "有效成份檢測"
+          "zh": "有效成份檢測",
+          "en": "Testing Reports"
         },
         "variant": "centered",
         "sub": {
-          "zh": "加拿大及香港雙重實驗室檢測 · 有效成份 >90% · 遠超國家藥品標準"
+          "zh": "加拿大及香港雙重實驗室檢測 · 有效成份 >90% · 遠超國家藥品標準",
+          "en": "Dual Laboratory Testing: Canada & Hong Kong · Active Ingredients >90% · Far Exceeding National Standards"
         },
         "headingId": "testing-heading"
       }
@@ -121,61 +129,75 @@
       },
       "fields": {
         "heading": {
-          "zh": "检测报告PDF下载"
+          "zh": "检测报告PDF下载",
+          "en": "Download Testing Reports (PDF)"
         },
         "headingHidden": true,
         "items": [
           {
             "title": {
-              "zh": "香港實驗室檢測報告 (第1頁)"
+              "zh": "香港實驗室檢測報告 (第1頁)",
+              "en": "Hong Kong Lab Test Report (Page 1)"
             },
             "text": {
-              "zh": "有效成份含量驗證，符合國家標準。"
+              "zh": "有效成份含量驗證，符合國家標準。",
+              "en": "Active ingredient verification, meets national standards."
             },
             "href": "https://drive.google.com/file/d/1EZ38FqzvR0Xhl3b2d15i1M6tD2LgsEfU/view?usp=sharing",
             "image": "https://static.wixstatic.com/media/b3683f_cd911bc0a80d4d749247bbab9df01465~mv2.jpg/v1/fill/w_366,h_513,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Assay%20test%20(HK%20lab)%20-1.jpg",
             "imageAlt": {
-              "zh": "香港實驗室檢測報告第1頁 - 有效成份含量驗證"
+              "zh": "香港實驗室檢測報告第1頁 - 有效成份含量驗證",
+              "en": "Hong Kong laboratory test report page 1 - verification of active ingredient content"
             },
             "aria": {
-              "zh": "打开香港实验室检测报告第1页PDF"
+              "zh": "打开香港实验室检测报告第1页PDF",
+              "en": "Open the PDF of Hong Kong laboratory test report page 1"
             }
           },
           {
             "title": {
-              "zh": "香港實驗室檢測報告 (第2頁)"
+              "zh": "香港實驗室檢測報告 (第2頁)",
+              "en": "Hong Kong Lab Test Report (Page 2)"
             },
             "text": {
-              "zh": "完整檢測數據，品質保證。"
+              "zh": "完整檢測數據，品質保證。",
+              "en": "Complete test data, quality assurance."
             },
             "href": "https://drive.google.com/file/d/1EZ38FqzvR0Xhl3b2d15i1M6tD2LgsEfU/view?usp=sharing",
             "image": "https://static.wixstatic.com/media/b3683f_b943d02b6c7d427fa420f0b4ef77a2a7~mv2.jpg/v1/fill/w_347,h_513,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Assay%20test%20(HK%20lab)%20-2_edited.jpg",
             "imageAlt": {
-              "zh": "香港實驗室檢測報告第2頁 - 完整檢測數據"
+              "zh": "香港實驗室檢測報告第2頁 - 完整檢測數據",
+              "en": "Hong Kong laboratory test report page 2 - full test data"
             },
             "aria": {
-              "zh": "打开香港实验室检测报告第2页PDF"
+              "zh": "打开香港实验室检测报告第2页PDF",
+              "en": "Open the PDF of Hong Kong laboratory test report page 2"
             }
           },
           {
             "title": {
-              "zh": "加拿大GMP廠檢測證書"
+              "zh": "加拿大GMP廠檢測證書",
+              "en": "Canadian GMP Factory Test Certificate"
             },
             "text": {
-              "zh": "完整PDF報告下載"
+              "zh": "完整PDF報告下載",
+              "en": "Complete PDF Report Download"
             },
             "href": "https://drive.google.com/file/d/1JovlPvJ4sVoIJYd2yTAc6dbaY31uvJQ-/view?usp=sharing",
             "image": "https://drive.google.com/thumbnail?id=1s-yd_CcgGyEivKt5-lEuuFTa1tu0dNj2&sz=w800",
             "imageAlt": {
-              "zh": "加拿大GMP廠檢測證書"
+              "zh": "加拿大GMP廠檢測證書",
+              "en": "Canadian GMP Factory Test Certificate"
             },
             "aria": {
-              "zh": "打开加拿大GMP厂检测证书PDF"
+              "zh": "打开加拿大GMP厂检测证书PDF",
+              "en": "Open the PDF of the Canadian GMP facility test certificate"
             }
           }
         ],
         "linkLabel": {
-          "zh": "下載報告 (PDF)"
+          "zh": "下載報告 (PDF)",
+          "en": "<i class='fas fa-download'></i> Download Report (PDF)"
         },
         "linkIcon": "fas fa-download",
         "noReferrer": false,

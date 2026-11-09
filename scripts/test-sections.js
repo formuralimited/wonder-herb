@@ -200,6 +200,7 @@ console.log('\n=== product-grid, against data/products.json ===\n');
    (renderer/render.js `resolveData`). Sections render text, never language
    maps, so the test has to feed them the same shape the renderer does. */
 const { resolveData } = require(path.join(ROOT, 'renderer', 'render.js'));
+const { resolveField } = require(path.join(ROOT, 'renderer', 'i18n.js'));
 const ZH = resolveData(DATA, 'zh');
 const zhProducts = ZH.products;
 
@@ -289,7 +290,14 @@ check('one item per question', (faq.match(/class="faq-item"/g) || []).length ===
 check('the live classes', faq.indexOf('class="faq-list"') !== -1
       && faq.indexOf('class="faq-question"') !== -1
       && faq.indexOf('class="faq-answer"') !== -1, 'faq-list/question/answer');
-check('the real question text', faq.indexOf(realFaq[0].q) !== -1, realFaq[0].q);
+/* realFaq is the RAW data/faq.json, whose q and a became per-language objects
+   at P14-T1. The section is handed data that renderer/render.js has already
+   put through resolveData, so the expectation has to be resolved the same way
+   - comparing against the raw object asserts "[object Object]". */
+const realFaqQ = resolveField(realFaq[0].q, 'zh');
+check('the real question text', faq.indexOf(realFaqQ) !== -1, realFaqQ);
+check('  ...and it is a resolved string, not a language object',
+      typeof realFaqQ === 'string' && realFaqQ.indexOf('[object') === -1, 'resolved');
 const faqCat = render(components['faq-accordion'], { source: 'faq.json', data: ZH, category: 'General' });
 const generalCount = realFaq.filter(f => f.cat === 'General').length;
 check('category filters by the real cat values',

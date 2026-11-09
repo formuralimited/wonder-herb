@@ -676,12 +676,20 @@ const EFFECTS = {
     } finally { await ctx.close(); }
   },
 
-  /* The chat widget (P13-T5), FRONT END ONLY. What is asserted is the honesty
-     of the shipped state, because that is the part that can mislead a visitor:
-     the panel opens, the input is DISABLED and says why, there is NO typing
-     indicator (nothing is typing), and the WhatsApp route is in the panel. A
-     dead input that silently swallowed a message would pass a "does it open"
-     check and fail the person typing into it. */
+  /* The chat widget, in the state the STATIC SITE ships: data/site.json's
+     chat.apiBase is empty, so no answer service is configured and the widget
+     behaves exactly as P13-T5 built it. What is asserted is the honesty of
+     that state, because that is the part that can mislead a visitor: the panel
+     opens, the composer is DISABLED and says why, there is NO typing indicator
+     (nothing is typing), and the WhatsApp route is in the panel. A dead input
+     that silently swallowed a message would pass a "does it open" check and
+     fail the person typing into it.
+
+     The ENABLED path is not tested here and cannot be: this suite serves
+     static files with no API, deliberately. It is covered by scripts/test-chat.js
+     (the service, its guards and the markup contract, 84 checks) and must be
+     re-checked in a browser against the real API when one is hosted - see the
+     verify list under P15-T1 in BUILD_TASKS.md. */
   async chatOpens(width) {
     const ctx = await context(width); const page = await newPage(ctx);
     try {
@@ -820,11 +828,31 @@ const EFFECTS = {
     } finally { await ctx.close(); }
   },
 
+  /* THE SWITCHER NOW HAS TWO CORRECT OUTCOMES, and both are asserted.
+   *
+   * Until Phase 14 a migrated page existed only in Chinese, so EVERY language
+   * button was expected to save the choice and show a "not available" notice
+   * (finding 24's accepted regression). English pages exist now, so clicking
+   * EN must actually NAVIGATE - and this suite caught that the moment it
+   * became true, which is what it is for.
+   *
+   * Japanese still has no pages, so the notice path must keep working. Losing
+   * it would be the finding-23 failure in reverse: a button that does nothing
+   * at all and says nothing about why.
+   *
+   * 1280 exercises en (navigates), 390 exercises ja (notice) - the two widths
+   * also exercise the two different controls, the inline bar and the phone
+   * dropdown.
+   */
   async languageSwitch(width) {
     const code = width === 390 ? 'ja' : 'en';
     const ctx = await context(width); const page = await newPage(ctx);
     try {
       await page.goto(url(this.scenario, this.file), { waitUntil: 'load' });
+      const zhHeading = await page.evaluate(() => document.querySelector('h1').textContent);
+      const hasAlternate = await page.evaluate(
+        c => Boolean(document.querySelector('link[rel="alternate"][hreflang="' + c + '"]')), code);
+
       if (width === 390) {
         await page.click('#langCurrentBtn', { timeout: 2000 });
         if (!(await until(() => page.evaluate(() => document.getElementById('langDropdown').classList.contains('show')), 1000))) return false;
@@ -832,6 +860,29 @@ const EFFECTS = {
       } else {
         await page.click('#langEnBtn', { timeout: 2000 });
       }
+
+      if (hasAlternate) {
+        /* THE LANGUAGE EXISTS: the click must land on that page, and the page
+           must really be in that language - not the Chinese one relabelled. */
+        const arrived = await until(() => page.evaluate(
+          c => document.documentElement.lang === c, code), 4000);
+        const where = page.url();
+        const heading = await page.evaluate(() => document.querySelector('h1').textContent);
+        const saved = await page.evaluate(k => localStorage.getItem(k), LANG_KEY);
+        const stylesheet = await page.evaluate(() => {
+          const l = document.querySelector('link[rel="stylesheet"][href*="assets/"]');
+          return l ? l.getAttribute('href') : '';
+        });
+        this.detail = 'navigated to ' + where.split('/').slice(-2).join('/') +
+                      ', lang ' + code + ': ' + arrived + ', heading changed: ' +
+                      (heading !== zhHeading) + ', saved ' + saved +
+                      ', assets resolve from /' + code + '/: ' + stylesheet;
+        return arrived && where.indexOf('/' + code + '/') !== -1 &&
+               heading !== zhHeading && saved === code &&
+               /^\.\.\/assets\//.test(stylesheet);
+      }
+
+      /* NO SUCH LANGUAGE: the honest notice, exactly as before. */
       const expected = site.UNAVAILABLE[code];
       const state = await page.evaluate(k => {
         const n = document.getElementById('langNotice');
@@ -845,15 +896,14 @@ const EFFECTS = {
         };
       }, LANG_KEY);
       const noticeOk = await until(() => page.evaluate(() => { const n = document.getElementById('langNotice'); return n && n.getBoundingClientRect().height > 0; }), 1000);
-      // the choice carries: a live page opened next is in that language
       await page.goto(url(this.scenario, LIVE_PAGE), { waitUntil: 'load' });
       const liveLang = await until(() => page.evaluate(c => document.documentElement.lang === c, code), 3000);
-      // and coming back, the migrated page says so instead of looking broken
       await page.goto(url(this.scenario, this.file), { waitUntil: 'load' });
       const onReturn = await page.evaluate(() => { const n = document.getElementById('langNotice'); return n ? n.firstChild.textContent : ''; });
-      this.detail = 'saved ' + state.saved + ', notice "' + state.notice + '" (lang ' + state.noticeLang +
-                    ', close label "' + state.closeLabel + '"), page still ' + state.lang +
-                    ', ' + LIVE_PAGE + ' in ' + code + ': ' + liveLang + ', notice on return: ' + Boolean(onReturn);
+      this.detail = 'no ' + code + ' page: saved ' + state.saved + ', notice "' + state.notice +
+                    '" (lang ' + state.noticeLang + '), page still ' + state.lang +
+                    ', ' + LIVE_PAGE + ' in ' + code + ': ' + liveLang +
+                    ', notice on return: ' + Boolean(onReturn);
       return state.saved === code && noticeOk && state.notice === expected &&
              state.noticeLang === code && state.closeLabel === site.CLOSE[code] &&
              state.h1 === (this.h1 || '產品系列') && state.lang === 'zh-Hant' && liveLang && onReturn === expected;
@@ -884,7 +934,7 @@ async function runEffect(name, scenario, width, page) {
         crossTabBadge: 'a second tab\'s badge follows the cart',
         badgeFromStoredCart: 'the badge shows a cart stored by the old pages, on load',
         crossTabStorage: 'a cart written in another tab (no quick view involved) reaches the badge',
-        languageSwitch: 'language switch is not dead: saves the choice, says this page is Chinese only, a live page follows it'
+        languageSwitch: 'language switch works by effect: EN navigates to the English page, JA (no pages) says so and saves the choice'
       };
       for (const name of Object.keys(EFFECTS)) {
         /* LABEL is the list of effects that apply to THIS page. Effects for a
@@ -972,7 +1022,7 @@ async function runEffect(name, scenario, width, page) {
         'badgeFromStoredCart@1280': 'the badge shows the stored cart on load (1280)',
         'badgeFromStoredCart@390': 'the badge shows the stored cart on load (390)',
         'crossTabStorage@1280': 'a second tab\'s cart change reaches this page\'s badge',
-        'languageSwitch@1280': 'language switch (en): saves, says Chinese only, ' + LIVE_PAGE + ' follows, notice on return',
+        'languageSwitch@1280': 'language switch (en): navigates to the English page, on the host the visitor is actually on',
         'languageSwitch@390': 'language switch (ja, from the phone dropdown): the same'
       };
       for (const [k, label] of Object.entries(SHARED)) {
@@ -1028,7 +1078,7 @@ async function runEffect(name, scenario, width, page) {
         {
           'chatOpens@1280': 'chat opens, the input is disabled WITH a reason, no typing indicator, WhatsApp in the panel, Escape returns focus',
           'chatOpens@390': 'the same on a phone, where it must clear the full-width WhatsApp bar',
-          'chatRefusal@1280': 'the refusal state renders in the log with the approved wording (P13-T5; nothing can trigger it until Phase 15)'
+          'chatRefusal@1280': 'the refusal state renders in the log with the approved wording (driven through the boundary: the live composer is disabled while apiBase is empty)'
         });
       for (const [k, label] of Object.entries(EXTRA)) {
         const [name, w] = k.split('@');

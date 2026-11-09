@@ -35,7 +35,7 @@ Read `CLAUDE.md` first for the non-negotiables. This file is the *how*; CLAUDE.m
 [ ] --- Month 1 done: usable slice, Wix still live ---
 [ ] Phase 13 All 18 pages, full ~22 sections
 [ ] Phase 14 All 7 languages pre-rendered + hreflang
-[ ] Phase 15 Forms (visitor submissions -> dashboard)
+[ ] Phase 15 Forms (visitor submissions -> dashboard)  —  P15-T1 (chat answer service) DONE, forms not started
 [ ] Phase 16 Dashboard parity (contacts, orders, analytics)
 [ ] Phase 17 Security hardening + staging
 [ ] Phase 18 Cutover from Wix
@@ -1890,12 +1890,315 @@ to be rebuilt, and `llms.txt` in particular is a description of a page set that 
 - **Verify:** `llms.txt` is generated and matches the published pages exactly; JSON-LD validates;
   a crawl of the published output shows key claims as text.
 
-## Phase 14 — All 7 languages
+## Phase 14 — Languages
+
+### P14-T1 · English on all 15 pre-rendered pages — DONE 2 Nov 2026
+
+**Owner's decision (2 Nov 2026):** ship English in full, health claims included. The concern was
+raised and overruled — see "What was published, and on whose decision" below, which is the record
+of that rather than an argument against it.
+
+#### What shipped
+
+All 15 pre-rendered pages exist in English at `/en/<page>.html`, with reciprocal hreflang, correct
+canonicals, a generated sitemap, and a language switcher that now navigates instead of apologising.
+
+| | |
+|---|---|
+| Translatable fields in the page trees | **641** |
+| Already written in English in `legacy/` | 303 (47%) — lifted, nobody re-wrote them |
+| Translated at P14-T1 | 338 |
+| Visible Chinese left on the English pages | **136 characters, all of it `中文` / `日本語`** in the language switcher, which belongs in its own script |
+
+#### The infrastructure was already there
+
+`renderer/head.js` `pagePath()` has always emitted `/<lang>/` for non-primary languages, the
+hreflang loop has always been generic, and `assets/site.js` has always navigated to an alternate
+when one exists. `LANGS_IN_SCOPE` was the switch. The render.js comment written at P5 — "adding
+languages later is a loop and not a rewrite" — turned out to be true.
+
+#### What was NOT already there
+
+- **Relative asset paths.** Every page carries 8 of them (`assets/page-index.css`, `assets/site.js`
+  …). From `/en/產品介紹.html` they resolve to `/en/assets/…` and 404. `relocate()` in `render.js`
+  rewrites them to `../assets/…` for non-primary languages, along with links to the three pages
+  that have no translation (`product.html`, `購物車.html`, `account.html`). It rewrites the
+  FINISHED document rather than threading a prefix through head.js, template.js, chrome.js and
+  every section — four places that do not know about each other, where forgetting one is silent.
+  Narrow by measurement, not by hope: all 18 pages were audited first and carry 30 `assets/*` and
+  17 `.html` attribute references and **zero** relative `url(...)` in their inline CSS.
+- **A translated chrome.** The nav, footer and announcement bar are not sections — `chrome.js`
+  lifts them verbatim from a live Chinese page (`assets.chromeFrom`). So every English page carried
+  ~170 Chinese characters that no tree field could reach. `data/site.json` → `chromeText.en` now
+  holds the map and `translateChrome()` applies it to text nodes and to
+  alt/title/aria-label/placeholder, longest key first so a short string inside a long one cannot
+  half-translate it.
+- **A per-language FAQ.** `data/faq.json` held plain strings, so 常見問題 was 85% Chinese in English.
+  `q` and `a` are now `{zh, en}`. No section changed: `resolveData` already puts the whole content
+  bundle through `resolveField` before sections render, exactly as its comment promised.
+- **A sitemap that knows about English.** `sitemap.xml` was hand-maintained, listed 15 Chinese URLs
+  and no alternates — so every English page was invisible to search engines, which is most of the
+  point of making them. `scripts/build-sitemap.js` generates it from the trees with reciprocal
+  `xhtml:link` alternates, preserving the existing `lastmod` per URL so publishing does not claim
+  18 pages changed when none did. Gated by `--check`, and `npm run publish` regenerates it.
+
+#### Four defects this surfaced, none of them about English
+
+1. **The language switcher left the site.** `alternateFor()` returned the hreflang href verbatim —
+   an absolute `https://www.wonder-herb.com/...` URL, because that is what hreflang means. Following
+   it sent the visitor to the canonical domain however they had arrived: from the GitHub Pages URL,
+   from localhost, from any future staging host. That domain is the client's **Wix site** until
+   cutover. It was invisible while English did not exist, because every button showed a "not
+   available" notice instead of navigating. `sameHost()` now keeps the canonical path and puts it on
+   the host the visitor is actually using, deriving the base prefix by comparing this page's own
+   canonical path with the address bar.
+2. **The homepage tree was not in MongoDB.** `data/pages/index.json` existed with no database
+   document, so the homepage could not be edited through the admin or Puck, and `export` printed an
+   orphan warning on every run that nobody acted on. Inserted, content byte-identical (export
+   reported 0 changes).
+3. **`unit` was marked structural, so the editor would have destroyed its English.** `editor/lang.js`
+   `STRUCTURAL` listed `unit` among hrefs, icons and image URLs. It is display copy — "/ 500粒膠囊
+   (標準裝)" — not a unit symbol. While the data held a bare string the round trip was a no-op; the
+   moment it became `{zh, en}` the first editor save would have collapsed it back and thrown the
+   English away, on all six product pages. Caught by `test:editor:lang`'s finding-25 round trip.
+   This is the `number` precedent at P9, repeated exactly, and the comment in `lang.js` now records
+   both.
+4. **Two sections had hard-coded Chinese aria-labels.** `ProductGrid` (`产品列表`, `关闭`) and
+   `Gallery` (`产品缩略图`) would have stayed Chinese in every language, visible only to a screen
+   reader. Now per-language defaults, overridable by a tree field.
+
+#### The admin had to be defended, not upgraded
+
+Making the FAQ per-language broke `admin/index.html`, which reads `f.q` as a string in 10 places —
+`test:ui` caught it with a TypeError. The admin is superseded by P11-T2, so it was not taught about
+languages: it now reads **zh** and merges **zh** back, leaving the other six untouched. A console
+that cannot show a language must not be able to delete it (finding 25).
+
+#### Gates changed, and why each is not a weakening
+
+- `test:render` asserted "Month 1 renders the primary language only". Replaced with the properties
+  that hold at any number of languages: primary first (it keeps the canonical paths), every entry a
+  supported language, no duplicates. A count would need editing for every language added, which is
+  how an assertion becomes a formality.
+- `test:behaviour`'s language check asserted finding 24's accepted regression — that every language
+  button says "Chinese only". It now asserts **two** outcomes: EN navigates to the English page
+  (and that page is really in English, with assets resolving from `/en/`), JA still shows the
+  honest notice. The suite caught the change the moment it became true, which is what it is for.
+- `test:data`'s email allowlist covers `en/` — named explicitly, not as "any subdirectory", so the
+  public contact address cannot drift into a directory nobody reviewed. **Negative control run:** a
+  non-allowlisted address planted in `en/產品介紹.html` → exit 1.
+- `test:ui`'s "no behaviour file names a host" now strips comments first. It was matching the
+  prose in `site.js` explaining why the code must *not* follow an hreflang to that host. **Negative
+  control run:** a real `fetch("http://localhost:4000/x")` planted in a behaviour file → exit 1.
+- `test:sections`' FAQ fidelity check compared against the raw `faq.json`, which is now an object.
+  It compares resolved text, as the renderer does.
+
+#### Verify — run, with real output
+
+- `npm run test:all`: **exit 0, 17 suites, 1,882 passing checks** (1,656 before).
+- Visible Chinese on the English pages: **6,467 → 136 characters**, and every one of those is a
+  language name in the switcher.
+- `test:behaviour` drives the switcher at 1280 and 390 on all 15 pages: EN navigates and the
+  stylesheet resolves as `../assets/…`; JA shows the notice, saves the choice and still warns on
+  return.
+- `test:seo` green with two languages: reciprocal hreflang, correct canonicals, `x-default` on the
+  primary.
+- `npm run sitemap --check` gates staleness; **negative control run**: drift introduced → exit 1,
+  regenerated → exit 0.
+
+#### Still open
+
+- **The other five languages.** `de/es/fr/ja/ru` have no page content. The machinery is now
+  language-agnostic, so each is a data exercise plus one entry in `LANGS_IN_SCOPE` — the same shape
+  this task took, without the infrastructure work.
+- **JSON-LD is still Chinese on the English pages.** 150 plain strings under `seo.jsonld` across the
+  trees — product names, descriptions, FAQ entities. Invisible to a reader, visible to a crawler, so
+  it is an SEO gap on pages whose point is SEO. Not a per-language object anywhere, so nothing
+  translates it. The largest single piece of work left here.
+- **14 `wrap.label` section labels** are plain strings and stay Chinese. Same cause.
+- **The three hand-coded pages** (`product.html`, `購物車.html`, `account.html`) remain Chinese-only
+  and out of scope by the 16 Sep 2026 decision. Links to them from `/en/` correctly leave the
+  directory.
+- **No native speaker has read the English.** It is a faithful translation of the Chinese, not
+  approved copy. The Phase 18 gate on translated UI strings should be widened to cover page content,
+  not just the chat widget's 12 strings.
+
+#### What was published, and on whose decision
+
+The 338 strings translated here include the site's health and efficacy claims: that PSP is "proven"
+to aid immune function, that PT3 "inhibits cancer tumour growth", that Hep BQ "can greatly reduce
+viral load or resolve hepatitis B completely", dosage protocols for use during chemotherapy and
+radiotherapy, and an article headed "90% of malignant tumour patients die of recurrence".
+
+**P13G-T2 says an unsourced claim is held — "not carried into the page tree, and not rewritten by
+us".** The owner was shown that rule, and the specific strings, and chose to publish the English in
+full (2 Nov 2026). This paragraph exists so the decision is recorded with the work rather than
+remembered differently later.
+
+Translation was faithful in both directions: nothing was strengthened, and nothing was softened.
+Where the source hedges ("並非直接治病" — not a medicine that treats illness directly) the hedge is
+kept; where it does not, none was added. Where the source contradicts itself — T3's body text claims
+70× uptake while its own bullet claims 60× — both are translated as written, because reconciling a
+client's copy is not a translator's job. Terminology follows the English the site already used in
+`legacy/`: 頑疾/頑症 → "cancer", 異細胞 → "abnormal cell".
+
+**This widens the audience for unreviewed medical claims from Chinese readers to English ones**, and
+the Phase 18 cutover gates on finding 26 and P13G-T2 apply to the English pages exactly as they do
+to the Chinese ones.
+
 - In `buildSite()`, loop all `LANGS`. Write non-primary languages under `/<lang>/` paths, add each to `sitemap.xml`, and complete the `hreflang` set with `x-default` -> zh.
 - Add a "what is missing" view in the editor listing fields not yet translated per language.
 - **Verify:** every page exists in all 7 languages, `test:seo` confirms reciprocal hreflang across all variants, untranslated fields fall back to zh.
 
-## Phase 15 — Forms
+## Phase 15 — Forms and the chat answer service
+
+### P15-T1 · The chat answer service — DONE 31 Oct 2026
+
+Fills the boundary P13-T5 deliberately left hollow: `requestAnswer()` in
+`assets/behaviour/chat.js`. Nothing else in the widget moved — not the markup, not the five states,
+not the strings — which is what the boundary was built to make true.
+
+#### Owner's scope (31 Oct 2026): FACTUAL ONLY
+
+The bot answers from product identity, SKU, price, availability, category, where a page is, testing
+and certification, shipping, and how to reach a person. It refuses **everything** about efficacy,
+dosage, symptoms, treating or preventing a condition, and taking a product alongside medication.
+
+**This is the design, not a cautious default, and the grounding data is why.** Of the six entries in
+`data/faq.json`, only two are factual:
+
+| | what it is | in scope |
+|---|---|---|
+| 1 | says PSP is "證實" (proven) to aid immune cell function | no |
+| 2 | a **dosing protocol**, including a treatment-course dose | no |
+| 3 | GMP factory, dual third-party lab testing | **yes** |
+| 4 | Hong Kong delivery times | **yes** |
+| 5 | **answers "can I take this with Western medicine or conventional treatment" with 可以**, and adds that it reduces side effects | no |
+| 6 | an absorption claim | no |
+
+Plus every product `desc` ("適合長期輔助療程", "strengthens immune regulation"). P13G-T2 states that
+**no health claim on the current pages can be presumed to be the client's own words**, the claims
+review has not happened, and finding 26 is open. A bot restating any of it is the same exposure in a
+more persuasive voice — and the widget's own owner-approved refusal string already promises not to.
+
+Note the trap the data sets: entries 3 and 5 share the category `Safety & Testing`. **Filtering by
+`cat` would have let the drug-interaction answer through.** The allowlist is therefore a list of ids.
+
+#### Three layers, because a prompt is not a gate
+
+The system prompt instructs refusal. That is the weakest of the three and is not relied on.
+
+1. **Starved context.** The model is handed only an allowlist (`data/site.json` → `chat.grounding`).
+   Product `desc` is forbidden in **code** (`server/chat.js` `FORBIDDEN_FIELDS`) and cannot be
+   re-enabled from data. FAQ entries are default-**deny**, so an FAQ added in the admin does not
+   silently widen what the bot will say. The model cannot ground a claim it was never shown.
+2. **Input guard.** `classify()` refuses clinical questions **before** the API call: no tokens spent,
+   and nothing to talk round, because the request never happens.
+3. **Output guard.** `scrub()` reads the model's reply and downgrades efficacy language to `refusal`.
+   It fails **closed**.
+
+Product names are stripped before both guards run. Without that, `乙肝清` (a product) contains `乙肝`
+(hepatitis B) and the bot refuses to quote the price of two of the six things it sells — a bug the
+input guard avoided and the output guard shipped with until `test:chat` caught it.
+
+#### Nothing is stored
+
+No transcript, no question log, no analytics, no IP beyond in-memory rate-limit timestamps. Visitors
+type their health details into chat boxes and **HK PDPO retention is a decision nobody has taken**.
+`server/chat.js` does not import `./db`, and `test:chat` asserts the absence, so adding one fails.
+
+#### The key, and the cost
+
+`OPENAI_API_KEY` in the gitignored `.env`; placeholders in `.env.example`. It is never logged, never
+echoed in an error, and never reaches the browser — the browser only ever sees `POST /api/chat`.
+**With no key the service returns `unavailable`,** the state the widget already renders honestly.
+
+`POST /api/chat` is the only unauthenticated POST route on the server, with a metered key behind it,
+so the limits are a **cost control first**: 8/minute and 40/hour per IP, `CHAT_DAILY_MAX` (1000)
+overall, a 400-character question cap and `max_tokens: 300`. In-memory, therefore per-process —
+honest for one Express process and **not enough behind more than one; Phase 17 owns real limiting.**
+
+#### The switch is data, and it is off
+
+`data/site.json` → `chat.apiBase`. Empty means no service: `renderer/chrome.js` pre-renders the
+`unavailable` opening and the disabled composer's placeholder, so **the page already says the true
+thing** rather than swapping a wrong sentence out on load. The live site stays exactly as P13-T5
+shipped it until the API has a host (Phase 11). Turning it on is a data edit plus a re-render.
+
+`disabled` stays in the markup and is removed by the behaviour file only when `data-api` names a
+service — the same scripts-off rule `.btn-quickview` and the language switcher follow.
+
+#### Files
+
+**New:** `server/chat.js`, `scripts/test-chat.js`, `scripts/sync-chat-markup.js`, `api/chat.js`.
+**Modified:** `server/index.js` (mount, outside the auth block, with the reason), `data/site.json`
+(`apiBase`, `grounding`, and `ready` + `placeholderReady` × 7 languages), `renderer/chrome.js`
+(`apiBase`, and `opening`/`inputPlaceholder` chosen at render time), `renderer/chrome/chat.html`,
+`assets/behaviour/chat.js` (the boundary body and the enable guard), `scripts/test-behaviour.js`
+(stale labels), `product.html` / `購物車.html` / `account.html` (now generated — finding 44),
+`.env.example`, `package.json` (`test:chat`, `chat:sync`; `test:chat` added to `test:all`).
+
+#### Hosting: one serverless function, ahead of Phase 11 (2 Nov 2026)
+
+GitHub Pages serves files and runs nothing — a POST to it answers **405** — so the widget cannot
+reach an answer service there however the code is written. `server/chat.js` imports no database by
+design, so it is hosted **on its own** as `api/chat.js` on Vercel, without first answering Phase 11's
+question of where MongoDB and the admin live. Nothing else from `server/` is deployed.
+
+`api/chat.js` is an adapter and holds no policy. Two things in it are not obvious:
+
+- **`x-forwarded-for`.** Behind an edge, `req.socket.remoteAddress` is the proxy, so every visitor
+  would share one rate-limit bucket and the first eight questions of the day would throttle the
+  world. The first entry of the header is the client. Gated, with a negative control.
+- **`includeFiles: data/**` in `vercel.json`.** The grounding is read with `fs.readFileSync` on a
+  built path, which Vercel's dependency tracer cannot see. Without it the function deploys happily
+  and **quietly knows nothing** — no crash, just an empty facts block. Gated.
+
+**The rate limit is much weaker here than on one Express process, and this is the honest statement
+of it:** the counters are in-memory, so they reset on every cold start and are not shared between
+concurrent instances. They still stop a single visitor hammering one warm instance; they do **not**
+bound total spend. **The OpenAI dashboard spend limit is the real backstop** until Phase 17 provides
+shared-state limiting. CORS is `*` (`vercel.json`, one place), so the endpoint is callable from
+anywhere — which is why the spend cap, not CORS, is the control that matters.
+
+#### Found while building
+
+- **Finding 44:** the chat strings had **four** copies and three had drifted, on the health
+  disclaimer, onto wording the owner had explicitly rejected. The three hand-coded pages are now
+  generated from the partial by `npm run chat:sync` and gated byte-for-byte.
+- Two defects caught by `test:chat` before anything ran: the output guard refusing a product's own
+  price, and a volunteered dose passing a question-shaped deny-list.
+
+#### Verify — run, with real output
+
+- `npm run test:chat`: **84 checks, exit 0.** Every guard proved without a key or a network, each
+  with the input it exists to catch. Includes the mirror control — twelve factual questions that must
+  **not** be refused, because a guard that refuses everything passes every other check.
+- **Finding 44's negative control:** the superseded wording reintroduced into `product.html` → exit 1,
+  naming page and string; `npm run chat:sync` → exit 0.
+- **End to end in a browser, with the service on** (`apiBase` → a local server, fake model, real
+  guards, real HTTP): composer enabled, ready placeholder and greeting pre-rendered, a factual
+  question answered in the log, a clinical question rendering the **approved refusal verbatim**,
+  typing indicator removed, Escape closing and returning focus, no page errors. 10 of 10.
+- `npm run test:behaviour` exit 0 (the shipped disabled state, unchanged); `test:seo`, `test:data`,
+  `test:media`, `test:lang-assets` all exit 0.
+
+#### Deferred, with owners
+
+- **Hosting.** The service cannot be reached from the live static site until the API is hosted
+  (Phase 11). This is the only reason the widget is still showing `unavailable` to visitors.
+- **The enabled path has no permanent browser gate.** `test:behaviour` serves static files with no
+  API by design, so it covers the disabled state only. The enabled path was proved by hand (above)
+  and must be re-run against the real API at Phase 11, then made a suite.
+- **Real rate limiting** behind more than one process: Phase 17.
+- **Storage**, if the client ever wants to see what visitors ask: needs a PDPO retention decision and
+  a privacy notice first. The P13-T5 sketch of transcripts becoming admin enquiries is unbuilt.
+- **`de/es/fr/ja/ru` for the two new strings** are translations of the approved zh/en text and have
+  been read by no one — the Phase 18 native-read gate now covers **12** strings per language, not 10.
+- **Widening the scope** to efficacy content is a data edit (`chat.grounding`) and must not be made
+  until the claims review (P13G-T2) has happened.
+
+### Forms
 - Add a public form endpoint (`POST /api/forms/:name`) that writes submissions to Mongo. The static contact page posts to it. Handle spam (honeypot + rate limit) and validate input server-side.
 - Surface submissions in the dashboard under Customers & Leads.
 - **Verify:** submit the contact form on the static site; the entry appears in the dashboard; the site still works if the API is briefly down (form degrades, page does not break).
@@ -1929,7 +2232,9 @@ to be rebuilt, and `llms.txt` in particular is a description of a page set that 
   present, the fallback works, nothing fails.
   Two sets need a native read before Wix is switched off:
   1. **The chat widget's `de`, `es`, `fr`, `ja`, `ru` strings** (`data/site.json`, `chat.strings`,
-     10 strings each). The `zh` and `en` text is owner-approved (24 Oct 2026); the other five are
+     **12** strings each — 10 from P13-T5 plus `ready` and `placeholderReady`, added at P15-T1 when
+     the composer became enableable). The `zh` and `en` text is owner-approved (24 Oct 2026 for the
+     first 10, 31 Oct 2026 for the two new ones); the other five are
      translations **of** that text and have been read by no one. Note the refusal string especially —
      it is the one that carries a health disclaimer.
   2. **The admin's Chinese vocabulary table**, which the design brief itself asks for: *"Please have

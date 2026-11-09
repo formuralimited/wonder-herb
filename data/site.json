@@ -101,8 +101,45 @@
   },
   "chat": {
     "enabled": true,
-    "_why": "The floating chat widget (P13-T5). FRONT END ONLY: there is no answer backend yet, so the panel opens in its 'unavailable' state and routes the visitor to WhatsApp. Phase 15 replaces the single boundary in assets/behaviour/chat.js; none of these strings change when it does. Wording is owner-approved (24 Oct 2026). zh and en are approved text; de/es/fr/ja/ru are translations of that text and need a native read before cutover, falling back to zh if any is removed.",
+    "_why": "The floating chat widget (P13-T5), with its answer service wired up at P15-T1 (server/chat.js). The service exists and is tested, but `apiBase` below is EMPTY, so the live site still opens the panel in its 'unavailable' state and routes the visitor to WhatsApp - the composer is never enabled. That is because the API has no host until Phase 11, not because anything is missing. Wording is owner-approved (24 Oct 2026 for the first 10 strings, 31 Oct 2026 for `ready` and `placeholderReady`). zh and en are approved text; de/es/fr/ja/ru are translations of that text and need a native read before cutover (a Phase 18 gate, now 12 strings per language), falling back to zh if any is removed.",
     "handoffHref": "https://wa.me/85293318571/",
+    "_apiBaseWhy": "Where the answer service lives (server/chat.js, POST /api/chat). EMPTY means there is no service: the composer stays disabled and the panel opens in its honest 'unavailable' state, which is exactly what P13-T5 shipped and what the live site keeps doing until the API is hosted at Phase 11. Set it to the API origin with NO trailing slash and no path - 'http://localhost:4000' to try it locally, the hosted origin after Phase 11. Because the renderer reads this at build time, turning the chat on is a data edit plus a re-render, never a code change.",
+    "apiBase": "",
+    "grounding": {
+      "_why": "Everything the chat answer service (server/chat.js) is allowed to tell a visitor. FACTUAL ONLY, by owner decision 31 Oct 2026: product identity, price, availability, category, where its page is, testing and certification, shipping, how to reach a person. NOTHING about efficacy, dosage, symptoms, treating a condition or taking a product with medication - those hit the approved refusal string above. A product's `desc` is efficacy copy on every one of the six products, so it is blocked in CODE (server/chat.js FORBIDDEN_FIELDS) and cannot be re-enabled from here.",
+      "_faqWhy": "faqIds is an ALLOWLIST and the default is deny: an FAQ added in the admin does not reach the bot until its id is added here, on purpose. Only 3 (heavy-metal and pesticide testing) and 4 (Hong Kong shipping times) are factual. 1 says PSP is 'proven' to aid immune function; 2 is a dosing protocol including a treatment-course dose; 5 answers 'can I take this with Western medicine or conventional treatment' with 'yes, it reduces side effects'; 6 makes an absorption claim. Those four are health claims that BUILD_TASKS P13G-T2 says cannot be presumed to be the client's own words, and they stay out until that review happens. The `cat` field does NOT separate factual from clinical - 3 and 5 are both 'Safety & Testing' - which is why this is a list of ids and not a list of categories.",
+      "productFields": [
+        "sku",
+        "title",
+        "price",
+        "status",
+        "cat",
+        "badges",
+        "link"
+      ],
+      "faqIds": [
+        3,
+        4
+      ],
+      "facts": [
+        {
+          "zh": "網站以繁體中文為主，另設英文、德文、西班牙文、法文、日文及俄文版本。",
+          "en": "The site is primarily in Traditional Chinese, with English, German, Spanish, French, Japanese and Russian versions."
+        },
+        {
+          "zh": "所有價格以港幣 (HKD) 計算。",
+          "en": "All prices are in Hong Kong dollars (HKD)."
+        },
+        {
+          "zh": "標示「指定診所發售」的產品不經網站銷售，須向診所購買。",
+          "en": "A product marked clinic-only is not sold through the website and must be obtained from a clinic."
+        },
+        {
+          "zh": "產品檢測報告可於「有效成份檢測」頁查看，研究資料可於「研究報告」頁查看。",
+          "en": "Test reports are on the ingredient-testing page and research material is on the research page."
+        }
+      ]
+    },
     "strings": {
       "zh": {
         "title": "線上對話",
@@ -110,9 +147,11 @@
         "close": "關閉對話",
         "send": "傳送",
         "unavailable": "網上即時對話尚未開放。如有查詢，請透過 WhatsApp 聯絡我們。",
+        "ready": "您好。可查詢產品、價格、存貨、檢測報告及送貨事宜。有關治療或健康狀況的問題，請諮詢專業醫療人員。",
         "refusal": "有關治療方面的問題，此處不提供解答。如涉及您的健康狀況、症狀或正在服用的藥物，請諮詢專業醫療人員。產品、成分、檢測及訂購方面的問題，可在此查詢。",
         "handoff": "透過 WhatsApp 聯絡我們",
         "placeholder": "對話尚未開放",
+        "placeholderReady": "輸入您的問題…",
         "error": "發生錯誤，訊息未能傳送。",
         "offline": "您目前似乎離線。"
       },
@@ -122,9 +161,11 @@
         "close": "Close chat",
         "send": "Send",
         "unavailable": "Chat isn't available yet. For anything you need now, message us on WhatsApp.",
+        "ready": "Hello. Ask about products, prices, stock, test reports and delivery. For questions about treatment or your health, please speak to a qualified practitioner.",
         "refusal": "Questions about treating a condition can't be answered here. For anything about your health, symptoms or medication, please speak to a qualified practitioner. Help is available for products, ingredients, testing and ordering.",
         "handoff": "Talk to us on WhatsApp",
         "placeholder": "Chat isn't available yet",
+        "placeholderReady": "Type your question…",
         "error": "Something went wrong. Your message wasn't sent.",
         "offline": "You appear to be offline."
       },
@@ -134,9 +175,11 @@
         "close": "Chat schließen",
         "send": "Senden",
         "unavailable": "Der Chat ist noch nicht verfügbar. Für alles, was Sie jetzt brauchen, schreiben Sie uns auf WhatsApp.",
+        "ready": "Hallo. Fragen Sie nach Produkten, Preisen, Verfügbarkeit, Prüfberichten und Versand. Bei Fragen zu Behandlung oder Gesundheit wenden Sie sich bitte an eine qualifizierte Fachkraft.",
         "refusal": "Fragen zur Behandlung von Erkrankungen können hier nicht beantwortet werden. Wenden Sie sich bei Fragen zu Gesundheit, Symptomen oder Medikamenten an eine qualifizierte Fachkraft. Zu Produkten, Inhaltsstoffen, Prüfberichten und Bestellungen erhalten Sie hier Unterstützung.",
         "handoff": "Schreiben Sie uns auf WhatsApp",
         "placeholder": "Chat noch nicht verfügbar",
+        "placeholderReady": "Ihre Frage eingeben…",
         "error": "Es ist ein Fehler aufgetreten. Ihre Nachricht wurde nicht gesendet.",
         "offline": "Sie scheinen offline zu sein."
       },
@@ -146,9 +189,11 @@
         "close": "Cerrar el chat",
         "send": "Enviar",
         "unavailable": "El chat aún no está disponible. Para cualquier consulta, escríbanos por WhatsApp.",
+        "ready": "Hola. Puede preguntar sobre productos, precios, disponibilidad, informes de análisis y envíos. Para preguntas sobre tratamientos o su salud, consulte a un profesional cualificado.",
         "refusal": "Las preguntas sobre el tratamiento de enfermedades no se pueden responder aquí. Para cuestiones de salud, síntomas o medicación, consulte a un profesional cualificado. Sí se ofrece ayuda sobre productos, ingredientes, análisis y pedidos.",
         "handoff": "Escríbanos por WhatsApp",
         "placeholder": "El chat aún no está disponible",
+        "placeholderReady": "Escriba su pregunta…",
         "error": "Se ha producido un error. Su mensaje no se ha enviado.",
         "offline": "Parece que no hay conexión."
       },
@@ -158,9 +203,11 @@
         "close": "Fermer la discussion",
         "send": "Envoyer",
         "unavailable": "La messagerie n'est pas encore disponible. Pour toute question, écrivez-nous sur WhatsApp.",
+        "ready": "Bonjour. Posez vos questions sur les produits, les prix, la disponibilité, les rapports d’analyse et la livraison. Pour toute question sur un traitement ou votre santé, veuillez consulter un professionnel qualifié.",
         "refusal": "Les questions portant sur le traitement d'une maladie ne peuvent pas être traitées ici. Pour toute question de santé, de symptômes ou de médicaments, consultez un professionnel qualifié. Une aide est disponible pour les produits, les ingrédients, les analyses et les commandes.",
         "handoff": "Écrivez-nous sur WhatsApp",
         "placeholder": "Messagerie pas encore disponible",
+        "placeholderReady": "Saisissez votre question…",
         "error": "Une erreur s'est produite. Votre message n'a pas été envoyé.",
         "offline": "Vous semblez être hors ligne."
       },
@@ -170,9 +217,11 @@
         "close": "チャットを閉じる",
         "send": "送信",
         "unavailable": "チャットはまだご利用いただけません。お問い合わせは WhatsApp からお願いいたします。",
+        "ready": "こんにちは。製品、価格、在庫、検査報告、配送についてお尋ねください。治療や健康状態に関するご質問は、専門の医療従事者にご相談ください。",
         "refusal": "治療に関するご質問にはこちらではお答えできません。健康状態、症状、服用中のお薬については、医療従事者にご相談ください。製品、成分、検査、ご注文については、こちらでご案内できます。",
         "handoff": "WhatsApp でお問い合わせ",
         "placeholder": "チャットはまだご利用いただけません",
+        "placeholderReady": "ご質問を入力してください…",
         "error": "エラーが発生しました。メッセージは送信されていません。",
         "offline": "オフラインのようです。"
       },
@@ -182,12 +231,51 @@
         "close": "Закрыть чат",
         "send": "Отправить",
         "unavailable": "Чат пока недоступен. По любым вопросам напишите нам в WhatsApp.",
+        "ready": "Здравствуйте. Спросите о товарах, ценах, наличии, протоколах испытаний и доставке. По вопросам лечения или вашего здоровья обратитесь к квалифицированному специалисту.",
         "refusal": "Вопросы о лечении заболеваний здесь не рассматриваются. По вопросам здоровья, симптомов или лекарств обратитесь к квалифицированному специалисту. Помощь доступна по продукции, составу, результатам анализов и заказам.",
         "handoff": "Напишите нам в WhatsApp",
         "placeholder": "Чат пока недоступен",
+        "placeholderReady": "Введите ваш вопрос…",
         "error": "Произошла ошибка. Сообщение не отправлено.",
         "offline": "Похоже, вы не в сети."
       }
+    }
+  },
+  "chromeText": {
+    "_why": "The site chrome - top bar, nav, announcement, footer - is NOT modelled as sections: renderer/chrome.js lifts it verbatim out of a live page (assets.chromeFrom), which is a stopgap recorded in renderer/render.js. That means its wording is not a tree field and cannot be translated the way page content is. This map is how a non-primary language gets a translated chrome: renderer/chrome.js substitutes these strings in text nodes and in alt/title/aria-label/placeholder attributes. When the chrome finally becomes sections or a shared partial, this map is what it has to carry. Language NAMES in the switcher (中文, 日本語) are deliberately absent - each language is shown in its own script, which is what the live page does and what users expect.",
+    "en": {
+      "關於我們": "About Us",
+      "產品介紹": "Products",
+      "研究報告": "Research",
+      "成份檢測": "Testing",
+      "典型病例": "Case Studies",
+      "小册子": "Brochure",
+      "文章": "Articles",
+      "常見問題": "FAQ",
+      "聯絡我們": "Contact Us",
+      "諮詢專員": "Consult",
+      "網上商店": "Online Store",
+      "立即諮詢": "Enquire now",
+      "康草堂 Wonder Herb 以人為本，天然高效。": "Wonder Herb: patient-first, natural and effective.",
+      "康草堂 Wonder Herb": "Wonder Herb",
+      "以人為本，天然高效。": "Patient-first, natural and effective.",
+      "加拿大GMP藥廠生產": "GMP-certified in Canada",
+      "香港及加拿大雙重檢測": "Dual testing: Canada and Hong Kong",
+      "WhatsApp 專線": "WhatsApp Hotline",
+      "資訊中心": "Information",
+      "有效成份檢測": "Testing Reports",
+      "© 2025 Wonder-herb Health Products Ltd. 版權所有 | 天然雲芝糖肽專家": "© 2025 Wonder-herb Health Products Ltd. All Rights Reserved | Natural Yunzhi PSP Expert",
+      "最後更新：": "Last updated: ",
+      "2026年6月8日": "8 June 2026",
+      "語言切換器": "Language switcher",
+      "語言切換": "Language switcher",
+      "切換至中文": "Switch to Chinese",
+      "日本語に切り替え": "Switch to Japanese",
+      "公告": "Announcement",
+      "康草堂 Wonder Herb 官方標誌": "Wonder Herb official logo",
+      "購物車": "Shopping cart",
+      "開啟選單": "Open menu",
+      "主導航": "Main navigation"
     }
   }
 }

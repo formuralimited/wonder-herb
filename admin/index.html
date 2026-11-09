@@ -2211,7 +2211,7 @@ function collectAttention(){
   const untracked = productsData.filter(p => invState(p) === 'untracked');
   if(untracked.length) add(untracked.length + ' product(s) have no stock tracking yet', 'inventory');
 
-  const badFaq = faqData.filter(f => !(f.q || '').trim() || !(f.a || '').trim());
+  const badFaq = faqData.filter(f => !zhText(f.q).trim() || !zhText(f.a).trim());
   if(badFaq.length) add(badFaq.length + ' FAQ entr(y/ies) are missing a question or an answer', 'faq');
 
   const hp = currentHomepageValues();
@@ -2519,7 +2519,7 @@ function buildCasesCsv(){
 
 function buildFaqCsv(){
   return csvFromRows(['#', 'Category', 'Question', 'Answer'],
-    faqData.map((f, i) => [i + 1, f.cat || '', f.q || '', f.a || '']));
+    faqData.map((f, i) => [i + 1, f.cat || '', zhText(f.q), zhText(f.a)]));
 }
 
 function buildHomepageCsv(){
@@ -3428,7 +3428,7 @@ function renderFaqList(){
   document.getElementById('badge-faq').textContent = faqData.length;
 
   const filtered = faqData.filter(item => {
-    const matchesQ = !q || (item.q + ' ' + item.a).toLowerCase().includes(q);
+    const matchesQ = !q || (zhText(item.q) + ' ' + zhText(item.a)).toLowerCase().includes(q);
     const matchesCat = cat === 'all' || item.cat === cat;
     return matchesQ && matchesCat;
   });
@@ -3443,8 +3443,8 @@ function renderFaqList(){
       <div class="idx">${i+1}</div>
       <div class="body">
         <span class="badge badge-blue">${esc(item.cat)}</span>
-        <h3 style="margin-top:6px">${esc(item.q)}</h3>
-        <div class="summary" style="margin-top:6px">${esc(item.a)}</div>
+        <h3 style="margin-top:6px">${esc(zhText(item.q))}</h3>
+        <div class="summary" style="margin-top:6px">${esc(zhText(item.a))}</div>
       </div>
       <div class="actions">
         <button class="btn btn-ghost btn-sm" onclick="openFaqEditor(${i})">Edit</button>
@@ -3463,8 +3463,8 @@ function openFaqEditor(idx){
   if(idx !== null){
     const item = faqData[idx];
     document.getElementById('f_faq_cat').value = item.cat;
-    document.getElementById('f_faq_q').value = item.q;
-    document.getElementById('f_faq_a').value = item.a;
+    document.getElementById('f_faq_q').value = zhText(item.q);
+    document.getElementById('f_faq_a').value = zhText(item.a);
   } else {
     document.getElementById('f_faq_cat').value = 'General';
     document.getElementById('f_faq_q').value = '';
@@ -3477,13 +3477,35 @@ function closeFaqEditor(){
   document.getElementById('faq-listView').classList.remove('hidden');
 }
 
+/* The FAQ became per-language at P14 (q and a are {zh, en, ...} objects), and
+   this admin edits one language. zhText() reads the Chinese; zhMerge() writes
+   it back WITHOUT touching any other language - the store merges, never
+   replaces (docs/FINDINGS.md finding 25). Both accept a plain string so an
+   older faq.json still works.
+
+   This console is superseded by the new admin (P11-T2), which will edit all
+   seven languages properly. Until then it must at least not DESTROY the six
+   it cannot show. */
+function zhText(v){
+  if (v === null || v === undefined) return '';
+  return typeof v === 'object' ? String(v.zh || '') : String(v);
+}
+function zhMerge(existing, value){
+  if (existing && typeof existing === 'object') {
+    return Object.assign({}, existing, { zh: value });
+  }
+  return { zh: value };
+}
+
 function saveFaq(){
   const wasNewFaq = editingFaqIdx === null;
   const faqObj = {
     id: editingFaqIdx === null ? Date.now() : faqData[editingFaqIdx].id,
     cat: document.getElementById('f_faq_cat').value,
-    q: document.getElementById('f_faq_q').value || 'Untitled Question',
-    a: document.getElementById('f_faq_a').value || ''
+    q: zhMerge(editingFaqIdx === null ? null : faqData[editingFaqIdx].q,
+               document.getElementById('f_faq_q').value || 'Untitled Question'),
+    a: zhMerge(editingFaqIdx === null ? null : faqData[editingFaqIdx].a,
+               document.getElementById('f_faq_a').value || '')
   };
 
   if(editingFaqIdx === null){
@@ -3495,7 +3517,7 @@ function saveFaq(){
   renderFaqList();
   localStorage.setItem('wh_faq_data', JSON.stringify(faqData));
   notifyCMSSync('faq', faqData);
-  logActivity('faq', (wasNewFaq ? 'Added FAQ: ' : 'Edited FAQ: ') + faqObj.q);
+  logActivity('faq', (wasNewFaq ? 'Added FAQ: ' : 'Edited FAQ: ') + zhText(faqObj.q));
   toast('Saved FAQ entry!', true);
 }
 
@@ -3506,7 +3528,7 @@ function deleteFaq(i){
   renderFaqList();
   localStorage.setItem('wh_faq_data', JSON.stringify(faqData));
   notifyCMSSync('faq', faqData);
-  logActivity('faq', 'Deleted FAQ: ' + ((gone && gone.q) || 'untitled'));
+  logActivity('faq', 'Deleted FAQ: ' + (zhText(gone && gone.q) || 'untitled'));
   toast('FAQ entry deleted', false);
 }
 

@@ -66,13 +66,24 @@ export function priceText(product, fallback) {
   return 'HK$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-export default function ProductGrid({ source, data, quickViewLabel, detailLabel, priceNote, quantityLabel, addLabel }) {
+/* Two labels that are structural rather than editorial - the grid's own role
+   name and the quick-view modal's close button. They were hard-coded Chinese,
+   so they stayed Chinese in every language, which only a screen-reader user
+   would ever have hit. Given as per-language defaults here rather than as tree
+   fields: every tree would otherwise have to carry them, and nobody would
+   think to translate an aria-label they cannot see. A tree MAY still override
+   them with gridLabel / closeLabel. */
+const GRID_LABEL = { zh: '产品列表', en: 'Product list' };
+const CLOSE_LABEL = { zh: '关闭', en: 'Close' };
+const pick = (map, lang) => map[lang] || map.zh;
+
+export default function ProductGrid({ source, data, lang, quickViewLabel, detailLabel, priceNote, quantityLabel, addLabel, gridLabel, closeLabel }) {
   const key = String(source || 'products.json').replace(/\.json$/, '');
   const items = (data && Array.isArray(data[key])) ? data[key] : [];
   const quickView = Boolean(quickViewLabel && addLabel);
 
   const grid = (
-    <div className="products-grid" id="productGrid" role="list" aria-label="产品列表">
+    <div className="products-grid" id="productGrid" role="list" aria-label={gridLabel || pick(GRID_LABEL, lang)}>
       {items.map(p => {
         const titleId = 'product-title-' + p.id;
         return (
@@ -114,7 +125,7 @@ export default function ProductGrid({ source, data, quickViewLabel, detailLabel,
       {grid}
       <div id="quickViewModal" className="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <div className="modal-content">
-          <span className="close-modal" role="button" tabIndex={0} aria-label="关闭">&times;</span>
+          <span className="close-modal" role="button" tabIndex={0} aria-label={closeLabel || pick(CLOSE_LABEL, lang)}>&times;</span>
           <img id="modalImage" className="modal-product-image" alt="" />
           <h2 id="modalTitle" className="modal-product-title"></h2>
           <div id="modalPrice" className="modal-product-price"></div>

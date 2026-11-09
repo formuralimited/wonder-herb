@@ -14,7 +14,10 @@
     "price": "3800.00",
     "status": "Out of Stock",
     "cat": "yunzhi",
-    "badges": "GMP 認證, 有效成份>90%",
+    "badges": {
+      "zh": "GMP 認證, 有效成份>90%",
+      "en": "GMP certified, active ingredients >90%"
+    },
     "model": "bottle_PEPTIDES.glb",
     "desc": {
       "zh": "強化免疫調節，適合長期輔助療程。每批產品雙重檢測，有效成份 >90%。",
@@ -43,7 +46,10 @@
     "price": "680.00",
     "status": "In Stock",
     "cat": "yunzhi",
-    "badges": "GMP 認證, 便攜試用",
+    "badges": {
+      "zh": "GMP 認證, 便攜試用",
+      "en": "GMP certified, portable trial size"
+    },
     "model": "bottle_PEPTIDES.glb",
     "desc": {
       "zh": "多醣肽含量達國家標準1.8倍以上，提升免疫細胞活性，化療放療期間減輕副作用。",
@@ -72,7 +78,10 @@
     "price": "1900.00",
     "status": "In Stock",
     "cat": "t3",
-    "badges": "專利配方, 大學證實功效倍增",
+    "badges": {
+      "zh": "專利配方, 大學證實功效倍增",
+      "en": "Patented formula, university-confirmed doubled efficacy"
+    },
     "model": "bottle_YUNZHI.glb",
     "desc": {
       "zh": "大學研究證實：PSP + T3 複合配方使功效倍增，適合需要更強免疫調節的患者。",
@@ -101,7 +110,10 @@
     "price": "2480.00",
     "status": "In Stock",
     "cat": "special",
-    "badges": "高濃縮, 雙重協同",
+    "badges": {
+      "zh": "高濃縮, 雙重協同",
+      "en": "Highly concentrated, dual synergy"
+    },
     "model": "bottle_PT3.glb",
     "desc": {
       "zh": "專業級配方，只在指定中西醫診所出售。請諮詢您的醫生。",
@@ -148,7 +160,10 @@
     "price": "1880.00",
     "status": "In Stock",
     "cat": "special",
-    "badges": "天然草本, 護肝排毒",
+    "badges": {
+      "zh": "天然草本, 護肝排毒",
+      "en": "Natural herbs, liver support and detox"
+    },
     "model": "bottle_HEP.glb",
     "desc": {
       "zh": "天然草本護肝配方，強化肝臟代謝，針對乙肝及肝功能受損人士。",
@@ -177,7 +192,10 @@
     "price": "880.00",
     "status": "In Stock",
     "cat": "special",
-    "badges": "腦部保健, 專利成份",
+    "badges": {
+      "zh": "腦部保健, 專利成份",
+      "en": "Brain health, patented ingredient"
+    },
     "model": "",
     "desc": {
       "zh": "奧地利 EVER PHARMA 研發配方，有助修復腦細胞、增強記憶力及專注力，經歐洲嚴格測試。",

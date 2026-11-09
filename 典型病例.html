@@ -18,6 +18,7 @@
 
   <link rel="canonical" href="https://www.wonder-herb.com/典型病例.html">
   <link rel="alternate" hreflang="zh-Hant" href="https://www.wonder-herb.com/典型病例.html">
+  <link rel="alternate" hreflang="en" href="https://www.wonder-herb.com/en/典型病例.html">
   <link rel="alternate" hreflang="x-default" href="https://www.wonder-herb.com/典型病例.html">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -318,6 +319,7 @@
      holding a second copy that could drift. Escaped by renderer/chrome.js. -->
 <div class="wh-chat-panel" id="wh-chat-panel" role="dialog"
      aria-labelledby="wh-chat-title" aria-describedby="wh-chat-state"
+     data-api=""
      data-refusal="有關治療方面的問題，此處不提供解答。如涉及您的健康狀況、症狀或正在服用的藥物，請諮詢專業醫療人員。產品、成分、檢測及訂購方面的問題，可在此查詢。"
      data-error="發生錯誤，訊息未能傳送。"
      data-offline="您目前似乎離線。" hidden>
@@ -332,6 +334,12 @@
   <!-- role="log" + aria-live="polite" so a screen reader hears a new message
        without the panel stealing focus mid-read. -->
   <div class="wh-chat-log" id="wh-chat-log" role="log" aria-live="polite" aria-relevant="additions">
+    <!-- The opening message below is the `unavailable` string or the `ready`
+         one, depending on whether data/site.json sets chat.apiBase - chosen in
+         renderer/chrome.js at RENDER time. So the pre-rendered page already
+         says the true thing and no visitor sees a wrong sentence swapped out
+         on load. (Written without the token's own name: fillChat substitutes
+         inside comments too, and this one read as nonsense when it did.) -->
     <p class="wh-chat-msg wh-chat-msg-system" id="wh-chat-state">網上即時對話尚未開放。如有查詢，請透過 WhatsApp 聯絡我們。</p>
   </div>
 
@@ -343,7 +351,12 @@
       透過 WhatsApp 聯絡我們
     </a>
     <!-- Disabled with a VISIBLE reason, never a dead input that swallows what
-         someone types. Phase 15 enables it; no markup here changes. -->
+         someone types. `disabled` stays in the MARKUP and is removed by
+         assets/behaviour/chat.js only when data-api names a service: with
+         scripts off, a control that needs JavaScript must not be usable, which
+         is the same rule .btn-quickview and the language switcher follow. The
+         placeholder is already the right one at render time, so enabling the
+         input never changes the words in it. -->
     <form class="wh-chat-composer" id="wh-chat-composer">
       <label class="wh-chat-sr" for="wh-chat-input">線上對話</label>
       <input type="text" id="wh-chat-input" class="wh-chat-input"

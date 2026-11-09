@@ -3,37 +3,44 @@
   "path": "產品_雲芝糖肽精華_A.html",
   "mainClass": "container",
   "title": {
-    "zh": "雲芝糖肽精華 (PSP) 試用裝 | Wonder Herb – 天然雲芝糖肽專家"
+    "zh": "雲芝糖肽精華 (PSP) 試用裝 | Wonder Herb – 天然雲芝糖肽專家",
+    "en": "Yunzhi PSP Essence (Trial Pack) | Wonder Herb - Natural Yunzhi PSP Specialists"
   },
   "seo": {
     "description": {
-      "zh": "康草堂雲芝糖肽精華 PSP 試用裝，有效成份高達90%以上，加拿大GMP藥廠生產，大學研究證實能提升免疫力，適合初次體驗及短期輔助。"
+      "zh": "康草堂雲芝糖肽精華 PSP 試用裝，有效成份高達90%以上，加拿大GMP藥廠生產，大學研究證實能提升免疫力，適合初次體驗及短期輔助。",
+      "en": "Wonder Herb Yunzhi PSP Essence Trial Pack: active ingredients above 90%, made in a Canadian GMP facility. University research confirms it raises immunity; ideal for first-time use and short-term support."
     },
     "dateModified": "2026-06-02T10:30:00+08:00",
     "ogTitle": {
-      "zh": "雲芝糖肽精華 (PSP) 試用裝 | Wonder Herb – 天然雲芝糖肽專家"
+      "zh": "雲芝糖肽精華 (PSP) 試用裝 | Wonder Herb – 天然雲芝糖肽專家",
+      "en": "Yunzhi PSP Essence (Trial Pack) | Wonder Herb - Natural Yunzhi PSP Specialists"
     },
     "ogDescription": {
-      "zh": "康草堂雲芝糖肽精華 PSP 試用裝，有效成份高達90%以上，加拿大GMP藥廠生產，大學研究證實能提升免疫力。"
+      "zh": "康草堂雲芝糖肽精華 PSP 試用裝，有效成份高達90%以上，加拿大GMP藥廠生產，大學研究證實能提升免疫力。",
+      "en": "Wonder Herb Yunzhi PSP Essence Trial Pack: active ingredients above 90%, made in a Canadian GMP facility, with university research confirming it raises immunity."
     },
     "ogType": "product",
     "image": "https://static.wixstatic.com/media/b3683f_33a97500a0794f629de24db948fa66d7~mv2.jpg",
     "breadcrumb": [
       {
         "name": {
-          "zh": "首頁"
+          "zh": "首頁",
+          "en": "Home"
         },
         "path": ""
       },
       {
         "name": {
-          "zh": "產品介紹"
+          "zh": "產品介紹",
+          "en": "Products"
         },
         "path": "產品介紹.html"
       },
       {
         "name": {
-          "zh": "雲芝糖肽精華 (PSP) 試用裝"
+          "zh": "雲芝糖肽精華 (PSP) 試用裝",
+          "en": "Yunzhi PSP Essence (Trial Pack)"
         },
         "path": "產品_雲芝糖肽精華_A.html"
       }
@@ -116,18 +123,21 @@
           {
             "src": "https://static.wixstatic.com/media/b3683f_33a97500a0794f629de24db948fa66d7~mv2.jpg",
             "alt": {
-              "zh": "PSP 試用裝正面"
+              "zh": "PSP 試用裝正面",
+              "en": "PSP Trial Pack, front"
             }
           },
           {
             "src": "https://static.wixstatic.com/media/b3683f_b209ae1f489d4cf0a562b1b0651d30c7~mv2.jpg",
             "alt": {
-              "zh": "PSP 試用裝實拍"
+              "zh": "PSP 試用裝實拍",
+              "en": "PSP Trial Pack, product photo"
             }
           }
         ],
         "mainAlt": {
-          "zh": "雲芝糖肽精華 PSP 試用裝 60粒正面圖"
+          "zh": "雲芝糖肽精華 PSP 試用裝 60粒正面圖",
+          "en": "Yunzhi PSP Essence Trial Pack, 60 capsules, front view"
         }
       }
     },
@@ -142,14 +152,17 @@
         "source": "products.json",
         "sku": "WH-PSP-060",
         "quantityLabel": {
-          "zh": "數量："
+          "zh": "數量：",
+          "en": "Quantity:"
         },
         "addLabel": {
-          "zh": "加入購物車"
+          "zh": "加入購物車",
+          "en": "Add to Cart"
         },
         "addIcon": "fas fa-cart-plus",
         "detailLabel": {
-          "zh": "詳細介紹"
+          "zh": "詳細介紹",
+          "en": "More Details <i class='fas fa-chevron-down'></i>"
         },
         "detailHref": "#detailedInfo",
         "detailIcon": "fas fa-chevron-down",
@@ -165,9 +178,13 @@
             "icon": "fas fa-university"
           }
         ],
-        "unit": "/ 60粒膠囊 (試用裝)",
+        "unit": {
+          "zh": "/ 60粒膠囊 (試用裝)",
+          "en": "/ 60 capsules (Trial Pack)"
+        },
         "headingBadge": {
-          "zh": "Cov-1菌絲體提取 | 初次體驗推薦"
+          "zh": "Cov-1菌絲體提取 | 初次體驗推薦",
+          "en": "Cov-1 Mycelium Extract | First Trial Recommended"
         }
       }
     },
@@ -181,20 +198,24 @@
       },
       "fields": {
         "heading": {
-          "zh": "產品介紹"
+          "zh": "產品介紹",
+          "en": "Products"
         },
         "paragraphs": [
           {
             "label": {
-              "zh": "雲芝糖肽精華（PSP）"
+              "zh": "雲芝糖肽精華（PSP）",
+              "en": "Yunzhi PSP Essence (PSP)"
             },
             "text": {
-              "zh": "是從Cov-1品種的深層菌絲體提取的多糖肽聚合體。研究表明多糖肽可以增强人體免疫功能，同時能够調控異細胞功能，通過激活免疫效應細胞從而促使異細胞的凋謝。"
+              "zh": "是從Cov-1品種的深層菌絲體提取的多糖肽聚合體。研究表明多糖肽可以增强人體免疫功能，同時能够調控異細胞功能，通過激活免疫效應細胞從而促使異細胞的凋謝。",
+              "en": "is a polysaccharide-peptide complex extracted from the deep-layer mycelium of the Cov-1 strain. Research indicates that polysaccharide peptides can strengthen the body's immune function while regulating abnormal cell activity, promoting apoptosis of abnormal cells by activating immune effector cells."
             }
           },
           {
             "text": {
-              "zh": "根據國家藥品標準，雲芝糖肽的含量不得低於49.5%（多糖不得低於38%，蛋白肽含量不得低於11.5%），康草堂產品的「有效成份」含量高達90%以上。可能是香港唯一達到「國家藥品監督管理局」標準的雲芝糖肽 PSP。濃度及活性含量更高於國家標準80%，深受中西醫信賴。"
+              "zh": "根據國家藥品標準，雲芝糖肽的含量不得低於49.5%（多糖不得低於38%，蛋白肽含量不得低於11.5%），康草堂產品的「有效成份」含量高達90%以上。可能是香港唯一達到「國家藥品監督管理局」標準的雲芝糖肽 PSP。濃度及活性含量更高於國家標準80%，深受中西醫信賴。",
+              "en": "According to national drug standards, Yunzhi PSP content must not be less than 49.5% (polysaccharides ≥38%, protein peptides ≥11.5%). <strong>Wonder Herb's active ingredient content exceeds 90%</strong>. It is possibly the only Yunzhi PSP in Hong Kong meeting the 'National Medical Products Administration' standard, with potency 80% higher than national requirements, trusted by TCM and Western medicine practitioners."
             }
           }
         ],
@@ -211,32 +232,38 @@
       },
       "fields": {
         "heading": {
-          "zh": "產品功效及特性"
+          "zh": "產品功效及特性",
+          "en": "Key Benefits & Features"
         },
         "bullets": [
           {
             "text": {
-              "zh": "配合傳統治療 (化療、電療、標靶、免疫治療)及於手術前後服用"
+              "zh": "配合傳統治療 (化療、電療、標靶、免疫治療)及於手術前後服用",
+              "en": "Taken alongside conventional treatment (chemotherapy, radiotherapy, targeted therapy, immunotherapy) and before and after surgery"
             }
           },
           {
             "text": {
-              "zh": "減低療程不適，例如疲勞，胃口不佳，痛楚，失眠，噁心，嘔吐等"
+              "zh": "減低療程不適，例如疲勞，胃口不佳，痛楚，失眠，噁心，嘔吐等",
+              "en": "Eases treatment discomfort such as fatigue, poor appetite, pain, insomnia, nausea and vomiting"
             }
           },
           {
             "text": {
-              "zh": "減低復發機會"
+              "zh": "減低復發機會",
+              "en": "Reduces the chance of recurrence"
             }
           },
           {
             "text": {
-              "zh": "為頑症病人、抵抗力低、或頑症家族史人仕提升自身免疫力"
+              "zh": "為頑症病人、抵抗力低、或頑症家族史人仕提升自身免疫力",
+              "en": "Raises the body's own immunity for cancer patients, people with low resistance, and those with a family history of cancer"
             }
           },
           {
             "text": {
-              "zh": "活性含量高出國家藥品標準近一倍"
+              "zh": "活性含量高出國家藥品標準近一倍",
+              "en": "Active content nearly double the national drug standard"
             }
           }
         ],
@@ -254,27 +281,32 @@
       },
       "fields": {
         "heading": {
-          "zh": "適合服用的對象"
+          "zh": "適合服用的對象",
+          "en": "Who Should Use"
         },
         "bullets": [
           {
             "text": {
-              "zh": "家族頑症遺傳基因的人仕"
+              "zh": "家族頑症遺傳基因的人仕",
+              "en": "People with inherited cancer genes in the family"
             }
           },
           {
             "text": {
-              "zh": "免疫力較弱的人仕"
+              "zh": "免疫力較弱的人仕",
+              "en": "People with weaker immunity"
             }
           },
           {
             "text": {
-              "zh": "預防頑症的人仕"
+              "zh": "預防頑症的人仕",
+              "en": "People seeking to prevent cancer"
             }
           },
           {
             "text": {
-              "zh": "保健養生人士"
+              "zh": "保健養生人士",
+              "en": "People focused on general health and wellbeing"
             }
           }
         ],
@@ -293,7 +325,8 @@
         "paragraphs": [
           {
             "text": {
-              "zh": "注意 曾接受器官移植的人仕不宜服用"
+              "zh": "注意 曾接受器官移植的人仕不宜服用",
+              "en": "Note: not suitable for anyone who has had an organ transplant"
             }
           }
         ],
@@ -311,12 +344,14 @@
       },
       "fields": {
         "heading": {
-          "zh": "科研實證"
+          "zh": "科研實證",
+          "en": "Scientific Evidence"
         },
         "paragraphs": [
           {
             "text": {
-              "zh": "資深研究學者凌教授在國際醫學期刊 Plos One 發表的研究報告指出「康草堂PSP能百分之百阻止腫瘤的發展，在治療過程中沒有產生任何副作用」。"
+              "zh": "資深研究學者凌教授在國際醫學期刊 Plos One 發表的研究報告指出「康草堂PSP能百分之百阻止腫瘤的發展，在治療過程中沒有產生任何副作用」。",
+              "en": "Professor Ling, a senior researcher, published a study in the international journal <strong>Plos One</strong> stating that 'Wonder Herb PSP can 100% inhibit tumor development without any side effects during treatment.'"
             }
           }
         ],
@@ -334,16 +369,19 @@
       },
       "fields": {
         "heading": {
-          "zh": "包裝規格"
+          "zh": "包裝規格",
+          "en": "Specifications"
         },
         "paragraphs": [
           {
             "text": [
               {
-                "zh": "每瓶 60 粒膠囊 (試用裝，適合初次體驗)"
+                "zh": "每瓶 60 粒膠囊 (試用裝，適合初次體驗)",
+                "en": "60 capsules per bottle (Trial Pack, ideal for first-time use)"
               },
               {
-                "zh": "另有 500 粒標準裝，滿足長期輔助療程需求"
+                "zh": "另有 500 粒標準裝，滿足長期輔助療程需求",
+                "en": "A 500-capsule Standard Pack is also available for long-term adjuvant courses"
               }
             ]
           }
@@ -362,39 +400,48 @@
       },
       "fields": {
         "heading": {
-          "zh": "建議用量"
+          "zh": "建議用量",
+          "en": "Recommended Dosage"
         },
         "bullets": [
           {
             "label": {
-              "zh": "手術前/後："
+              "zh": "手術前/後：",
+              "en": "Before / after surgery:"
             },
             "text": {
-              "zh": "每日4次，每次5粒"
+              "zh": "每日4次，每次5粒",
+              "en": "4 times daily, 5 capsules each time"
             }
           },
           {
             "label": {
-              "zh": "化療期間："
+              "zh": "化療期間：",
+              "en": "During chemotherapy:"
             },
             "text": {
-              "zh": "每日3次，每次3粒"
+              "zh": "每日3次，每次3粒",
+              "en": "3 times daily, 3 capsules each time"
             }
           },
           {
             "label": {
-              "zh": "電療 / 標靶 / 免疫治療："
+              "zh": "電療 / 標靶 / 免疫治療：",
+              "en": "Radiotherapy / targeted therapy / immunotherapy:"
             },
             "text": {
-              "zh": "每日4次，每次4粒"
+              "zh": "每日4次，每次4粒",
+              "en": "4 times daily, 4 capsules each time"
             }
           },
           {
             "label": {
-              "zh": "保健用途："
+              "zh": "保健用途：",
+              "en": "General health use:"
             },
             "text": {
-              "zh": "每日3-4粒"
+              "zh": "每日3-4粒",
+              "en": "3-4 capsules daily"
             }
           }
         ],
@@ -413,7 +460,8 @@
         "paragraphs": [
           {
             "text": {
-              "zh": "※ 詳情請咨詢醫生或專業醫護人員"
+              "zh": "※ 詳情請咨詢醫生或專業醫護人員",
+              "en": "<em>※ Please consult your doctor or healthcare professional.</em>"
             }
           }
         ],
@@ -427,37 +475,45 @@
           {
             "icon": "fas fa-file-alt",
             "title": {
-              "zh": "雙重含量檢測"
+              "zh": "雙重含量檢測",
+              "en": "Dual Lab Testing"
             },
             "text": {
-              "zh": "加拿大 + 香港實驗室"
+              "zh": "加拿大 + 香港實驗室",
+              "en": "Canada + Hong Kong"
             }
           },
           {
             "icon": "fas fa-certificate",
             "title": {
-              "zh": "GMP 認證藥廠"
+              "zh": "GMP 認證藥廠",
+              "en": "GMP Certified"
             },
             "text": {
-              "zh": "加拿大衛生部監管"
+              "zh": "加拿大衛生部監管",
+              "en": "Health Canada regulated"
             }
           },
           {
             "icon": "fas fa-chart-line",
             "title": {
-              "zh": "20,000+ 患者信賴"
+              "zh": "20,000+ 患者信賴",
+              "en": "20,000+ Patients"
             },
             "text": {
-              "zh": "真實病例改善回饋"
+              "zh": "真實病例改善回饋",
+              "en": "Real recovery stories"
             }
           },
           {
             "icon": "fas fa-microscope",
             "title": {
-              "zh": "大學研究證實"
+              "zh": "大學研究證實",
+              "en": "University Proven"
             },
             "text": {
-              "zh": "PSP+T3功效倍增"
+              "zh": "PSP+T3功效倍增",
+              "en": "PSP+T3 Synergy"
             }
           }
         ],
@@ -468,7 +524,8 @@
       "type": "related-products",
       "fields": {
         "heading": {
-          "zh": "你可能也感興趣"
+          "zh": "你可能也感興趣",
+          "en": "You May Also Like"
         },
         "source": "products.json",
         "items": [
@@ -477,10 +534,12 @@
             "href": "產品_雲芝糖肽精華_B.html",
             "icon": "fas fa-boxes",
             "label": {
-              "zh": "雲芝糖肽精華 (標準裝)"
+              "zh": "雲芝糖肽精華 (標準裝)",
+              "en": "Yunzhi PSP Essence (Standard Pack)"
             },
             "desc": {
-              "zh": "500粒／強化免疫調節，長期輔助療程首選"
+              "zh": "500粒／強化免疫調節，長期輔助療程首選",
+              "en": "500 capsules / Long-term immune modulation"
             }
           },
           {
@@ -488,10 +547,12 @@
             "href": "產品_T3.html",
             "icon": "fas fa-flask",
             "label": {
-              "zh": "T3 三烯生育醇"
+              "zh": "T3 三烯生育醇",
+              "en": "T3 Tocotrienol"
             },
             "desc": {
-              "zh": "澳洲大學證實，抗頑疾幹細胞，心血管守護"
+              "zh": "澳洲大學證實，抗頑疾幹細胞，心血管守護",
+              "en": "QUT proven, anti-cancer stem cell, cardiovascular support"
             }
           },
           {
@@ -499,10 +560,12 @@
             "href": "產品_乙肝清.html",
             "icon": "fas fa-heartbeat",
             "label": {
-              "zh": "乙肝清"
+              "zh": "乙肝清",
+              "en": "Hep BQ capsules"
             },
             "desc": {
-              "zh": "天然草本護肝配方，強化肝臟代謝"
+              "zh": "天然草本護肝配方，強化肝臟代謝",
+              "en": "Herbal liver support formula"
             }
           }
         ]

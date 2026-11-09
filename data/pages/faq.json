@@ -2,31 +2,37 @@
   "slug": "faq",
   "path": "常見問題.html",
   "title": {
-    "zh": "常見問題 | 康草堂 Wonder Herb - 雲芝糖肽精華專業解答"
+    "zh": "常見問題 | 康草堂 Wonder Herb - 雲芝糖肽精華專業解答",
+    "en": "FAQ | Wonder Herb - Yunzhi PSP Essence Answers"
   },
   "seo": {
     "description": {
-      "zh": "康草堂 Wonder Herb 雲芝糖肽精華常見問題：解答雲芝糖肽是什麼、功效、檢測方法、副作用以及與其他品牌的區別，為您提供專業清晰的資訊。"
+      "zh": "康草堂 Wonder Herb 雲芝糖肽精華常見問題：解答雲芝糖肽是什麼、功效、檢測方法、副作用以及與其他品牌的區別，為您提供專業清晰的資訊。",
+      "en": "Wonder Herb Yunzhi PSP Essence FAQ: what Yunzhi PSP is, its effects, how it is tested, side effects, and how it differs from other brands - clear, professional information."
     },
     "dateModified": "2026-06-02T10:30:00+08:00",
     "ogTitle": {
-      "zh": "常見問題 | Wonder Herb - 雲芝糖肽精華"
+      "zh": "常見問題 | Wonder Herb - 雲芝糖肽精華",
+      "en": "FAQ | Wonder Herb - Yunzhi PSP Essence"
     },
     "ogDescription": {
-      "zh": "康草堂 Wonder Herb 雲芝糖肽精華常見問題：解答雲芝糖肽是什麼、功效、檢測方法、副作用以及與其他品牌的區別。"
+      "zh": "康草堂 Wonder Herb 雲芝糖肽精華常見問題：解答雲芝糖肽是什麼、功效、檢測方法、副作用以及與其他品牌的區別。",
+      "en": "Wonder Herb Yunzhi PSP Essence FAQ: what Yunzhi PSP is, its effects, how it is tested, side effects, and how it differs from other brands."
     },
     "ogType": "website",
     "image": "https://lh3.googleusercontent.com/d/1mQafHatzw_gwbV_J9Y5AmwIAUS9r8SEi",
     "breadcrumb": [
       {
         "name": {
-          "zh": "首頁"
+          "zh": "首頁",
+          "en": "Home"
         },
         "path": ""
       },
       {
         "name": {
-          "zh": "常見問題"
+          "zh": "常見問題",
+          "en": "FAQ"
         },
         "path": "常見問題.html"
       }
@@ -81,10 +87,12 @@
       "type": "page-header",
       "fields": {
         "heading": {
-          "zh": "常見問題"
+          "zh": "常見問題",
+          "en": "FAQ"
         },
         "sub": {
-          "zh": "關於雲芝糖肽精華 PSP、T3 配方及康草堂產品的常見疑問，為您逐一解答"
+          "zh": "關於雲芝糖肽精華 PSP、T3 配方及康草堂產品的常見疑問，為您逐一解答",
+          "en": "Common questions about Yunzhi PSP Essence, T3 formula and Wonder Herb products — answered by experts."
         },
         "headingId": "faq-page-heading",
         "variant": "centered"
@@ -111,14 +119,17 @@
       },
       "fields": {
         "heading": {
-          "zh": "癌症治療期間是否可以食用雲芝？"
+          "zh": "癌症治療期間是否可以食用雲芝？",
+          "en": "Can Yunzhi be taken during cancer treatment?"
         },
         "icon": "fas fa-video",
         "body": {
-          "zh": "專科醫生為你在他個人網頁講解作答，點擊下方按鈕觀看影片與詳細說明。"
+          "zh": "專科醫生為你在他個人網頁講解作答，點擊下方按鈕觀看影片與詳細說明。",
+          "en": "A specialist explains in his personal webpage. Click below to watch the video and read detailed answers."
         },
         "label": {
-          "zh": "微信文章：專科醫生解答"
+          "zh": "微信文章：專科醫生解答",
+          "en": "WeChat Article: Specialist Answers"
         },
         "href": "https://mp.weixin.qq.com/s/V8IK7N3-czW3O5_Gh8bzyA",
         "linkIcon": "fab fa-weixin",
@@ -134,18 +145,22 @@
       },
       "fields": {
         "heading": {
-          "zh": "大學研究實證"
+          "zh": "大學研究實證",
+          "en": "University Research Evidence"
         },
         "icon": "fas fa-university",
         "body": {
-          "zh": "經大學研究證實，「康草堂雲芝糖肽精華 PSP + T3」的獨特配方，比單一服用雲芝糖肽精華PSP功效倍增。多項國際期刊論文支持雲芝糖肽在免疫調節、抗腫瘤及輔助治療方面的顯著功效。詳情請參考"
+          "zh": "經大學研究證實，「康草堂雲芝糖肽精華 PSP + T3」的獨特配方，比單一服用雲芝糖肽精華PSP功效倍增。多項國際期刊論文支持雲芝糖肽在免疫調節、抗腫瘤及輔助治療方面的顯著功效。詳情請參考",
+          "en": "University research confirms that the unique \"Wonder Herb Yunzhi PSP + T3\" formula doubles the effect compared with taking Yunzhi PSP Essence on its own. A number of papers in international journals support the significant effects of Yunzhi PSP in immune regulation, anti-tumour action and adjuvant treatment. For details see"
         },
         "label": {
-          "zh": "研究報告頁面"
+          "zh": "研究報告頁面",
+          "en": "Research Reports page"
         },
         "href": "研究報告.html",
         "after": {
-          "zh": "。"
+          "zh": "。",
+          "en": "."
         },
         "variant": "note"
       }
@@ -159,7 +174,8 @@
       },
       "fields": {
         "label": {
-          "zh": "探索產品系列"
+          "zh": "探索產品系列",
+          "en": "Explore Products"
         },
         "href": "產品介紹.html",
         "variant": "button"

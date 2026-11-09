@@ -2,31 +2,37 @@
   "slug": "brochure",
   "path": "小册子.html",
   "title": {
-    "zh": "小册子 | 康草堂 Wonder Herb - 雲芝糖肽精華產品指南"
+    "zh": "小册子 | 康草堂 Wonder Herb - 雲芝糖肽精華產品指南",
+    "en": "Brochure | Wonder Herb - Yunzhi PSP Essence Product Guide"
   },
   "seo": {
     "description": {
-      "zh": "康草堂 Wonder Herb 產品小冊子，詳細介紹雲芝糖肽精華 PSP 及相關健康資訊。"
+      "zh": "康草堂 Wonder Herb 產品小冊子，詳細介紹雲芝糖肽精華 PSP 及相關健康資訊。",
+      "en": "The Wonder Herb product brochure, with detailed information on Yunzhi PSP Essence and related health information."
     },
     "dateModified": "2026-06-02T12:00:00+08:00",
     "ogTitle": {
-      "zh": "小册子 | Wonder Herb - 雲芝糖肽精華"
+      "zh": "小册子 | Wonder Herb - 雲芝糖肽精華",
+      "en": "Brochure | Wonder Herb - Yunzhi PSP Essence"
     },
     "ogDescription": {
-      "zh": "康草堂 Wonder Herb 產品小冊子，詳細介紹雲芝糖肽精華 PSP 及相關健康資訊。"
+      "zh": "康草堂 Wonder Herb 產品小冊子，詳細介紹雲芝糖肽精華 PSP 及相關健康資訊。",
+      "en": "The Wonder Herb product brochure, with detailed information on Yunzhi PSP Essence and related health information."
     },
     "ogType": "website",
     "image": "https://static.wixstatic.com/media/b3683f_b8275f690b4e42c797853a481b0296f7~mv2.jpg/v1/fill/w_800,h_620,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Wonder%20herb%20leaflet%20%20(%20new%20update)-1.jpg",
     "breadcrumb": [
       {
         "name": {
-          "zh": "首頁"
+          "zh": "首頁",
+          "en": "Home"
         },
         "path": ""
       },
       {
         "name": {
-          "zh": "小册子"
+          "zh": "小册子",
+          "en": "Brochure"
         },
         "path": "小册子.html"
       }
@@ -107,11 +113,13 @@
       "type": "page-header",
       "fields": {
         "heading": {
-          "zh": "產品小冊子"
+          "zh": "產品小冊子",
+          "en": "Product Brochure"
         },
         "variant": "centered",
         "sub": {
-          "zh": "詳細產品資訊 · 雲芝糖肽精華專業指南"
+          "zh": "詳細產品資訊 · 雲芝糖肽精華專業指南",
+          "en": "Detailed Product Information · Professional Guide to Yunzhi PSP"
         },
         "headingId": "brochure-heading"
       }
@@ -125,39 +133,47 @@
       },
       "fields": {
         "heading": {
-          "zh": "小册子页面展示"
+          "zh": "小册子页面展示",
+          "en": "Brochure Pages"
         },
         "headingHidden": true,
         "items": [
           {
             "title": {
-              "zh": "小冊子 · 封面及產品介紹"
+              "zh": "小冊子 · 封面及產品介紹",
+              "en": "Brochure · Cover & Product Introduction"
             },
             "href": "https://drive.google.com/file/d/1Y9W3q17TLJgAT_vyKBKAnEXfsFZ4O91D/view?usp=sharing",
             "image": "https://drive.google.com/thumbnail?id=1Y9W3q17TLJgAT_vyKBKAnEXfsFZ4O91D&sz=w1000",
             "imageAlt": {
-              "zh": "Wonder Herb 小冊子第1頁，封面及產品介紹"
+              "zh": "Wonder Herb 小冊子第1頁，封面及產品介紹",
+              "en": "Wonder Herb brochure page 1: cover and product introduction"
             },
             "aria": {
-              "zh": "打开小册子第1页大图：封面及产品介绍"
+              "zh": "打开小册子第1页大图：封面及产品介绍",
+              "en": "Open a larger image of brochure page 1: cover and product introduction"
             }
           },
           {
             "title": {
-              "zh": "小冊子 · 科研及成份說明"
+              "zh": "小冊子 · 科研及成份說明",
+              "en": "Brochure · Research & Ingredients"
             },
             "href": "https://drive.google.com/file/d/1mgLPFYbJ9F7BW7DAoQ_2EIm6W_JxSN0b/view?usp=sharing",
             "image": "https://drive.google.com/thumbnail?id=1mgLPFYbJ9F7BW7DAoQ_2EIm6W_JxSN0b&sz=w1000",
             "imageAlt": {
-              "zh": "Wonder Herb 小冊子第2頁，科研及成份說明"
+              "zh": "Wonder Herb 小冊子第2頁，科研及成份說明",
+              "en": "Wonder Herb brochure page 2: research and ingredient information"
             },
             "aria": {
-              "zh": "打开小册子第2页大图：科研及成份说明"
+              "zh": "打开小册子第2页大图：科研及成份说明",
+              "en": "Open a larger image of brochure page 2: research and ingredient information"
             }
           }
         ],
         "hint": {
-          "zh": "點擊圖片放大"
+          "zh": "點擊圖片放大",
+          "en": "<i class='fas fa-search-plus'></i> Click to enlarge"
         },
         "hintIcon": "fas fa-search-plus",
         "noReferrer": true,

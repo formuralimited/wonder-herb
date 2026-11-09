@@ -229,14 +229,55 @@ function loadPage(file, url, apiUp, apiBase) {
   check('no request to a local API from the live domain', calledApi === false);
   check('the live page still renders its catalogue',
     pub.window.document.querySelectorAll('.product-card').length > 0);
-  /* jsdom does not load the page's external behaviour scripts, so read them:
-     the pre-rendered page's behaviour must make no network calls at all. */
-  const behaviourSrc = (read('產品介紹.html').match(/<script src="(assets\/[^"]+)"/g) || [])
-    .map(t => t.replace(/^<script src="/, '').replace(/"$/, ''));
-  const calls = behaviourSrc.filter(f => /\bfetch\s*\(|XMLHttpRequest|localhost|127\.0\.0\.1/.test(read(f)));
-  check('its behaviour scripts make no network calls and name no local API',
-    behaviourSrc.length >= 2 && calls.length === 0,
-    behaviourSrc.join(', ') + (calls.length ? '   CALLS IN: ' + calls.join(', ') : ''));
+  /* jsdom does not load the page's external behaviour scripts, so read them.
+   *
+   * WHAT THIS ASSERTS, AND WHY IT CHANGED AT P15-T1. It used to say the
+   * behaviour files make no network call AT ALL. That rule was never actually
+   * true of the site: assets/behaviour/home-hero.js fetches the homepage's
+   * .glb models, and the check only passed because it read the scripts on
+   * 產品介紹, which does not carry it. So it was a page-specific accident, and
+   * it broke the moment a second file legitimately called out - the chat
+   * widget, whose whole purpose is to ask an answer service a question.
+   *
+   * THE REAL INVARIANT, which is stronger and now stated: no behaviour file
+   * may NAME A HOST. Every fetch target is built from the DOM - home-hero
+   * reads `data-model`, chat reads `data-api` - so where the site talks to is
+   * data, re-pointable by a data edit and a re-render, and the published site
+   * can never be found pointing at a developer's machine. That is the rule
+   * BUILD_TASKS already states for media ("a behaviour file never names a
+   * file: it reads data-model from the DOM"); this is the same rule for
+   * origins. It is checked across EVERY behaviour file rather than the ones
+   * one page happens to load, which is what closes the original blind spot.
+   *
+   * It does not weaken the guarantee that matters - a page must render without
+   * the API. That is held by the scripts-off sweep and test:behaviour, which
+   * drive these pages with no API running at all. */
+  const allBehaviour = ['assets/site.js'].concat(
+    fs.readdirSync(path.join(ROOT, 'assets', 'behaviour'))
+      .filter(f => f.endsWith('.js')).map(f => 'assets/behaviour/' + f));
+
+  /* Comments are stripped first. The check is about what the CODE reaches for,
+     not what a comment mentions - assets/site.js explains in prose why it must
+     not follow an hreflang to www.wonder-herb.com, and an unstripped match
+     read that explanation as the offence it warns about. Line comments are
+     matched only when not preceded by ':', so the // in https:// survives to
+     be caught. */
+  const stripComments = src => src
+    .replace(/\/\*[\s\S]*?\*\//g, ' ')
+    .replace(/(^|[^:])\/\/.*$/gm, '$1');
+  const namesHost = allBehaviour.filter(
+    f => /https?:\/\/|localhost|127\.0\.0\.1/.test(stripComments(read(f))));
+  check('no behaviour file names a host: every fetch target comes from the DOM',
+    allBehaviour.length >= 8 && namesHost.length === 0,
+    allBehaviour.length + ' file(s) checked' +
+    (namesHost.length ? '   NAMES A HOST: ' + namesHost.join(', ') : ''));
+
+  /* And the published pages must not be carrying a configured API either: the
+     one that would matter is a local one left in data/site.json by accident. */
+  const apiAttr = (read('產品介紹.html').match(/data-api="([^"]*)"/) || [])[1];
+  check('the published page carries no local API in its chat config',
+    apiAttr !== undefined && !/localhost|127\.0\.0\.1/.test(apiAttr),
+    'data-api=' + JSON.stringify(apiAttr));
 
   server.close();
   for (const c of Object.values(COLLECTIONS)) await db.collection(c).deleteMany({});

@@ -55,7 +55,7 @@ const isLangMap = i18n.isLangMap;
 /* Keys that are never content, whatever they look like. Derived from the real
    field names across all eleven sections - see each section's config. */
 export const STRUCTURAL = new Set([
-  'variant', 'headingId', 'blockId', 'source', 'category', 'sku', 'unit',
+  'variant', 'headingId', 'blockId', 'source', 'category', 'sku',
   'href', 'primaryHref', 'secondaryHref', 'detailHref',
   'icon', 'primaryIcon', 'secondaryIcon', 'addIcon', 'detailIcon', 'descIcon',
   'defaultIcon', 'badgeIcons', 'linkIcon', 'hintIcon', 'captionIcon', 'src',
@@ -64,7 +64,14 @@ export const STRUCTURAL = new Set([
   'poster'   // a model slide's fallback photograph: a URL, like `src` and `image`
 ]);
 
-/* `number` was on this list and came off at P9 (index.html). The only field
+/* `unit` came off at P14 (Phase 14, English), for the same reason and caught
+   by the same check. It reads "/ 500粒膠囊 (標準裝)" - "/ 500 capsules (Standard
+   Pack)" - which is display copy, not a unit symbol like ml or mg. While the
+   data held a bare string the round trip was a no-op and nothing noticed;
+   the moment it became {zh, en} the first editor save collapsed it back to a
+   string and threw the English away. Six product pages, one per page.
+
+   `number` was on this list and came off at P9 (index.html). The only field
    actually named `number` is a hero stat, and those read "90%+", "20+ Yrs",
    "GMP" - display copy that Phase 14 has to translate, not a quantity. Treating
    it as structural collapsed {zh: "20+ Yrs"} to a bare string on the first

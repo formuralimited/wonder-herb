@@ -2,31 +2,37 @@
   "slug": "research",
   "path": "研究報告.html",
   "title": {
-    "zh": "研究報告 | Wonder Herb - 雲芝糖肽精華"
+    "zh": "研究報告 | Wonder Herb - 雲芝糖肽精華",
+    "en": "Research | Wonder Herb - Yunzhi PSP Essence"
   },
   "seo": {
     "description": {
-      "zh": "康草堂 Wonder Herb - 大學研究報告、臨床實證，展示雲芝糖肽精華 PSP 的抗腫瘤及免疫調節功效。"
+      "zh": "康草堂 Wonder Herb - 大學研究報告、臨床實證，展示雲芝糖肽精華 PSP 的抗腫瘤及免疫調節功效。",
+      "en": "Wonder Herb - university research and clinical evidence on the anti-tumour and immune-regulating effects of Yunzhi PSP Essence."
     },
     "dateModified": "2026-06-02T10:30:00+08:00",
     "ogTitle": {
-      "zh": "研究報告 | Wonder Herb - 雲芝糖肽精華"
+      "zh": "研究報告 | Wonder Herb - 雲芝糖肽精華",
+      "en": "Research | Wonder Herb - Yunzhi PSP Essence"
     },
     "ogDescription": {
-      "zh": "大學研究報告、臨床實證，展示雲芝糖肽精華 PSP 的抗腫瘤及免疫調節功效。"
+      "zh": "大學研究報告、臨床實證，展示雲芝糖肽精華 PSP 的抗腫瘤及免疫調節功效。",
+      "en": "University research and clinical evidence on the anti-tumour and immune-regulating effects of Yunzhi PSP Essence."
     },
     "ogType": "website",
     "image": "https://lh3.googleusercontent.com/d/1mQafHatzw_gwbV_J9Y5AmwIAUS9r8SEi",
     "breadcrumb": [
       {
         "name": {
-          "zh": "首頁"
+          "zh": "首頁",
+          "en": "Home"
         },
         "path": ""
       },
       {
         "name": {
-          "zh": "研究報告"
+          "zh": "研究報告",
+          "en": "Research"
         },
         "path": "研究報告.html"
       }
@@ -100,11 +106,13 @@
       "type": "page-header",
       "fields": {
         "heading": {
-          "zh": "研究報告"
+          "zh": "研究報告",
+          "en": "Research"
         },
         "variant": "video",
         "sub": {
-          "zh": "國際權威期刊及大學研究實證 · 康草堂雲芝糖肽精華的科學依據"
+          "zh": "國際權威期刊及大學研究實證 · 康草堂雲芝糖肽精華的科學依據",
+          "en": "International Peer-Reviewed Journals & University Studies · Scientific Evidence for Wonder Herb Yunzhi PSP"
         },
         "headingId": "research-heading",
         "videoUrl": "https://video.wixstatic.com/video/11062b_d578b9d4ffba48c68d086ec29fe9e6f0/1080p/mp4/file.mp4"
@@ -122,7 +130,8 @@
         "paragraphs": [
           {
             "text": {
-              "zh": "康草堂與多所大學合作，以下研究均採用「康草堂雲芝糖肽 PSP」或複合配方進行臨床驗證，結果顯示其在免疫調節、抗腫瘤及輔助治療方面具有顯著功效。"
+              "zh": "康草堂與多所大學合作，以下研究均採用「康草堂雲芝糖肽 PSP」或複合配方進行臨床驗證，結果顯示其在免疫調節、抗腫瘤及輔助治療方面具有顯著功效。",
+              "en": "Wonder Herb collaborates with multiple universities. The following studies used 'Wonder Herb Yunzhi PSP' or the proprietary compound formula for clinical validation, demonstrating significant efficacy in immune modulation, anti-tumor activity, and adjuvant therapy."
             }
           }
         ]
@@ -139,85 +148,104 @@
         "items": [
           {
             "title": {
-              "zh": "香港著名大學研究"
+              "zh": "香港著名大學研究",
+              "en": "Renowned Hong Kong University Study"
             },
             "text": {
-              "zh": "採用「康草堂雲芝糖肽 PSP」進行的研究證明能有效抑制腫瘤生長，調節免疫系統。"
+              "zh": "採用「康草堂雲芝糖肽 PSP」進行的研究證明能有效抑制腫瘤生長，調節免疫系統。",
+              "en": "Research using 'Wonder Herb Yunzhi PSP' proves effective inhibition of tumor growth and immune system regulation."
             },
             "href": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0019804",
             "icon": "fas fa-university",
             "aria": {
-              "zh": "閱讀香港著名大學研究關於雲芝糖肽抗腫瘤功效的全文"
+              "zh": "閱讀香港著名大學研究關於雲芝糖肽抗腫瘤功效的全文",
+              "en": "Read the full study from a leading Hong Kong university on the anti-tumour effects of Yunzhi PSP"
             }
           },
           {
             "title": {
-              "zh": "澳洲著名大學研究"
+              "zh": "澳洲著名大學研究",
+              "en": "Renowned Australian University Study"
             },
             "text": {
-              "zh": "獨立驗證康草堂雲芝糖肽 PSP 的抗腫瘤活性，為天然輔助療法提供堅實科學基礎。"
+              "zh": "獨立驗證康草堂雲芝糖肽 PSP 的抗腫瘤活性，為天然輔助療法提供堅實科學基礎。",
+              "en": "Independently validates the anti-tumor activity of Wonder Herb Yunzhi PSP, providing a solid scientific basis for natural adjuvant therapy."
             },
             "href": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0019804",
             "icon": "fas fa-globe-asia",
             "aria": {
-              "zh": "閱讀澳洲著名大學驗證雲芝糖肽抗腫瘤活性的研究全文"
+              "zh": "閱讀澳洲著名大學驗證雲芝糖肽抗腫瘤活性的研究全文",
+              "en": "Read the full study from a leading Australian university verifying the anti-tumour activity of Yunzhi PSP"
             }
           },
           {
             "title": {
-              "zh": "胃部腫瘤臨床研究"
+              "zh": "胃部腫瘤臨床研究",
+              "en": "Gastric Cancer Clinical Study"
             },
             "text": {
-              "zh": "研究證實雲芝糖肽對胃部腫瘤患者具有輔助治療效果，提升生活品質。"
+              "zh": "研究證實雲芝糖肽對胃部腫瘤患者具有輔助治療效果，提升生活品質。",
+              "en": "Study confirms Yunzhi PSP provides adjuvant therapeutic benefits for gastric cancer patients, improving quality of life."
             },
             "href": "https://pubmed.ncbi.nlm.nih.gov/7910230/",
             "icon": "fas fa-stethoscope",
             "aria": {
-              "zh": "閱讀胃部腫瘤臨床研究：雲芝糖肽輔助治療效果"
+              "zh": "閱讀胃部腫瘤臨床研究：雲芝糖肽輔助治療效果",
+              "en": "Read the gastric tumour clinical study: Yunzhi PSP as adjuvant treatment"
             }
           },
           {
             "title": {
-              "zh": "結腸腫瘤術後生存期"
+              "zh": "結腸腫瘤術後生存期",
+              "en": "Postoperative Survival in Colon Cancer"
             },
             "text": {
-              "zh": "雲芝糖肽能延長結腸腫瘤病人術後的生存期，並降低復發風險。"
+              "zh": "雲芝糖肽能延長結腸腫瘤病人術後的生存期，並降低復發風險。",
+              "en": "Yunzhi PSP prolongs postoperative survival in colon cancer patients and reduces recurrence risk."
             },
             "href": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11038516/",
             "icon": "fas fa-chart-line",
             "aria": {
-              "zh": "閱讀結腸腫瘤術後生存期研究：雲芝糖肽延長生存期"
+              "zh": "閱讀結腸腫瘤術後生存期研究：雲芝糖肽延長生存期",
+              "en": "Read the colon tumour post-operative survival study: Yunzhi PSP and extended survival"
             }
           },
           {
             "title": {
-              "zh": "誘導結直腸腫瘤細胞凋亡"
+              "zh": "誘導結直腸腫瘤細胞凋亡",
+              "en": "Induction of Colorectal Cancer Cell Apoptosis"
             },
             "text": {
-              "zh": "通過調節 EGFR 和 PD-L1 的表達，雲芝糖肽誘導結直腸腫瘤細胞凋亡。"
+              "zh": "通過調節 EGFR 和 PD-L1 的表達，雲芝糖肽誘導結直腸腫瘤細胞凋亡。",
+              "en": "Yunzhi PSP induces apoptosis in colorectal cancer cells by modulating EGFR and PD-L1 expression."
             },
             "href": "https://pubmed.ncbi.nlm.nih.gov/36942063/",
             "icon": "fas fa-dna",
             "aria": {
-              "zh": "閱讀誘導結直腸腫瘤細胞凋亡的研究：調節EGFR和PD-L1"
+              "zh": "閱讀誘導結直腸腫瘤細胞凋亡的研究：調節EGFR和PD-L1",
+              "en": "Read the study on inducing apoptosis in colorectal tumour cells: regulation of EGFR and PD-L1"
             }
           },
           {
             "title": {
-              "zh": "免疫調節與抗腫瘤功能"
+              "zh": "免疫調節與抗腫瘤功能",
+              "en": "Immunomodulatory & Anti-Tumor Functions"
             },
             "text": {
-              "zh": "雲芝糖肽（PSP）具備顯著的免疫調節和抗腫瘤功能，適合輔助治療。"
+              "zh": "雲芝糖肽（PSP）具備顯著的免疫調節和抗腫瘤功能，適合輔助治療。",
+              "en": "Yunzhi PSP (PSP) exhibits significant immunomodulatory and anti-tumor functions, suitable as an adjuvant therapy."
             },
             "href": "https://pubmed.ncbi.nlm.nih.gov/25614677/",
             "icon": "fas fa-shield-alt",
             "aria": {
-              "zh": "閱讀免疫調節與抗腫瘤功能的研究：雲芝糖肽PSP功效"
+              "zh": "閱讀免疫調節與抗腫瘤功能的研究：雲芝糖肽PSP功效",
+              "en": "Read the study on immune regulation and anti-tumour function: the effects of Yunzhi PSP"
             }
           }
         ],
         "linkLabel": {
-          "zh": "閱讀全文 →"
+          "zh": "閱讀全文 →",
+          "en": "Read More →"
         },
         "variant": "icon"
       }
@@ -231,37 +259,44 @@
       },
       "fields": {
         "heading": {
-          "zh": "詳細研究報告下載"
+          "zh": "詳細研究報告下載",
+          "en": "Download Detailed Research Reports"
         },
         "items": [
           {
             "title": {
-              "zh": "研究證明複合配方「康草堂雲芝糖肽 PSP + T3」的功效倍增 (PDF)"
+              "zh": "研究證明複合配方「康草堂雲芝糖肽 PSP + T3」的功效倍增 (PDF)",
+              "en": "Study confirms synergistic efficacy of 'Wonder Herb Yunzhi PSP + T3' formula (PDF)"
             },
             "href": "https://www.wonder-herb.com/_files/ugd/b3683f_5ce3d5e304d54d13bfd3390f8f6f676f.pdf",
             "icon": "fas fa-file-pdf",
             "aria": {
-              "zh": "下載研究報告：康草堂雲芝糖肽 PSP + T3 功效倍增 (PDF)"
+              "zh": "下載研究報告：康草堂雲芝糖肽 PSP + T3 功效倍增 (PDF)",
+              "en": "Download the research report: Wonder Herb Yunzhi PSP + T3 doubled efficacy (PDF)"
             }
           },
           {
             "title": {
-              "zh": "瀋陽醫科大學對「乙肝清」進行的研究實證 (PDF)"
+              "zh": "瀋陽醫科大學對「乙肝清」進行的研究實證 (PDF)",
+              "en": "Shenyang Medical University Research on 'Hep BQ capsules' (PDF)"
             },
             "href": "https://www.wonder-herb.com/_files/ugd/b3683f_3993ef273f2e40f099fc273347403ea5.pdf",
             "icon": "fas fa-file-pdf",
             "aria": {
-              "zh": "下載瀋陽醫科大學對乙肝清的研究報告 (PDF)"
+              "zh": "下載瀋陽醫科大學對乙肝清的研究報告 (PDF)",
+              "en": "Download the Shenyang Medical University research report on Hep BQ capsules (PDF)"
             }
           },
           {
             "title": {
-              "zh": "雲芝糖肽配合化療能加強療效及恢復環磷酰胺引起的免疫抑制"
+              "zh": "雲芝糖肽配合化療能加強療效及恢復環磷酰胺引起的免疫抑制",
+              "en": "Yunzhi PSP enhances chemotherapy efficacy and restores cyclophosphamide-induced immunosuppression"
             },
             "href": "https://pubmed.ncbi.nlm.nih.gov/9166995/",
             "icon": "fas fa-file-alt",
             "aria": {
-              "zh": "閱讀雲芝糖肽配合化療加強療效的研究"
+              "zh": "閱讀雲芝糖肽配合化療加強療效的研究",
+              "en": "Read the study on Yunzhi PSP enhancing the effect of chemotherapy"
             }
           }
         ],

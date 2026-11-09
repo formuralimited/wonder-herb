@@ -105,6 +105,18 @@ jobs:
           # the 18 public pages
           cp ./*.html _site/
 
+          # The pre-rendered pages for every language but the primary (P14-T1).
+          # Named explicitly, like everything else here: `cp ./*.html` is
+          # root-only, so a new language directory does NOT ship until someone
+          # adds it to this line. The gate below is what stops that being a
+          # silent omission.
+          for lang in en; do
+            if [ -d "$lang" ]; then
+              mkdir -p "_site/$lang"
+              cp "$lang"/*.html "_site/$lang/"
+            fi
+          done
+
           # the 3D models, until Phase 10 moves them to R2 and this line goes
           if compgen -G "./*.glb" > /dev/null; then cp ./*.glb _site/; fi
 
@@ -153,6 +165,27 @@ jobs:
             if [ -e "_site/$forbidden" ]; then
               echo "EXCLUDED PATH PRESENT IN THE ARTIFACT: $forbidden" >&2
               exit 1
+            fi
+          done
+
+          # Every language the renderer produced must have REACHED the
+          # artifact, with the same number of pages. Checked against the
+          # repository rather than against a list, so that rendering a new
+          # language without adding it to the allow-list above FAILS the
+          # deploy instead of shipping a site whose switcher 404s: the primary
+          # pages carry hreflang links to /<lang>/, and a missing directory
+          # turns every one of them into a dead end - strictly worse than the
+          # honest "this page is Chinese only" notice shown when no alternate
+          # exists at all.
+          for lang in en de es fr ja ru; do
+            if compgen -G "$lang/*.html" > /dev/null; then
+              want=$(find "$lang" -maxdepth 1 -name '*.html' | wc -l)
+              have=$(find "_site/$lang" -maxdepth 1 -name '*.html' 2>/dev/null | wc -l)
+              test "$have" -eq "$want" || {
+                echo "$lang/: $have of $want page(s) in the artifact - add it to the allow-list" >&2
+                exit 1
+              }
+              echo "$lang/: $have page(s) staged"
             fi
           done
 

@@ -334,12 +334,28 @@ console.log('\n=== the rate limit, which is a cost control first ===\n');
 
 chat.resetLimits();
 const minute = chat.WINDOWS[0].max;
+/* THE RESPONSE DOUBLE IS SHAPED TO MATCH VERCEL, NOT TO MATCH OUR CODE.
+   It offers exactly what a Vercel function's `res` offers - a Node
+   ServerResponse plus Vercel's helpers - and nothing else. Anything the
+   handler reaches for beyond this list throws here, which is the whole point.
+
+   It did not, once. It carried a `set` method because server/chat.js called
+   res.set('Retry-After'), Express-style. Vercel has no res.set, so every
+   throttled visitor got a 500 from the catch in api/chat.js instead of a 429.
+   The suite passed throughout: a double written to match the code can never
+   disagree with the code. Found by sending nine questions to the live
+   deployment. Same shape as findings 12, 23 and 45 - a check that looks
+   thorough while testing a kinder world than the real one.
+
+   Do not add a method here because the handler wants one. Check whether
+   Vercel has it first. */
 const res = () => {
   const out = { code: 200, body: null, headers: {} };
   return {
-    set: (k, v) => { out.headers[k] = v; },
-    status: c => { out.code = c; return { json: b => { out.body = b; return out; } }; },
+    setHeader: (k, v) => { out.headers[k] = v; },
+    status: c => { out.code = c; return { json: b => { out.body = b; return out; }, end: () => out }; },
     json: b => { out.body = b; return out; },
+    end: () => out,
     out: out
   };
 };
@@ -384,6 +400,26 @@ check('the answer service does not import the database',
       'no ./db import, no collection reference');
 check('it writes no file',
       !/writeFile|appendFile|createWriteStream/.test(source), 'no write call in the module');
+
+/* The handler runs on Vercel, where `res` is a Node ServerResponse with
+   Vercel's helpers bolted on. An Express-only method throws there and
+   api/chat.js's catch turns it into a 500 - so a bug in a rarely-taken branch
+   stays invisible until a visitor finds it. res.set did precisely that on the
+   throttle path.
+
+   This checks the SOURCE rather than relying on the double, because a double
+   only proves the methods some test happens to exercise, while the rule
+   applies to every line. Comments are stripped first: the explanation of this
+   very bug contains the string "res.set", and a gate that reads prose fails on
+   its own documentation - which has already happened twice in this project. */
+const code = source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+const VERCEL_RES = ['status', 'json', 'send', 'setHeader', 'getHeader', 'removeHeader', 'end', 'write'];
+const used = [...new Set([...code.matchAll(/\bres\.([a-zA-Z]+)/g)].map(m => m[1]))];
+const expressOnly = used.filter(m => !VERCEL_RES.includes(m));
+check('the handler uses only response methods Vercel actually provides',
+      used.length > 0 && expressOnly.length === 0,
+      expressOnly.length ? 'Express-only: res.' + expressOnly.join(', res.')
+                         : used.map(m => 'res.' + m).join(', '));
 /* Awaited, not handed to check() as a promise: a pending promise is truthy and
    would have passed this check without ever running it. */
 chat.resetLimits();
@@ -544,13 +580,44 @@ check('the refusal wording is the impersonal one the owner approved',
       zh.refusal.indexOf('此處不提供解答') !== -1 && zh.refusal.indexOf('本對話無法解答') === -1,
       'BUILD_TASKS P13-T5: impersonal by owner decision');
 
-console.log('\n=== apiBase is the switch, and it is off ===\n');
+console.log('\n=== apiBase is the switch, whichever way it is set ===\n');
 
 check('data/site.json carries an apiBase key, so turning chat on is a data edit',
       typeof site.chat.apiBase === 'string', JSON.stringify(site.chat.apiBase));
-check('the live site ships with no answer service configured',
-      site.chat.apiBase === '',
-      'composer stays disabled; set apiBase to enable it');
+
+/* This used to assert apiBase === '', which was true and useful for as long as
+   the service had nowhere to run. It stopped being either on 9 Nov 2026, when
+   the Vercel function went up - and a gate that encodes a temporary state
+   fails the day the state ends, which teaches people to edit gates to make
+   them pass. So it now checks the SHAPE of whatever is there, which is true in
+   both worlds and catches the mistakes that actually happen. */
+const apiBase = site.chat.apiBase;
+check('apiBase is either off, or a bare https origin',
+      apiBase === '' || /^https:\/\/[a-z0-9.-]+$/i.test(apiBase),
+      apiBase === '' ? 'off - the composer stays disabled' : apiBase);
+
+/* assets/behaviour/chat.js builds the URL as api + '/api/chat'. A trailing
+   slash gives //api/chat and a path gives /prefix/api/chat; both 404, and the
+   widget reports a generic error that looks like the service being down. */
+check('apiBase has no trailing slash and no path, because the client appends one',
+      apiBase === '' || (!/\/$/.test(apiBase) && apiBase.split('//')[1].indexOf('/') === -1),
+      apiBase === '' ? 'n/a' : 'client appends /api/chat');
+
+/* Single-sourced: the three hand-coded pages are generated from the partial by
+   chat:sync and the rest by the renderer, so a page disagreeing with
+   site.json means one of those did not run. Finding 44 was four copies of
+   these strings, three of them drifted. */
+{
+  const pages = ['index.html', 'product.html', path.join('en', 'index.html')];
+  const bad = pages.filter(p => {
+    const html = fsx0.readFileSync(path.join(__dirname, '..', p), 'utf8');
+    return html.indexOf('data-api="' + apiBase + '"') === -1;
+  });
+  check('every published page carries exactly the apiBase in data/site.json',
+        bad.length === 0,
+        bad.length ? bad.join(', ') + ' disagree - run npm run render and npm run chat:sync'
+                   : pages.length + ' page(s) agree');
+}
 check('every language has the two strings an enabled composer needs',
       ['zh', 'en', 'de', 'es', 'fr', 'ja', 'ru'].every(l =>
         site.chat.strings[l] && site.chat.strings[l].ready &&

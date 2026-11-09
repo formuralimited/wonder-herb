@@ -509,7 +509,18 @@ async function handle(req, res, deps) {
 
   const limit = rateLimited(ip);
   if (limit) {
-    res.set('Retry-After', '60');
+    /* setHeader, NOT Express's res.set. This runs on Vercel, where res is a
+       Node ServerResponse with Vercel's own helpers bolted on - status, json,
+       send, setHeader - and no `set`. res.set threw there, the catch in
+       api/chat.js turned it into a 500, and a throttled visitor got a generic
+       error instead of a 429 with a retry hint. setHeader exists on both,
+       because Express's response inherits from ServerResponse.
+
+       Found in production, on the live deployment, by sending nine questions
+       in a row - not by the suite, whose res double had been written with a
+       `set` method because the code called one. A double shaped to match the
+       code cannot contradict the code. It is shaped to match Vercel now. */
+    res.setHeader('Retry-After', '60');
     return res.status(429).json({ kind: 'error' });
   }
 

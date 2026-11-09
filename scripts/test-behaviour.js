@@ -701,26 +701,51 @@ const EFFECTS = {
       if (!atLoad.launcher) { this.detail = 'no launcher in the page'; return false; }
       if (!atLoad.panelHidden) { this.detail = 'the panel is open before anyone asked'; return false; }
       await page.click('#wh-chat-launcher', { timeout: 2000 });
+      /* THE HONEST STATE DEPENDS ON WHETHER AN ANSWER SERVICE IS CONFIGURED,
+         so this reads the page's own data-api and asserts the matching one.
+         It used to assert `i.disabled === true` outright, which was correct
+         for as long as there was nowhere for the service to run, and failed on
+         every page the day the Vercel function went up (9 Nov 2026).
+
+         A gate written against a temporary state does not just fail when the
+         state ends - it fails LOUDLY and for a good reason, which is the
+         moment someone is most tempted to edit the gate until it passes.
+         Both branches are asserted here so neither can rot: a composer enabled
+         with no service behind it is as wrong as one disabled with a service
+         waiting, and this now catches both. */
       const open = await until(() => page.evaluate(() => {
         const p = document.querySelector('#wh-chat-panel');
         const i = document.querySelector('#wh-chat-input');
         const state = document.querySelector('#wh-chat-state');
-        return !p.hidden &&
+        /* Read data-api off the PANEL, which is the element
+           assets/behaviour/chat.js itself reads. Asking a different element
+           would let the two disagree, and the test would be describing a
+           widget that does not exist. */
+        const configured = !!(p.getAttribute('data-api') || '').trim();
+        const shared = !p.hidden &&
                document.querySelector('#wh-chat-launcher').getAttribute('aria-expanded') === 'true' &&
-               i.disabled === true &&
                (i.getAttribute('placeholder') || '').length > 0 &&
                (state.textContent || '').trim().length > 0 &&
                document.querySelectorAll('.wh-chat-typing').length === 0 &&
                !!document.querySelector('.wh-chat-handoff[href^="https://wa.me/"]');
+        /* Enabled only when a service is configured; disabled otherwise. The
+           WhatsApp handoff stays in both, because it is the route that works
+           whatever the service is doing. */
+        return shared && i.disabled === !configured;
       }), 2000);
-      if (!open) { this.detail = 'opened but the shipped state is not honest'; return false; }
+      if (!open) { this.detail = 'opened but the shipped state does not match data-api'; return false; }
+      /* Read back into Node so the printed line says which of the two states
+         was actually asserted. A check whose output does not distinguish them
+         reads as a pass for the wrong one. */
+      const configured = await page.evaluate(() =>
+        !!(document.querySelector('#wh-chat-panel').getAttribute('data-api') || '').trim());
       /* Escape must close it and give focus back, or a keyboard user is
          trapped in a panel that cannot answer them. */
       await page.keyboard.press('Escape');
       const closed = await until(() => page.evaluate(() =>
         document.querySelector('#wh-chat-panel').hidden &&
         document.activeElement && document.activeElement.id === 'wh-chat-launcher'), 2000);
-      this.detail = 'opens, input disabled with a reason, no typing indicator, WhatsApp in panel, Escape returns focus: ' + closed;
+      this.detail = 'opens, composer ' + (configured ? 'ENABLED (service configured)' : 'disabled (no service)') + ', reason shown, no typing indicator, WhatsApp in panel, Escape returns focus: ' + closed;
       return closed;
     } finally { await ctx.close(); }
   },
@@ -1076,7 +1101,7 @@ async function runEffect(name, scenario, width, page) {
         } : {},
         /* the chat widget is CHROME, so it is on every page - no key test */
         {
-          'chatOpens@1280': 'chat opens, the input is disabled WITH a reason, no typing indicator, WhatsApp in the panel, Escape returns focus',
+          'chatOpens@1280': 'chat opens, the composer matches data-api, the state carries a reason, no typing indicator, WhatsApp in the panel, Escape returns focus',
           'chatOpens@390': 'the same on a phone, where it must clear the full-width WhatsApp bar',
           'chatRefusal@1280': 'the refusal state renders in the log with the approved wording (driven through the boundary: the live composer is disabled while apiBase is empty)'
         });

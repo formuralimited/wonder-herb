@@ -37,7 +37,7 @@
     ],
     "corsOrigins": [
       "https://www.wonder-herb.com",
-      "https://formurak4m.github.io"
+      "https://formuralimited.github.io"
     ],
     "cacheMinSeconds": 31536000
   },
@@ -50,9 +50,13 @@
       "kind": "self",
       "why": "our own canonicals, hreflang and the @id of the Organization node. ALSO a media host: /_files/ugd/ is Wix's file store and dies at cutover (finding 1), which is why it appears in media.hosts too"
     },
-    "formurak4m.github.io": {
+    "formuralimited.github.io": {
       "kind": "self",
-      "why": "the GitHub Pages origin, named as a CORS origin so media still loads if the site is served from there before cutover"
+      "why": "the GitHub Pages origin, named as a CORS origin so media still loads if the site is served from there before cutover. Was formurak4m.github.io until the repository moved org on 9 Nov 2026; the old host now 404s, and it was still the origin check:media would have tested Phase 10's CORS against"
+    },
+    "wonder-herb-chat.vercel.app": {
+      "kind": "api",
+      "why": "the chat answer service (P15-T2). The ONLY code this project runs on a server: GitHub Pages serves files, and the OpenAI key cannot live in a browser. Reads data/, never MongoDB, which is why it does not wait on Phase 11. Phase 18 may move it behind our own domain, which is a data edit here and a re-render - no code change"
     },
     "fonts.googleapis.com": {
       "kind": "runtime",
@@ -104,7 +108,7 @@
     "_why": "The floating chat widget (P13-T5), with its answer service wired up at P15-T1 (server/chat.js). The service exists and is tested, but `apiBase` below is EMPTY, so the live site still opens the panel in its 'unavailable' state and routes the visitor to WhatsApp - the composer is never enabled. That is because the API has no host until Phase 11, not because anything is missing. Wording is owner-approved (24 Oct 2026 for the first 10 strings, 31 Oct 2026 for `ready` and `placeholderReady`). zh and en are approved text; de/es/fr/ja/ru are translations of that text and need a native read before cutover (a Phase 18 gate, now 12 strings per language), falling back to zh if any is removed.",
     "handoffHref": "https://wa.me/85293318571/",
     "_apiBaseWhy": "Where the answer service lives (server/chat.js, POST /api/chat). EMPTY means there is no service: the composer stays disabled and the panel opens in its honest 'unavailable' state, which is exactly what P13-T5 shipped and what the live site keeps doing until the API is hosted at Phase 11. Set it to the API origin with NO trailing slash and no path - 'http://localhost:4000' to try it locally, the hosted origin after Phase 11. Because the renderer reads this at build time, turning the chat on is a data edit plus a re-render, never a code change.",
-    "apiBase": "",
+    "apiBase": "https://wonder-herb-chat.vercel.app",
     "grounding": {
       "_why": "Everything the chat answer service (server/chat.js) is allowed to tell a visitor. FACTUAL ONLY, by owner decision 31 Oct 2026: product identity, price, availability, category, where its page is, testing and certification, shipping, how to reach a person. NOTHING about efficacy, dosage, symptoms, treating a condition or taking a product with medication - those hit the approved refusal string above. A product's `desc` is efficacy copy on every one of the six products, so it is blocked in CODE (server/chat.js FORBIDDEN_FIELDS) and cannot be re-enabled from here.",
       "_faqWhy": "faqIds is an ALLOWLIST and the default is deny: an FAQ added in the admin does not reach the bot until its id is added here, on purpose. Only 3 (heavy-metal and pesticide testing) and 4 (Hong Kong shipping times) are factual. 1 says PSP is 'proven' to aid immune function; 2 is a dosing protocol including a treatment-course dose; 5 answers 'can I take this with Western medicine or conventional treatment' with 'yes, it reduces side effects'; 6 makes an absorption claim. Those four are health claims that BUILD_TASKS P13G-T2 says cannot be presumed to be the client's own words, and they stay out until that review happens. The `cat` field does NOT separate factual from clinical - 3 and 5 are both 'Safety & Testing' - which is why this is a list of ids and not a list of categories.",

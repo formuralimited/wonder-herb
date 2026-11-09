@@ -1,0 +1,48 @@
+# Vercel hosts exactly ONE thing from this repository: the chat answer service
+# (api/chat.js). The public site is static HTML on GitHub Pages and stays
+# there - hard rule 1 - so nothing here serves pages.
+#
+# WRITTEN AS AN ALLOW-LIST, for the same reason .github/workflows/static.yml
+# is: a new directory must be NAMED to ship. An exclude list publishes
+# whatever nobody thought of, and P8-T3 exists because `path: '.'` once put
+# editor/, server/, scripts/, docs/ and the vendored admin design on a
+# customer-facing URL.
+#
+# TWO THINGS THIS DELIBERATELY KEEPS OUT:
+#
+#   api/cms.js - an unauthenticated serverless function from before this
+#   rebuild. It sets Access-Control-Allow-Origin: * and accepts a POST from
+#   anyone, storing the body in memory and handing it back on GET. It cannot
+#   reach the real data, but it is an open write endpoint with no login and
+#   there is no reason for it to exist on the internet. Vercel makes EVERY
+#   file in api/ a live URL, so excluding the directory's contents and
+#   re-including one file is the only safe shape here.
+#
+#   server/index.js, auth.js, db.js, sales.js, stock.js, reports.js - the
+#   admin API. It is not a Vercel function and would not run, but it would be
+#   fetchable as source. Phase 11 decides where that API lives; until then it
+#   does not live here.
+
+# Ignore everything at the root.
+/*
+
+# The chat function, and nothing else in api/.
+!/api
+/api/*
+!/api/chat.js
+
+# What it reads. server/chat.js is the service itself - no database, so it
+# does not wait on Phase 11 - and data/ is the published content it answers
+# from, already public on GitHub Pages, so this adds no exposure.
+!/server
+/server/*
+!/server/chat.js
+
+!/data
+
+# Runtime config: the CORS headers and the includeFiles rule for data/**.
+!/vercel.json
+
+# Node runtime detection. server/chat.js itself requires only fs and path.
+!/package.json
+!/package-lock.json

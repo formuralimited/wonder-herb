@@ -52,7 +52,12 @@ const [emailArg, passwordArg, nameArg] = process.argv.slice(2);
     console.log('Created administrator ' + email + ' in ' + DB_NAME + '.');
   }
 
-  console.log('Sign in at http://localhost:8747/admin/');
+  /* There is no admin UI to sign in to: admin/index.html was deleted on
+     13 Nov 2026 (owner). The account is real and the API accepts it -
+     POST /api/auth/login - so it is still what the Puck editor and any script
+     authenticate with, and what the new admin will use when P11-T2 builds it. */
+  console.log('The account is ready. There is no admin UI yet (P11-T2);');
+  console.log('authenticate against POST /api/auth/login.');
   await close();
 })().catch(err => {
   console.error('\nCould not create the administrator:', err.message);

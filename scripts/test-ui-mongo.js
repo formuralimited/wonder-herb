@@ -92,59 +92,42 @@ function loadPage(file, url, apiUp, apiBase) {
   let up = true;
   const apiUp = () => up;
 
-  // ------------------------------------------------------------ admin, API up
-  console.log('\n=== /admin with MongoDB running ===\n');
-  const dom = await loadPage('admin/index.html', 'http://localhost:8000/admin/index.html', apiUp, API);
-  const w = dom.window, d = w.document;
-  w.localStorage.setItem('wh_admin_token', adminToken);
-  await w.eval('restoreSession()');
-  await settle(400);
+  /* THE ADMIN CONSOLE IS GONE. admin/index.html was deleted on 13 Nov 2026
+     (owner), so the checks that drove its chip, its inventory table and its
+     toast have nothing to drive. The WRITES they performed are kept and done
+     through the API instead, because that is now the only way into the
+     database - and because the publish section below asserts the stock state
+     those writes produce. Deleting them would have left it asserting nothing
+     while still passing, which is the finding-23 shape exactly.
 
-  check('the connection chip says MongoDB is connected',
-    /MongoDB connected/.test(d.getElementById('dbChipText').textContent),
-    d.getElementById('dbChipText').textContent);
-  check('the chip is styled as live', d.getElementById('dbChip').classList.contains('live'));
-
-  const P = () => w.eval('productsData');
-  check('products come from MongoDB, not the JSON file',
-    P().length === 2 && P()[0].sku === 'WH-DB-1', P().map(p => p.sku).join(','));
-  check('stock comes with them', P()[0].stock === 25);
-  check('cases come from MongoDB', w.eval('casesData')[0].zh.title === '資料庫病例');
-  check('faq comes from MongoDB', w.eval('faqData')[0].q === 'From Mongo?');
-
-  w.switchNav('inventory');
-  const rowText = sku => Array.from(d.querySelectorAll('#invBody tr'))
-    .find(r => r.textContent.includes(sku)).textContent;
-  check('the inventory table shows the database figures', rowText('WH-DB-1').includes('25'));
-  check('3 on hand against a reorder level of 10 reads Low stock',
-    rowText('WH-DB-2').includes('Low stock'));
-
-  // ------------------------------------------------------------ writes reach mongo
+     Everything still checked here is checked against MongoDB itself, not
+     against a screen: the write lands, the movement is logged with its note,
+     and an edit does not lose the stock it was not shown (finding 25). */
   console.log('\n=== A stock change is written to MongoDB ===\n');
-  const idx = P().findIndex(p => p.sku === 'WH-DB-1');
-  w.openInvAdjust(idx);
-  d.getElementById('inv_type').value = 'sale';
-  d.getElementById('inv_qty').value = '25';
-  d.getElementById('inv_note').value = 'Sold at the clinic';
-  await w.applyInvAdjust();
-  await settle(200);
+
+  const authed = (path, body) => fetch(API + path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + adminToken },
+    body: JSON.stringify(body)
+  });
+
+  const adjusted = await authed('/api/stock/WH-DB-1/adjust',
+    { type: 'sale', qty: 25, note: 'Sold at the clinic' });
+  check('the API accepts the stock adjustment', adjusted.ok, 'HTTP ' + adjusted.status);
 
   const inDb = await db.collection(COLLECTIONS.products).findOne({ sku: 'WH-DB-1' });
   check('the new count is in MongoDB', inDb.stock === 0, String(inDb.stock));
   check('MongoDB marked it Out of Stock', inDb.status === 'Out of Stock', inDb.status);
-  check('the screen agrees with the database', P()[idx].stock === 0);
   const move = await db.collection(COLLECTIONS.movements).findOne({ sku: 'WH-DB-1' });
   check('the movement is stored server-side with its note',
     move && move.note === 'Sold at the clinic' && move.delta === -25);
-  check('the toast says it went to MongoDB',
-    /MongoDB/.test(d.getElementById('toast').textContent), d.getElementById('toast').textContent);
 
   console.log('\n=== Editing a product writes through ===\n');
-  w.switchNav('products');
-  w.openProdEditor(1);
-  d.getElementById('f_prod_price').value = '999.00';
-  w.saveProd();
-  await settle(300);
+  const rows = await (await fetch(API + '/api/cms?type=products')).json();
+  const next = rows.map(r => r.sku === 'WH-DB-2' ? Object.assign({}, r, { price: '999.00' }) : r);
+  const saved = await authed('/api/cms?type=products', next);
+  check('the API accepts the product edit', saved.ok, 'HTTP ' + saved.status);
+
   const edited = await db.collection(COLLECTIONS.products).findOne({ sku: 'WH-DB-2' });
   check('the edited price is in MongoDB', edited.price === '999.00', edited.price);
   check('its stock was not lost by the edit', edited.stock === 3, String(edited.stock));
@@ -169,10 +152,10 @@ function loadPage(file, url, apiUp, apiBase) {
   const pd = new JSDOM(published).window.document;
   const card = sku => pd.querySelector('.product-card[data-sku="' + sku + '"]');
   check('a product that exists only in MongoDB is on the published catalogue', !!card('WH-DB-1'), 'WH-DB-1 card');
-  check('with the stock state the admin just wrote (Out of Stock)',
+  check('with the stock state just written through the API (Out of Stock)',
     card('WH-DB-1') && card('WH-DB-1').getAttribute('data-status') === 'Out of Stock',
     card('WH-DB-1') && card('WH-DB-1').getAttribute('data-status'));
-  check('and a price edited in the admin is the price the published cart charges',
+  check('and a price edited through the API is the price the published cart charges',
     card('WH-DB-2') && card('WH-DB-2').getAttribute('data-price') === '999',
     card('WH-DB-2') && card('WH-DB-2').getAttribute('data-price'));
 
@@ -185,17 +168,13 @@ function loadPage(file, url, apiUp, apiBase) {
   // ------------------------------------------------------------ fallback
   console.log('\n=== With MongoDB stopped, nothing breaks ===\n');
   up = false;
-  const offline = await loadPage('admin/index.html', 'http://localhost:8000/admin/index.html', apiUp, API);
-  offline.window.enterDemo();
-  await settle(400);
-  const od = offline.window.document;
-  check('the chip says the database is offline',
-    /offline/i.test(od.getElementById('dbChipText').textContent),
-    od.getElementById('dbChipText').textContent);
-  check('the admin still loads the committed cases',
-    offline.window.eval('casesData').length === JSON.parse(read('data/cases.json')).length);
-  check('the admin still loads the committed products',
-    offline.window.eval('productsData').length === JSON.parse(read('data/products.json')).length);
+  /* The three checks that stood here drove admin/index.html's offline chip and
+     its demo-mode fallback. The file is gone (13 Nov 2026, owner), and with no
+     admin there is nothing left to degrade gracefully - which is why they are
+     not replaced rather than rewritten.
+     What hard rule 1 actually protects is below and is unchanged: the PUBLIC
+     site must not depend on the API being up. That is the half that always
+     mattered, and it is the half a visitor sees. */
 
   /* The committed, pre-rendered 產品介紹 needs neither MongoDB nor scripts: the
      catalogue is IN the file, one card per committed product. */

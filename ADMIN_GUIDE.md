@@ -1,5 +1,21 @@
 # 網站管理教學 · How to Edit the Website
 
+> ## ⚠️ OUT OF DATE — the console this guide describes no longer exists
+>
+> `admin/index.html` was **deleted on 13 Nov 2026** (owner decision), ahead of the
+> P11-T2 trigger. Nothing described below can be opened today, and there is no
+> content editor of any kind until the new admin is built to the approved design
+> in `wonderherb-admin-frontend/`.
+>
+> **Do not give this guide to the client in its current form.** It is kept because
+> the WORKFLOW it documents — what each screen edits, what publishing does, and
+> that a stock change goes live at publish rather than instantly — is still the
+> workflow the new admin has to deliver. Rewrite it against the new app at
+> P11-T2, do not write a new one from scratch.
+>
+> The old file is recoverable: `git show a3f79c0:admin/index.html`.
+
+
 A simple guide to editing Wonder Herb content — no coding needed.
 簡單教學：修改康草堂網站內容，完全不需要寫程式。
 

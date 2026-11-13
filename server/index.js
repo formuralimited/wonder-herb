@@ -888,7 +888,11 @@ if (require.main === module) {
                   .then(() => ensurePageIndexes(db)).then(() => ensureSuperAdmin(db)))
     .then(() => app.listen(PORT, () => {
       console.log('Site                 ->  http://localhost:' + PORT + '/');
-      console.log('Admin                ->  http://localhost:' + PORT + '/admin/');
+      /* No admin line: admin/index.html was deleted on 13 Nov 2026 (owner).
+         The API is still the only way into the database and every guard in
+         this file still applies to every caller - the Puck editor, a script,
+         and the new admin when P11-T2 builds it. Until then there is no admin
+         UI at all, by decision. */
       console.log('API                  ->  http://localhost:' + PORT + '/api/health');
       console.log('MongoDB              ->  ' + URL + '/' + DB_NAME);
     }))

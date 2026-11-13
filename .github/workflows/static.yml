@@ -126,15 +126,12 @@ jobs:
           # the content the three hand-coded pages still fetch at runtime
           cp -r data _site/
 
-          # The vanilla admin. It is served from Pages ON PURPOSE: it is the
-          # only working admin interface today, and hard rule 1 says a broken
-          # admin must never take the site down - serving it as static files
-          # means it survives the API being down. It needs no build.
-          # REMOVE THIS WHEN P11-T2 LANDS and the new admin shell has a home of
-          # its own; that task is the trigger, not a date. Until then excluding
-          # it would remove the only route in, to fix something that is not yet
-          # a problem.
-          cp -r admin _site/
+          # NO ADMIN. admin/index.html was deleted on 13 Nov 2026 (owner), and
+          # admin/ is now in the forbidden list below rather than copied here,
+          # so it cannot return silently. The earlier note said the trigger for
+          # removing it was P11-T2 landing; the owner removed it ahead of that,
+          # accepting that until the new admin is built there is no content
+          # editor at all and the database is reachable only through the API.
 
           # site-level files
           for f in CNAME robots.txt sitemap.xml llms.txt; do
@@ -150,17 +147,20 @@ jobs:
           # what the site needs
           pages=$(find _site -maxdepth 1 -name '*.html' | wc -l)
           test "$pages" -ge 18 || { echo "only $pages pages staged, expected >= 18" >&2; exit 1; }
-          for required in _site/assets _site/data _site/admin _site/robots.txt _site/CNAME _site/index.html; do
+          for required in _site/assets _site/data _site/robots.txt _site/CNAME _site/index.html; do
             test -e "$required" || { echo "missing from the artifact: $required" >&2; exit 1; }
           done
 
           # what it must never hold. This is the assertion P8-T3 exists for:
           # if the allow-list above is ever widened by accident, this fails
           # rather than publishing the repository again.
-          # NOTE: admin/ is deliberately absent from this list - see the
-          # allow-list above for why it ships, and what removes it.
+          # admin/ IS on this list as of 13 Nov 2026. It used to be the one
+          # deliberate exception, shipped because it was the only way in. It is
+          # deleted now, so the exception became an assertion: if an admin
+          # directory ever reappears in the artifact, this fails rather than
+          # quietly publishing a console on a customer-facing URL.
           for forbidden in server scripts renderer sections editor api docs legacy \
-                           wonderherb-admin-frontend node_modules package.json \
+                           admin wonderherb-admin-frontend node_modules package.json \
                            package-lock.json vercel.json .env .env.example; do
             if [ -e "_site/$forbidden" ]; then
               echo "EXCLUDED PATH PRESENT IN THE ARTIFACT: $forbidden" >&2
@@ -195,7 +195,7 @@ jobs:
             exit 1
           fi
 
-          echo "artifact verified: $pages pages, assets/ data/ admin/ present, 14 excluded paths absent"
+          echo "artifact verified: $pages pages, assets/ data/ present, 15 excluded paths absent (admin/ among them)"
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

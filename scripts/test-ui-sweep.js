@@ -108,112 +108,13 @@ function loadPage(file, url, apiUp, apiBase, errors) {
     lines: [{ sku: 'WH-PSP-500', price: 2800, qty: 1 }], payment: 'Cash' }, admin);
   await post('/api/stock/WH-PSP-500/adjust', { type: 'receive', qty: 3, note: 'sweep' }, admin);
 
-  // ------------------------------------------------------------- the console
-  console.log('\n=== /admin: every section, every button ===\n');
-  const errors = [];
-  const dom = await loadPage('admin/index.html', 'http://localhost:4000/admin/index.html', apiUp, API, errors);
-  const w = dom.window, d = w.document;
-  w.localStorage.setItem('wh_admin_token', admin);
-  await w.eval('restoreSession()');
-  await settle(700);
-  check('the console opens for the administrator', d.getElementById('app').style.display === 'grid');
-
-  const sections = ['dashboard', 'cases', 'products', 'inventory', 'faq', 'homepage', 'users', 'sales'];
-  for (const sec of sections) {
-    const before = errors.length;
-    w.switchNav(sec);
-    await settle(sec === 'sales' || sec === 'users' ? 500 : 150);
-    const visible = !d.getElementById('sec-' + sec).classList.contains('hidden');
-    const others = sections.filter(s => s !== sec).every(s => d.getElementById('sec-' + s).classList.contains('hidden'));
-    check('section "' + sec + '" opens alone and without errors', visible && others && errors.length === before,
-      errors.slice(before).join(' | '));
-  }
-
-  // every button in the document, one at a time, in whichever section it lives
-  const buttons = Array.from(d.querySelectorAll('button[onclick]'));
-  let clicked = 0;
-  const failures = [];
-  for (const btn of buttons) {
-    const handler = btn.getAttribute('onclick');
-    // signing out mid-sweep would make every later click meaningless
-    if (/logout\(|enterDemo\(|doLogin\(/.test(handler) || btn.closest('#login')) continue;
-    // find the section this button belongs to so the screen is in a sensible state
-    const sec = btn.closest('section[id^="sec-"]');
-    if (sec) { w.switchNav(sec.id.replace('sec-', '')); await settle(60); }
-    const before = errors.length;
-    try {
-      btn.click();
-      await settle(handler.includes('download') || handler.includes('export') || handler.includes('render') || handler.includes('load') ? 250 : 40);
-    } catch (e) { errors.push('click threw: ' + e.message); }
-    clicked++;
-    if (errors.length > before) failures.push(handler.slice(0, 70) + '  =>  ' + errors.slice(before).join(' | '));
-    // close whatever it opened so the next click starts clean
-    d.querySelectorAll('.modal-overlay').forEach(m => m.classList.add('hidden'));
-    ['caseEditor', 'prodEditor', 'faqEditor'].forEach(id => { const el = d.getElementById(id); if (el) el.classList.add('hidden'); });
-  }
-  check('every one of the ' + clicked + ' buttons ran its handler without throwing', failures.length === 0,
-    failures.length ? '\n        ' + failures.join('\n        ') : '');
-
-  // dynamically rendered row buttons: the ones the sweep above cannot see until a list is drawn
-  const rowChecks = [
-    ['cases', '#casesList button, #caseList button, #sec-cases table button'],
-    ['products', '#prodList button, #sec-products table button'],
-    ['faq', '#faqList button, #sec-faq table button'],
-    ['inventory', '#invBody button'],
-    ['users', '#usersBody button'],
-    ['sales', '#salesBody button, #custBody button']
-  ];
-  for (const [sec, selector] of rowChecks) {
-    w.switchNav(sec); await settle(400);
-    const rowButtons = Array.from(d.querySelectorAll(selector));
-    const before = errors.length;
-    for (const b of rowButtons) {
-      try { b.click(); await settle(60); } catch (e) { errors.push(sec + ' row button threw: ' + e.message); }
-      d.querySelectorAll('.modal-overlay').forEach(m => m.classList.add('hidden'));
-    }
-    check('"' + sec + '": ' + rowButtons.length + ' row button(s) all run clean', rowButtons.length > 0 && errors.length === before,
-      errors.slice(before).join(' | ') || (rowButtons.length ? '' : 'no row buttons found'));
-  }
-
-  // the editors, opened and closed the way a person would
-  const modals = [
-    ['users', 'openUserEditor(null)', 'userModal', 'closeUserEditor()'],
-    ['sales', 'openSaleEditor(null)', 'saleModal', 'closeSaleEditor()'],
-    ['sales', 'openCustomerEditor(null)', 'custModal', 'closeCustomerEditor()'],
-    ['inventory', 'openInvAdjust(0)', 'invModal', 'closeInvAdjust()']
-  ];
-  for (const [sec, open, id, closeFn] of modals) {
-    w.switchNav(sec); await settle(300);
-    const before = errors.length;
-    w.eval(open); await settle(150);
-    const shown = !d.getElementById(id).classList.contains('hidden');
-    w.eval(closeFn); await settle(30);
-    const hidden = d.getElementById(id).classList.contains('hidden');
-    check(open + ' opens and ' + closeFn + ' closes, cleanly', shown && hidden && errors.length === before, errors.slice(before).join(' | '));
-  }
-
-  // the sign-in card in each of its states
-  await w.logout(); await settle(300);
-  check('log out returns to the sign-in card', d.getElementById('login').style.display === 'flex' && errors.length === 0);
-  const staffDom = await loadPage('admin/index.html', 'http://localhost:4000/admin/index.html', apiUp, API, errors);
-  const sw = staffDom.window, sd = staffDom.window.document;
-  await settle(300);
-  sd.getElementById('loginEmail').value = 'staff@example.com';
-  sd.getElementById('loginPassword').value = 'staff-password';
-  sd.getElementById('loginForm').dispatchEvent(new sw.Event('submit', { bubbles: true, cancelable: true }));
-  await settle(900);
-  check('a staff account with limited ticks gets in', sd.getElementById('app').style.display === 'grid');
-  const staffButtons = Array.from(sd.querySelectorAll('button[onclick]')).filter(b => !b.closest('#login'));
-  const beforeStaff = errors.length;
-  for (const b of staffButtons) {
-    if (/logout\(/.test(b.getAttribute('onclick'))) continue;
-    const sec = b.closest('section[id^="sec-"]');
-    if (sec) { sw.switchNav(sec.id.replace('sec-', '')); await settle(40); }
-    try { b.click(); await settle(40); } catch (e) { errors.push('staff click threw: ' + e.message); }
-    sd.querySelectorAll('.modal-overlay').forEach(m => m.classList.add('hidden'));
-  }
-  check('every button also runs clean for a limited staff account (' + staffButtons.length + ')', errors.length === beforeStaff,
-    errors.slice(beforeStaff).join(' | '));
+  /* THE ADMIN CONSOLE SWEEP IS GONE. admin/index.html was deleted on
+     13 Nov 2026 (owner), so the 25 checks that clicked every button in it
+     have nothing to click. They are not replaced: what they really verified -
+     that products, stock, sales, users and permissions round-trip through the
+     API - is asserted directly in test-api.js and test-auth.js, which do not
+     need a UI. When P11-T2 builds the new admin, a sweep like this one belongs
+     with it. The seeding above is kept: the site half below reads it. */
 
   // ------------------------------------------------------------- the site
   console.log('\n=== every site page, API up and API down ===\n');

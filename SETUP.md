@@ -9,7 +9,7 @@ serving plain files. Nothing about hosting, the SEO work or the deploy changes.
         |
    Node API (localhost:4000)      server/index.js
         |                          also serves the pages locally
-   /admin   +   the site pages
+   the site pages  (no admin UI since 13 Nov 2026)
         |
    npm run export  ->  data/*.json + data/inventory.csv  ->  git commit
 ```
@@ -30,9 +30,9 @@ Stock movements are kept.
 npm run dev
 ```
 
-One command, one server: the site, the admin and the API are all on
-<http://localhost:4000> — pages at `/`, the console at `/admin/`, the API under
-`/api/`. Serving the pages is a development convenience only; in production
+One command, one server: the site and the API are on
+<http://localhost:4000> — pages at `/`, the API under `/api/`. **There is no admin
+console:** `admin/index.html` was deleted on 13 Nov 2026 and the new one is P11-T2. Serving the pages is a development convenience only; in production
 they are static files and this server does not exist.
 
 A separate static server still works if you prefer it:
@@ -44,19 +44,21 @@ python -m http.server 8747   # the site, as before
 The pages look for the API on port 4000 either way. If you run it on a
 different port, set `window.WH_API_BASE` before the page's scripts.
 
-Then open <http://localhost:4000/admin/>. The chip in the top bar tells you
-where data is coming from:
+There is no console to open. Check the API directly instead:
+<http://localhost:4000/api/health> reports which collections it can see.
 
 - **MongoDB connected** — every save goes into the database. A second tab, or a
   colleague on the same database, sees the same numbers.
-- **Local files (MongoDB offline)** — the API is not running. The admin works
-  exactly as it did before: this browser's storage, then the committed files.
+- **Local files (MongoDB offline)** — the API is not running. The public site is
+  unaffected: it serves the committed files, which is hard rule 1 and the half
+  that matters now that there is no admin UI to degrade.
 
 ## Accounts
 
 Signing up, signing in and signing out are handled by the API and stored in
-MongoDB. Visitors use `account.html`; the console at `/admin/` uses the same
-accounts, but only lets an administrator in.
+MongoDB. Visitors use `account.html`. Administrator accounts still exist and still work
+(`npm run admin:create`), but until P11-T2 builds the new admin the only thing
+that consumes them is the API itself.
 
 **Three kinds of account.**
 

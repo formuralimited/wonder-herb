@@ -49,7 +49,7 @@ Already built:
   - loaded by `renderer/template.js` according to the tree's section types, keyed by `type` or `type/variant` (a behaviour may belong to one variant only), with any third-party libraries it needs declared as `deps` ahead of it.
 - **Puck editor** (`editor/`, `npm run editor:dev`): edits page trees one language at a time and saves through the API. Local only and **not client-facing yet** (P11-T2 makes it one admin site with one login).
 - **Pages CMS pilot** (`.pages.yml`): git-based form editor, wired for Cases only. Uses the 7-language object model.
-- **Admin** is a single vanilla file: `admin/index.html`.
+- **There is NO admin UI.** `admin/index.html` was DELETED on 13 Nov 2026 (owner), ahead of its P11-T2 trigger. Until the new admin is built the database is reachable only through the API; `npm run admin:create` still makes a real account for it. Recover the old file from git history (`git show a3f79c0:admin/index.html`) if it is ever wanted as a reference.
 - **7 languages**: `zh` (primary) + `en, de, es, fr, ja, ru` (optional, fall back to `zh`). Every text field is a per-language object. Month 1 renders `zh` only (`LANGS_IN_SCOPE`).
 - **Visual + SEO baseline captured** (Phase 0, re-captured 15 Sep 2026 at P9-T1): `node scripts/baseline.js`, output in `baseline/` (gitignored).
   - **What it records:** all 18 pages at 1280px and 390px, **scripts on** (`baseline/screens/`) **and scripts off** (`baseline/screens-nojs/`), plus each page's rendered `<head>` (`baseline/head/`).
@@ -127,7 +127,7 @@ The publish step renders content **into** the HTML instead of leaving the browse
     sample/               P5-T1 fixture tree, used only by test:render
     .build/ .out/         gitignored: sections bundle, rendered output
   editor/                 Puck React app (Vite), talks to the API
-  admin/index.html        vanilla admin (single file, no framework)
+  (admin/ deleted 13 Nov 2026 - no admin UI until P11-T2)
   api/cms.js              small helper
   server/                 Express API
     index.js              main API (~36 KB); MongoDB is the editing surface
@@ -240,7 +240,7 @@ Month 2: all 18 pages, all 7 languages, full ~22 sections, add-page-from-templat
 - **A pre-rendered page's stock changes go live at publish, not instantly.** Accepted; the client guide must say so at retirement.
 - **Phase 9 definition-of-done waivers:** "heavy assets from R2" (a Phase 10 dependency). "Editable in Puck" now passes after the `mergeTree` fix.
 - **One admin site, one login** is a client requirement (P11-T2).
-- **The admin design in `wonderherb-admin-frontend/` is FINAL and is the ONLY admin design** (owner, 17 Oct 2026). Do not design, propose or build any other admin UI. It is a *design prototype*, not code: `support.js` is a generated `dc-runtime` and the HTML is one inline-styled mockup with no API call — the target to build toward. `admin/index.html` and the Puck editor's own shell are **superseded** and retire to `legacy/` as the new app covers their modules. **`_ds/` was a DIFFERENT, unused design system** ("Industry": steel-blue wireframe, Barlow, Lucide) that the delivered HTML never referenced — **deleted on vendoring, 17 Oct 2026**, along with the nested `.git`; never reintroduce it. **The palette is final and is NOT to be resampled from the live site:** admin teal `#0f6b6b`, maroon `#8c1d2c`, deliberately calmer than the shopfront's `#2eada5`/`#9b2e2e`. Tokens are extracted once; no component hand-types a hex. The plan is P11-T2.
+- **The admin design in `wonderherb-admin-frontend/` is FINAL and is the ONLY admin design** (owner, 17 Oct 2026). Do not design, propose or build any other admin UI. It is a *design prototype*, not code: `support.js` is a generated `dc-runtime` and the HTML is one inline-styled mockup with no API call — the target to build toward. `admin/index.html` was **deleted outright on 13 Nov 2026** (owner) rather than retired to `legacy/`, and ahead of the P11-T2 trigger the deploy workflow named: the owner accepted that there is no content editor at all in the meantime. `admin` is now on the deploy allow-list FORBIDDEN list, so it cannot return silently. The Puck editor shell is still superseded and still present. **`_ds/` was a DIFFERENT, unused design system** ("Industry": steel-blue wireframe, Barlow, Lucide) that the delivered HTML never referenced — **deleted on vendoring, 17 Oct 2026**, along with the nested `.git`; never reintroduce it. **The palette is final and is NOT to be resampled from the live site:** admin teal `#0f6b6b`, maroon `#8c1d2c`, deliberately calmer than the shopfront's `#2eada5`/`#9b2e2e`. Tokens are extracted once; no component hand-types a hex. The plan is P11-T2.
 - **The four content modules are collections, not pages** (research, testing, booklet, article). The design's Content group edits the ITEMS a list section renders - reports, per-batch test reports, booklets with a language, WeChat articles - exactly the `faq-accordion` ↔ `data/faq.json` boundary. Page LAYOUT stays in Puck. This does not breach non-negotiable 3, and the booklet row's language column is the first proper model for finding 28's per-language documents.
 - **Login throttle hardening** belongs to Phase 11 (P11-T3).
 
